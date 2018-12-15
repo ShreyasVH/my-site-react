@@ -1,1 +1,1 @@
-web: npm run build-default
+web: bin/boot
