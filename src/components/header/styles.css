@@ -1,0 +1,14 @@
+.colorPrimary {
+    background-color: #000000 !important;
+}
+
+.modeSelectorWrap {
+    display: flex;
+}
+
+.modeSelector {
+    align-content: flex-end;
+    position: absolute;
+    top: -3px;
+    right: 7px;
+}

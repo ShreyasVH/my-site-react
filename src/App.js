@@ -1,28 +1,47 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Home from './containers/home';
+import NotFound from './containers/notFound';
+// import Test from './containers/test';
+import Header from './components/header';
+import Loader from './components/loader';
+
+import MoviesDashboard from './containers/movies/dashboard';
+// import ActorList from './containers/movies/actorList';
+// import DirectorList from './containers/movies/directorList';
+// import BrowseMovies from './containers/movies/browseMovies';
+// import DeletedMovies from './containers/movies/deletedMovies';
+// import MovieDetail from './containers/movies/movieDetail';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div>
+				<Router>
+					<div>
+						<Header />
+						<div className="container">
+							<Switch>
+								<Route exact path="/" component={Home} />
+
+								<Route path="/movies/dashboard" component={MoviesDashboard} />
+								{/*<Route path="/movies/actorList" component={ActorList} />*/}
+								{/*<Route path="/movies/directorList" component={DirectorList} />*/}
+								{/*<Route path="/movies/browseMovies" component={BrowseMovies} />*/}
+								{/*<Route path="/movies/deletedMovies" component={DeletedMovies} />*/}
+								{/*<Route path="/movies/movieDetail" component={MovieDetail} />*/}
+
+								{/*<Route path="/test" component={Test} />*/}
+								<Route component={NotFound} />
+							</Switch>
+						</div>
+						<Loader />
+					</div>
+				</Router>
+			</div>
+		);
+	}
 }
 
 export default App;

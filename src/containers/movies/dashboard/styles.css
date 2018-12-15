@@ -1,0 +1,28 @@
+.root {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.cell {
+    width: auto;
+    max-width: 10px;
+}
+
+thead th {
+    background-color: black;
+    color: white !important;
+}
+
+/*h1 {*/
+/*text-align: center;*/
+/*color: #FF3C3C;*/
+/*}*/
+
+a {
+    text-decoration: none;
+    color: #35A4F5;
+    font-weight: bold;
+}
