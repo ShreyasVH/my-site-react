@@ -1,0 +1,17 @@
+.cardWrapper {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.cardWrapper img {
+    height: 240px;
+    width: 180px;
+}
+
+.cardWrapper .movie-link {
+    text-align: center;
+    width: 180px;
+    margin-top: 10px;
+}

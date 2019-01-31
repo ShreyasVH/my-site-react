@@ -12,7 +12,10 @@ const defaultState = {
 	list: [],
 	filters: {},
 	offset: 0,
-	totalCount: -1
+	totalCount: -1,
+	sortMap: {
+		name: "ASC"
+	}
 };
 
 const moviesReducer = (state = defaultState, action) => {

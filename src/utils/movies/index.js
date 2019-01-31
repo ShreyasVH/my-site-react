@@ -14,36 +14,40 @@ export default class Movies {
 	static getDashBoard = () => {
 		let dashboard = store.getState().movies.dashboard;
 
-		// if (0 === dashboard.length) {
-		// 	let promise = ApiHelper.get(BASE_URL + MOVIES_DASHBOARD_URL);
-		// 	promise.then(apiResponse => {
-		// 		let response = apiResponse.data;
-		// 		if (0 !== response.length) {
-		// 			store.dispatch(updateDashBoard({
-		// 				dashboard: response
-		// 			}));
-		// 			Context.hideLoader();
-		// 		}
-		// 	});
-		// } else {
-		// 	Context.hideLoader();
-		// }
-		console.log(process);
+		if (0 === dashboard.length) {
+			let promise = ApiHelper.get(BASE_URL + MOVIES_DASHBOARD_URL);
+			promise.then(apiResponse => {
+				let response = apiResponse.data;
+				if (0 !== response.length) {
+					store.dispatch(updateDashBoard({
+						dashboard: response
+					}));
+					Context.hideLoader();
+				}
+			}).catch(apiResponse => {
+				Context.hideLoader();
+			});
+		} else {
+			Context.hideLoader();
+		}
 	};
 
 	static getMoviesWithFilters = (shouldReplace = true) => {
 		let movieStore = store.getState().movies;
-		let filters = movieStore.filters;
-		let offset = movieStore.offset;
-		let totalCount = movieStore.totalCount;
-		let movieList = movieStore.list;
-		if ((-1 === totalCount) || (movieList.length < totalCount)) {
-			let payload = Object.assign({}, filters, { offset, isPwaRequest: true });
+		let { filters, offset, totalCount, list, sortMap } = movieStore;
+		console.log(movieStore);
+		if ((-1 === totalCount) || (list.length < totalCount)) {
+			let payload = {
+				filters,
+				sortMap,
+				offset,
+				count: 24
+			};
 			let promise = ApiHelper.post(BASE_URL + GET_MOVIES_WITH_FILTERS_URL, payload);
 			promise.then(apiResponse => {
 				let response = apiResponse.data;
 				if (0 !== Object.keys(response).length) {
-					store.dispatch(updateMovieList(response.movieList, response.offset, response.count, shouldReplace));
+					store.dispatch(updateMovieList(response.movies, response.offset, response.totalCount, shouldReplace));
 					Context.hideLoader();
 				}
 			});

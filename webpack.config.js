@@ -13,7 +13,8 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, 'build'),
 		filename: '[name].js',
-		chunkFilename: '[name]-chunk.js'
+		chunkFilename: '[name]-chunk.js',
+		publicPath: '/'
 	},
 	module: {
 		rules: [
@@ -68,6 +69,7 @@ module.exports = {
 	devServer: {
 		port: 3000,
 		// host: 'my-site-react'
-		host: 'my-site-react.herokuapp.com'
+		host: 'my-site-react.herokuapp.com',
+		historyApiFallback: true
 	}
 };

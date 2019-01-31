@@ -21,26 +21,30 @@ export default class ApiHelper {
 
 	static post = (url, payload, additionalHeaders = {}) => {
 		let defaultHeaders = {
-			'X-Requested-With': 'XMLHttpRequest'
+			'X-Requested-With': 'XMLHttpRequest',
+			'Content-Type': 'application/json'
 		};
 		let headers = Object.assign({}, defaultHeaders, additionalHeaders);
 
-		let data = new URLSearchParams();
-		for (let key in payload) {
-			if (payload.hasOwnProperty(key)) {
-				let value = payload[key];
-				if (Array.isArray(value)) {
-					for(let index in value) {
-						if (value.hasOwnProperty(index)) {
-							data.append(key + '[]', value[index]);
-						}
-					}
-				} else {
-					data.append(key, value);
-				}
-
-			}
-		}
+		// let data = new URLSearchParams();
+		// for (let key in payload) {
+		// 	console.log('key:' + key);
+		// 	if (payload.hasOwnProperty(key)) {
+		// 		let value = payload[key];
+		// 		if (Array.isArray(value)) {
+		// 			for(let index in value) {
+		// 				if (value.hasOwnProperty(index)) {
+		// 					data.append(key + '[]', value[index]);
+		// 				}
+		// 			}
+		// 		} else {
+		// 			data.append(key, value);
+		// 		}
+		//
+		// 	}
+		// }
+		// console.log(data);
+		let data = JSON.stringify(payload);
 
 		return ApiHelper.execute({
 			method: 'post',
