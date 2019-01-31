@@ -9,10 +9,11 @@ import Loader from './components/loader';
 
 import MoviesDashboard from './containers/movies/dashboard';
 import BrowseMovies from './containers/movies/browseMovies';
+import MovieDetail from './containers/movies/movieDetail';
 // import ActorList from './containers/movies/actorList';
 // import DirectorList from './containers/movies/directorList';
 // import DeletedMovies from './containers/movies/deletedMovies';
-// import MovieDetail from './containers/movies/movieDetail';
+
 
 class App extends Component {
 	render() {
@@ -27,10 +28,10 @@ class App extends Component {
 
 								<Route path="/movies/dashboard" component={MoviesDashboard} />
 								<Route path="/movies/browseMovies" component={BrowseMovies} />
+								<Route path="/movies/movieDetail" component={MovieDetail} />
 								{/*<Route path="/movies/actorList" component={ActorList} />*/}
 								{/*<Route path="/movies/directorList" component={DirectorList} />*/}
 								{/*<Route path="/movies/deletedMovies" component={DeletedMovies} />*/}
-								{/*<Route path="/movies/movieDetail" component={MovieDetail} />*/}
 
 								{/*<Route path="/test" component={Test} />*/}
 								<Route component={NotFound} />
