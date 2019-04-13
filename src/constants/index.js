@@ -6,7 +6,7 @@ import Utils from '../utils';
 
 // export const BASE_URL = Utils.getProtocol() + Utils.getDomain();
 // export const BASE_URL = process.env.API_ENDPOINT;
-export const BASE_URL = 'http://my-api-java.herokuapp.com:9021';
+export const BASE_URL = 'http://my-api-java.herokuapp.com';
 // export const BASE_URL = 'http://127.0.0.1:9021';
 export const GET_MODE_URL = '/data/getMode';
 export const CHANGE_MODE_URL = '/index/changeMode?newMode={newMode}';
