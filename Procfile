@@ -1,1 +1,1 @@
-web: bin/boot
+web: "npm run build && node server.js"
