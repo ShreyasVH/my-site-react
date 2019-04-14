@@ -23,7 +23,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "build": "webpack --mode production",
-    "dev": "webpack-dev-server --progress --hot --inline"
+    "dev": "webpack-dev-server --progress --hot --inline",
+    "serve": "node server.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
