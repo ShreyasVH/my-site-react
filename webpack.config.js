@@ -7,6 +7,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const webpack = require('webpack');
 
 module.exports = {
 	entry: path.resolve(__dirname, 'src/index.js'),
@@ -56,7 +57,10 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: 'src/template.html'
 		}),
-		// new BundleAnalyzerPlugin()
+		// new BundleAnalyzerPlugin(),
+		new webpack.DefinePlugin({
+			'process.env.API_ENDPOINT': JSON.stringify(process.env.REACT_APP_API_ENDPOINT)
+		})
 	],
 	optimization: {
 		splitChunks: {
@@ -68,7 +72,6 @@ module.exports = {
 	},
 	devServer: {
 		port: 3000,
-		// host: 'my-site-react'
 		host: 'my-site-react.herokuapp.com',
 		historyApiFallback: true
 	}
