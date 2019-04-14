@@ -14,6 +14,8 @@ import './styles.css';
 
 export default class Home extends Component {
 	render() {
+
+		console.log(process.env);
 		return (
 			<div>
 				<Helmet
