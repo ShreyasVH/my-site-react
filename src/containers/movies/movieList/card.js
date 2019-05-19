@@ -46,7 +46,7 @@ class MovieCard extends Component {
 						className={this.props.classes.paper}
 					>
 						<img
-							src={movie.image}
+							src={movie.imageUrl}
 							alt={movie.name}
 						/>
 					</Paper>
