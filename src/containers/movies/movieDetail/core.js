@@ -136,7 +136,7 @@ class MovieDetailCore extends Component {
 						className="artist-image"
 					>
 						<img
-							src={director.image}
+							src={director.imageUrl}
 							alt={director.name}
 						/>
 					</div>
@@ -180,7 +180,7 @@ class MovieDetailCore extends Component {
 						className="artist-image"
 					>
 						<img
-							src={actor.image}
+							src={actor.imageUrl}
 							alt={actor.name}
 						/>
 					</div>
