@@ -14,6 +14,7 @@ import MovieDetail from './containers/movies/movieDetail';
 // import DirectorList from './containers/movies/directorList';
 // import DeletedMovies from './containers/movies/deletedMovies';
 
+import BrowseCards from './containers/cards/browse';
 
 class App extends Component {
 	render() {
@@ -34,6 +35,7 @@ class App extends Component {
 								{/*<Route path="/movies/deletedMovies" component={DeletedMovies} />*/}
 
 								{/*<Route path="/test" component={Test} />*/}
+								<Route path="/cards/browse" component={BrowseCards} />
 								<Route component={NotFound} />
 							</Switch>
 						</div>

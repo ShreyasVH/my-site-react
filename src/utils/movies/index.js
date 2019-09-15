@@ -35,7 +35,6 @@ export default class Movies {
 	static getMoviesWithFilters = (shouldReplace = true) => {
 		let movieStore = store.getState().movies;
 		let { filters, offset, totalCount, list, sortMap } = movieStore;
-		console.log(movieStore);
 		if ((-1 === totalCount) || (list.length < totalCount)) {
 			let payload = {
 				filters,

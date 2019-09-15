@@ -51,6 +51,16 @@ export default class Home extends Component {
 						</Link>
 					</CardContent>
 				</Card>
+
+				<br />
+
+				<Card className="project">
+					<CardContent>
+						<Link to="/cards/browse">
+							LET'S DUEL
+						</Link>
+					</CardContent>
+				</Card>
 			</div>
 		);
 	}
