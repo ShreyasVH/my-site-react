@@ -59,8 +59,9 @@ module.exports = {
 		}),
 		// new BundleAnalyzerPlugin(),
 		new webpack.DefinePlugin({
-			'process.env.API_ENDPOINT': JSON.stringify(process.env.REACT_APP_API_ENDPOINT)
-		})
+			'process.env.API_ENDPOINT': JSON.stringify(process.env.REACT_APP_API_ENDPOINT),
+			'process.env.API_ENDPOINT_DUEL_LINKS': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_DUEL_LINKS)
+		}),
 	],
 	optimization: {
 		splitChunks: {
@@ -74,5 +75,6 @@ module.exports = {
 		port: 3000,
 		host: 'my-site-react.herokuapp.com',
 		historyApiFallback: true
-	}
+	},
+	devtool: 'cheap-module-eval-source-map'
 };
