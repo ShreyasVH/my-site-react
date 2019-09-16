@@ -6,7 +6,7 @@
 import { BASE_URL, MOVIES_DASHBOARD_URL, GET_MOVIES_WITH_FILTERS_URL, GET_DELETED_MOVIES, GET_MOVIE_DETAILS } from '../../constants';
 import ApiHelper from '../apiHelper';
 import store from '../../store';
-import { updateDashBoard, updateMovieList, clearMovieList, updateFilters, setMovie} from '../../actions/moviesActions';
+import { updateDashBoard, updateMovieList, clearMovieList, updateFilters, setMovie, toggleFilters, resetTempFilters } from '../../actions/moviesActions';
 import Utils from '../index';
 import Context from '../context';
 
@@ -34,9 +34,15 @@ export default class Movies {
 
 	static getMoviesWithFilters = (shouldReplace = true) => {
 		let movieStore = store.getState().movies;
-		let { filters, offset, totalCount, list, sortMap } = movieStore;
-		console.log(movieStore);
-		if ((-1 === totalCount) || (list.length < totalCount)) {
+		let { filters, totalCount, list, sortMap } = movieStore;
+		let offset;
+		if (shouldReplace) {
+			offset = 0;
+		} else {
+			offset = movieStore.offset;
+		}
+
+		if ((-1 === totalCount) || (offset < totalCount) || shouldReplace) {
 			let payload = {
 				filters,
 				sortMap,
@@ -48,10 +54,12 @@ export default class Movies {
 				let response = apiResponse.data;
 				if (0 !== Object.keys(response).length) {
 					store.dispatch(updateMovieList(response.movies, response.offset, response.totalCount, shouldReplace));
+					Movies.closeFilters();
 					Context.hideLoader();
 				}
 			});
 		} else {
+			Movies.closeFilters();
 			Context.hideLoader();
 		}
 	};
@@ -89,5 +97,29 @@ export default class Movies {
 
 	static clearMovieDetails = () => {
 		store.dispatch(setMovie({}));
+	};
+
+	static openFilters = () => {
+		Movies.toggleFilters(true);
+	};
+
+	static closeFilters = () => {
+		Movies.toggleFilters(false);
+	};
+
+	static toggleFilters = (value) => {
+		store.dispatch(toggleFilters(value));
+	};
+
+	static resetTempFilters = () => {
+		store.dispatch(resetTempFilters());
+	};
+
+	static applyFilters = () => {
+		let storeValues = store.getState();
+		let movieStore = storeValues.movies;
+		let filtersTemp = movieStore.filtersTemp;
+
+		store.dispatch(updateFilters(filtersTemp));
 	};
 }

@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import Waypoint from 'react-waypoint';
 
 import MovieList from '../movieList/index';
+import Filters from '../../filters';
 
 export default class BrowseMoviesCore extends Component {
 	renderTitle = () => {
@@ -41,11 +42,32 @@ export default class BrowseMoviesCore extends Component {
 		}
 	};
 
+	openFilters = (event) => this.props.onFilterOpen && this.props.onFilterOpen(event);
+
+	closeFilters = (event) => this.props.onFilterClose && this.props.onFilterClose(event);
+
+	applyFilters = () => this.props.applyFilters && this.props.applyFilters();
+
+	renderFilter = () => {
+		return (
+			<Filters
+				isOpen={this.props.isFilterOpen}
+				selected={this.props.selectedFilters}
+				options={this.props.filterOptions}
+				onFilterOpen={this.openFilters}
+				onFilterClose={this.closeFilters}
+				handleEvent={this.props.handleEvent}
+				applyFilters={this.props.applyFilters}
+			/>
+		);
+	};
+
 	renderMarkup = () => {
 		let markup = [];
 		if (!this.props.isEmpty()) {
 			markup = (
 				<div>
+					{this.renderFilter()}
 					{this.renderTitle()}
 					{this.renderCount()}
 					<MovieList
