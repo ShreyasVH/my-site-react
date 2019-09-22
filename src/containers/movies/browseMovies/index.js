@@ -56,6 +56,10 @@ class BrowseMovies extends Component {
 		Movies.clearFilters();
 	};
 
+	clearFilter = key => {
+		Movies.clearFilter(key);
+	};
+
 	render() {
 		return (
 			<div>
@@ -72,6 +76,7 @@ class BrowseMovies extends Component {
 					handleEvent={MovieFilterHandler.handleEvent}
 					applyFilters={this.applyFilters}
 					clearFilters={this.clearFilters}
+					clearFilter={this.clearFilter}
 				/>
 			</div>
 		);

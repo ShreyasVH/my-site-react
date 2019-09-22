@@ -14,7 +14,8 @@ import {
 	setMovie,
 	toggleFilters,
 	resetTempFilters,
-	clearFilters
+	clearFilters,
+	clearFilter
 } from '../../actions/moviesActions';
 import Utils from '../index';
 import Context from '../context';
@@ -176,5 +177,9 @@ export default class Movies {
 
 	static clearFilters = () => {
 		store.dispatch(clearFilters());
+	};
+
+	static clearFilter = (key) => {
+		store.dispatch(clearFilter(key));
 	}
 }

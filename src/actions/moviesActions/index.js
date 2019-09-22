@@ -62,3 +62,8 @@ export const clearFilters = () => ({
 	type: MOVIE_EVENTS.CLEAR_FILTERS,
 	payload: {}
 });
+
+export const clearFilter = (key) => ({
+	type: MOVIE_EVENTS.CLEAR_FILTER,
+	payload: { key }
+});

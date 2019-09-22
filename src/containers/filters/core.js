@@ -47,6 +47,11 @@ const styles = (theme) => ({
         minHeight: theme.typography.pxToRem(10),
         backgroundColor: '#27AE60',
         marginLeft: theme.typography.pxToRem(10)
+    },
+    clearFilter: {
+        right: 0,
+        position: 'absolute',
+        fontWeight: 'bold'
     }
 });
 
@@ -64,6 +69,10 @@ class FiltersCore extends Component {
     clearFilters = (event) => this.props.clearFilters && this.props.clearFilters(event);
 
     handleEvent = event => this.props.handleEvent && this.props.handleEvent(event);
+
+    clearFilter = (key) => (event) => {
+        this.props.clearFilter && this.props.clearFilter(key);
+    };
 
     renderButton = () => {
         return (
@@ -107,12 +116,12 @@ class FiltersCore extends Component {
               </Button>
           );
       }
-
     };
 
+    isFilterSelected = key => (this.props.selected.hasOwnProperty(key) && (0 !== this.props.selected[key].length));
+
     renderFilterSelectedIndicator = (key) => {
-        let isFilterSelected = (this.props.selected.hasOwnProperty(key) && (0 !== this.props.selected[key].length));
-        if (isFilterSelected) {
+        if (this.isFilterSelected(key)) {
             return <div className={this.props.classes.appliedFilter} />
         }
     };
@@ -135,7 +144,7 @@ class FiltersCore extends Component {
 
     isCheckboxChecked = (key, id) => {
         let selectedFilters = this.props.selected;
-        return selectedFilters.hasOwnProperty(key) && (selectedFilters[key].indexOf(id) != -1);
+        return selectedFilters.hasOwnProperty(key) && (selectedFilters[key].indexOf(id) !== -1);
     };
 
     renderCheckboxOptions = (key, options) => {
@@ -170,9 +179,29 @@ class FiltersCore extends Component {
         return markup;
     };
 
+    renderClearFilterButton = (key) => {
+        if (this.isFilterSelected(key)) {
+            return (
+                <Button
+                    onClick={this.clearFilter(key)}
+                    color="primary"
+                    TouchRippleProps={{
+                        'data-key': key
+                    }}
+                    className={this.props.classes.clearFilter}
+                >
+                    <span>
+                        Clear
+                    </span>
+                </Button>
+            );
+        }
+    };
+
     renderCheckboxFilter = (key, filter) => {
         return (
             <div>
+                {this.renderClearFilterButton(key)}
                 {this.renderCheckboxOptions(key, filter.values)}
             </div>
         );

@@ -5,7 +5,7 @@
 
 import { MOVIE_EVENTS } from '../../constants/events';
 import Utils from '../../utils';
-import {FILTER_TYPE} from "../../constants";
+import { FILTER_TYPE } from '../../constants';
 
 const defaultState = {
 	dashboard: [],
@@ -178,6 +178,11 @@ const moviesReducer = (state = defaultState, action) => {
 			break;
         case MOVIE_EVENTS.CLEAR_FILTERS:
             state = Object.assign({}, state, {filtersTemp: {}});
+            break;
+        case MOVIE_EVENTS.CLEAR_FILTER:
+            let newFiltersTemp = Utils.copyObject(state.filtersTemp);
+            delete newFiltersTemp[action.payload.key];
+            state = Object.assign({}, state, {filtersTemp: newFiltersTemp});
             break;
 	}
 

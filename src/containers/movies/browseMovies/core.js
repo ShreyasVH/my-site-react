@@ -50,6 +50,8 @@ export default class BrowseMoviesCore extends Component {
 
     clearFilters = (event) => this.props.clearFilters && this.props.clearFilters(event);
 
+    clearFilter = (key) => this.props.clearFilter && this.props.clearFilter(key);
+
 	renderFilter = () => {
 		return (
 			<Filters
@@ -61,6 +63,7 @@ export default class BrowseMoviesCore extends Component {
 				handleEvent={this.props.handleEvent}
 				applyFilters={this.applyFilters}
                 clearFilters={this.clearFilters}
+                clearFilter={this.clearFilter}
 			/>
 		);
 	};
