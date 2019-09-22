@@ -97,11 +97,11 @@ const defaultState = {
 			type: FILTER_TYPE.CHECKBOX,
 			values: [
 				{
-					id: '1',
+					id: 'true',
 					name: 'Yes'
 				},
 				{
-					id: '0',
+					id: 'false',
 					name: 'No'
 				}
 			]
@@ -111,11 +111,11 @@ const defaultState = {
 			type: FILTER_TYPE.CHECKBOX,
 			values: [
 				{
-					id: '1',
+					id: 'true',
 					name: 'Yes'
 				},
 				{
-					id: '0',
+					id: 'false',
 					name: 'No'
 				}
 			]
@@ -176,6 +176,9 @@ const moviesReducer = (state = defaultState, action) => {
 		case MOVIE_EVENTS.RESET_TEMP_FILTERS:
 			state = Object.assign({}, state, {filtersTemp: state.filters});
 			break;
+        case MOVIE_EVENTS.CLEAR_FILTERS:
+            state = Object.assign({}, state, {filtersTemp: {}});
+            break;
 	}
 
 	return state;

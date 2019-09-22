@@ -52,6 +52,10 @@ class BrowseMovies extends Component {
 		Movies.getMoviesWithFilters();
 	};
 
+	clearFilters = event => {
+		Movies.clearFilters();
+	};
+
 	render() {
 		return (
 			<div>
@@ -67,6 +71,7 @@ class BrowseMovies extends Component {
 					onFilterClose={this.closeFilters}
 					handleEvent={MovieFilterHandler.handleEvent}
 					applyFilters={this.applyFilters}
+					clearFilters={this.clearFilters}
 				/>
 			</div>
 		);
@@ -80,7 +85,6 @@ function mapStateToProps (statesInRedux) {
 		selectedFilters: statesInRedux.movies.filtersTemp,
 		isFilterOpen: statesInRedux.movies.isFilterOpen,
 		filterOptions: statesInRedux.movies.filterOptions,
-		filters: statesInRedux.movies.filters
 	};
 }
 

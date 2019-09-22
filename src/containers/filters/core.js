@@ -61,6 +61,8 @@ class FiltersCore extends Component {
 
     applyFilters = (event) => this.props.applyFilters && this.props.applyFilters();
 
+    clearFilters = (event) => this.props.clearFilters && this.props.clearFilters(event);
+
     handleEvent = event => this.props.handleEvent && this.props.handleEvent(event);
 
     renderButton = () => {
@@ -84,8 +86,32 @@ class FiltersCore extends Component {
         }
     };
 
-    renderFilterSelecedIndicator = (key) => {
-        let isFilterSelected = (this.props.filters.hasOwnProperty(key) && (0 !== this.props.filters[key].length));
+    renderClearAllButton = () => {
+      let isAnyFilterSelected = false;
+
+      for (const key in this.props.selected) {
+          if (this.props.selected.hasOwnProperty(key)) {
+              let values = this.props.selected[key];
+              if (values.length !== 0)
+              {
+                  isAnyFilterSelected = true;
+                  break;
+              }
+          }
+      }
+
+      if (isAnyFilterSelected) {
+          return (
+              <Button color="inherit" name="submit" onClick={this.clearFilters}>
+                  Clear All
+              </Button>
+          );
+      }
+
+    };
+
+    renderFilterSelectedIndicator = (key) => {
+        let isFilterSelected = (this.props.selected.hasOwnProperty(key) && (0 !== this.props.selected[key].length));
         if (isFilterSelected) {
             return <div className={this.props.classes.appliedFilter} />
         }
@@ -97,7 +123,7 @@ class FiltersCore extends Component {
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography className={this.props.classes.heading}>
                         {filter.displayName}
-                        {this.renderFilterSelecedIndicator(key)}
+                        {this.renderFilterSelectedIndicator(key)}
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
@@ -187,6 +213,8 @@ class FiltersCore extends Component {
                                     <Button color="inherit" name="submit" onClick={this.applyFilters}>
                                         Apply
                                     </Button>
+
+                                    {this.renderClearAllButton()}
                                 </Toolbar>
                             </AppBar>
                             <div className={classes.root}>

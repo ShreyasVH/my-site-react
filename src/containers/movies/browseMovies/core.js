@@ -48,17 +48,19 @@ export default class BrowseMoviesCore extends Component {
 
 	applyFilters = () => this.props.applyFilters && this.props.applyFilters();
 
+    clearFilters = (event) => this.props.clearFilters && this.props.clearFilters(event);
+
 	renderFilter = () => {
 		return (
 			<Filters
 				isOpen={this.props.isFilterOpen}
-                filters={this.props.filters}
 				selected={this.props.selectedFilters}
 				options={this.props.filterOptions}
 				onFilterOpen={this.openFilters}
 				onFilterClose={this.closeFilters}
 				handleEvent={this.props.handleEvent}
-				applyFilters={this.props.applyFilters}
+				applyFilters={this.applyFilters}
+                clearFilters={this.clearFilters}
 			/>
 		);
 	};

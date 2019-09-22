@@ -58,3 +58,7 @@ export const toggleFilters = value => ({
 	}
 });
 
+export const clearFilters = () => ({
+	type: MOVIE_EVENTS.CLEAR_FILTERS,
+	payload: {}
+});

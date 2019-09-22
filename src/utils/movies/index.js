@@ -6,7 +6,16 @@
 import { BASE_URL, MOVIES_DASHBOARD_URL, GET_MOVIES_WITH_FILTERS_URL, GET_DELETED_MOVIES, GET_MOVIE_DETAILS } from '../../constants';
 import ApiHelper from '../apiHelper';
 import store from '../../store';
-import { updateDashBoard, updateMovieList, clearMovieList, updateFilters, setMovie, toggleFilters, resetTempFilters } from '../../actions/moviesActions';
+import {
+	updateDashBoard,
+	updateMovieList,
+	clearMovieList,
+	updateFilters,
+	setMovie,
+	toggleFilters,
+	resetTempFilters,
+	clearFilters
+} from '../../actions/moviesActions';
 import Utils from '../index';
 import Context from '../context';
 
@@ -66,8 +75,9 @@ export default class Movies {
 	};
 
 	static updateFilters = () => {
-		let filters = Utils.getUrlParams();
-		store.dispatch(updateFilters(filters));
+		let urlParams = Utils.getUrlParams();
+		delete urlParams.order;
+		store.dispatch(updateFilters(urlParams));
 	};
 
 	static updateUrl = () => {
@@ -163,4 +173,8 @@ export default class Movies {
 
 		store.dispatch(updateFilters(filtersTemp));
 	};
+
+	static clearFilters = () => {
+		store.dispatch(clearFilters());
+	}
 }
