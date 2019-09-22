@@ -70,9 +70,7 @@ class FiltersCore extends Component {
 
     handleEvent = event => this.props.handleEvent && this.props.handleEvent(event);
 
-    clearFilter = (key) => (event) => {
-        this.props.clearFilter && this.props.clearFilter(key);
-    };
+    clearFilter = (key) => (event) => this.props.clearFilter && this.props.clearFilter(key);
 
     renderButton = () => {
         return (
