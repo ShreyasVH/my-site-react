@@ -129,8 +129,8 @@ const defaultState = {
 					name: 'Good'
 				},
 				{
-					id: 'bad',
-					name: 'Bad'
+					id: 'normal',
+					name: 'Normal'
 				}
 			]
 		},

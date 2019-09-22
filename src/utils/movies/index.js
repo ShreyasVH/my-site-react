@@ -53,6 +53,7 @@ export default class Movies {
 			promise.then(apiResponse => {
 				let response = apiResponse.data;
 				if (0 !== Object.keys(response).length) {
+					Movies.updateUrl();
 					store.dispatch(updateMovieList(response.movies, response.offset, response.totalCount, shouldReplace));
 					Movies.closeFilters();
 					Context.hideLoader();
@@ -67,6 +68,46 @@ export default class Movies {
 	static updateFilters = () => {
 		let filters = Utils.getUrlParams();
 		store.dispatch(updateFilters(filters));
+	};
+
+	static updateUrl = () => {
+		let url = Movies.getUrlFromFilters();
+		history.pushState(null, "Browse with filters", url);
+	};
+
+	static getUrlFromFilters = () => {
+		let storeValues = store.getState();
+		let movieStore = storeValues.movies;
+		let filters = movieStore.filters;
+		let sortMap = movieStore.sortMap;
+
+		let urlParams = [];
+
+		for (const key in filters) {
+			if (filters.hasOwnProperty(key)) {
+				let values = filters[key];
+				for (const index in values) {
+					if (values.hasOwnProperty(index)) {
+						let value = values[index];
+						urlParams.push(key + "[]=" + value);
+					}
+				}
+			}
+		}
+
+		let queryString = urlParams.join("&");
+
+		let sortParams = [];
+		for (const key in sortMap) {
+			if (sortMap.hasOwnProperty(key)) {
+				let value = sortMap[key];
+				sortParams.push(key + " " + value);
+			}
+		}
+		let sortString = "order=" + sortParams.join("&");
+
+		queryString = (('' !== queryString) ? (queryString + "&" + sortString) : (sortString));
+		return location.pathname + "?" + queryString;
 	};
 
 	static clearList = () => {
