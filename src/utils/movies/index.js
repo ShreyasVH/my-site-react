@@ -44,7 +44,7 @@ export default class Movies {
 
 	static getMoviesWithFilters = (shouldReplace = true) => {
 		let movieStore = store.getState().movies;
-		let { filters, totalCount, list, sortMap } = movieStore;
+		let { filters, totalCount, sortMap } = movieStore;
 		let offset;
 		if (shouldReplace) {
 			offset = 0;

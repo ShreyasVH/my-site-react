@@ -17,6 +17,7 @@ import MovieIcon from '@material-ui/icons/Movie';
 import AudioIcon from '@material-ui/icons/MusicVideo';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import NoteIcon from '@material-ui/icons/Note';
+import VideoGameAssetIcon from '@material-ui/icons/VideogameAsset';
 
 import './styles.css';
 
@@ -230,6 +231,29 @@ export default class Hamburger extends Component {
 							</ListItemIcon>
 							<ListItemText
 								primary="Know Your Day"
+							/>
+						</ListItem>
+					</Link>
+				</List>
+
+				<List component="nav">
+					<ListItem>
+						<ListItemIcon>
+							<VideoGameAssetIcon />
+						</ListItemIcon>
+						<ListItemText
+							primary="Cards"
+						/>
+					</ListItem>
+
+					<Link
+						to="/cards/browse"
+						onClick={this.closeHamburger}
+					>
+						<ListItem>
+							<ListItemText
+								inset
+								primary="Browse"
 							/>
 						</ListItem>
 					</Link>
