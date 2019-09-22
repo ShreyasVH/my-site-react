@@ -1,7 +1,19 @@
 import store from '../../store';
 import ApiHelper from '../apiHelper';
-import { BASE_URL_DUEL_LINKS, GET_CARDS_WITH_FILTERS_URL } from '../../constants';
-import { updateCardList, updateFilters, clearCardList } from '../../actions/cardsActions';
+import {
+    BASE_URL_DUEL_LINKS,
+    GET_CARDS_WITH_FILTERS_URL,
+    OBTAIN_CARDS_URL
+} from '../../constants';
+import {
+    updateCardList,
+    updateFilters,
+    clearCardList,
+    setFoilTypeForObtainForm,
+    toggleObtainForm,
+    setCardIdForObtainForm,
+    resetObtainForm
+} from '../../actions/cardsActions';
 
 import Context from '../context';
 import Utils from '../index';
@@ -37,5 +49,49 @@ export default class Cards {
 
     static clearList = () => {
         store.dispatch(clearCardList());
+    };
+
+    static setFoilTypeForObtainForm = foilTypeId => {
+        store.dispatch(setFoilTypeForObtainForm(foilTypeId));
+    };
+
+    static showObtainForm = () => {
+        Cards.toggleObtainForm(true);
+    };
+
+    static hideObtainForm = () => {
+        Cards.toggleObtainForm(false);
+    };
+
+    static toggleObtainForm = (value) => {
+        store.dispatch(toggleObtainForm(value));
+    };
+
+    static setCardForObtainForm = cardId => {
+        store.dispatch(setCardIdForObtainForm(cardId));
+    };
+
+    static resetObtainForm = () => {
+        store.dispatch(resetObtainForm());
+    };
+
+    static submitObtainForm = () => {
+        let storeValues = store.getState();
+        let cardStore = storeValues.cards;
+        let obtainForm = cardStore.obtainForm;
+
+        let payload = {
+            cardId: obtainForm.cardId,
+            glossType: obtainForm.foilTypeId
+        };
+
+        let promise = ApiHelper.post(BASE_URL_DUEL_LINKS + OBTAIN_CARDS_URL, payload);
+        promise.then(apiResponse => {
+            let status = apiResponse.status;
+            if (200 === status) {
+                Cards.resetObtainForm();
+                Cards.hideObtainForm();
+            }
+        });
     };
 }

@@ -9,6 +9,25 @@ let defaultState = {
     totalCount: -1,
     sortMap: {
         name: "ASC"
+    },
+    obtainForm: {
+        isOpen: false,
+        foilTypeOptions: [
+            {
+                id: 0,
+                name: 'NORMAL'
+            },
+            {
+                id: 1,
+                name: 'GLOSSY'
+            },
+            {
+                id: 2,
+                name: 'PRISMATIC'
+            }
+        ],
+        cardId: -1,
+        foilTypeId: -1
     }
 };
 
@@ -37,6 +56,30 @@ const cardsReducer = (state = defaultState, action) => {
                 filters: action.payload
             });
             break;
+        case CARD_EVENTS.SET_FOIL_TYPE_IN_OBTAIN_FORM: {
+            let newState = Utils.copyObject(state);
+            newState.obtainForm.foilTypeId = action.payload.foilTypeId;
+            state = newState;
+            break;
+        }
+        case CARD_EVENTS.TOGGLE_OBTAIN_FORM: {
+            let newState = Utils.copyObject(state);
+            newState.obtainForm.isOpen = action.payload.isOpen;
+            state = newState;
+            break;
+        }
+        case CARD_EVENTS.SET_CARD_FOR_OBTAIN_FORM: {
+            let newState = Utils.copyObject(state);
+            newState.obtainForm.cardId = action.payload.cardId;
+            state = newState;
+            break;
+        }
+        case CARD_EVENTS.RESET_OBTAIN_FORM: {
+            let newState = Utils.copyObject(state);
+            newState.obtainForm.cardId = -1;
+            newState.obtainForm.foilTypeId = -1;
+            state = newState;
+        }
     }
     return state;
 };

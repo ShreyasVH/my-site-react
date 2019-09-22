@@ -10,6 +10,7 @@ import Card from '../card';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
+import ObtainForm from "../obtainForm";
 
 
 const styles = theme => ({
@@ -74,11 +75,18 @@ class BrowseCore extends Component {
         );
     };
 
+    renderObtainForm = () => {
+        return (
+            <ObtainForm />
+        );
+    };
+
     renderMarkup = () => {
         let markup = [];
         if (!this.props.isEmpty()) {
             markup = (
                 <div>
+                    {this.renderObtainForm()}
                     {this.renderTitle()}
                     {this.renderCount()}
                     {this.renderCardList()}
