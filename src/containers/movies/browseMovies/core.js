@@ -52,6 +52,7 @@ export default class BrowseMoviesCore extends Component {
 		return (
 			<Filters
 				isOpen={this.props.isFilterOpen}
+                filters={this.props.filters}
 				selected={this.props.selectedFilters}
 				options={this.props.filterOptions}
 				onFilterOpen={this.openFilters}

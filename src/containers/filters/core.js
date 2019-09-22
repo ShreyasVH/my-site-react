@@ -39,6 +39,14 @@ const styles = (theme) => ({
     heading: {
         fontSize: theme.typography.pxToRem(15),
         fontWeight: theme.typography.fontWeightRegular,
+    },
+    appliedFilter: {
+        display: 'inline-block',
+        borderRadius: '50%',
+        minWidth: theme.typography.pxToRem(10),
+        minHeight: theme.typography.pxToRem(10),
+        backgroundColor: '#27AE60',
+        marginLeft: theme.typography.pxToRem(10)
     }
 });
 
@@ -76,12 +84,20 @@ class FiltersCore extends Component {
         }
     };
 
+    renderFilterSelecedIndicator = (key) => {
+        let isFilterSelected = (this.props.filters.hasOwnProperty(key) && (0 !== this.props.filters[key].length));
+        if (isFilterSelected) {
+            return <div className={this.props.classes.appliedFilter} />
+        }
+    };
+
     renderFilter = (key, filter) => {
         return (
             <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography className={this.props.classes.heading}>
                         {filter.displayName}
+                        {this.renderFilterSelecedIndicator(key)}
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>

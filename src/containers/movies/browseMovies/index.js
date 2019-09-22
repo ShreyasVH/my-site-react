@@ -79,7 +79,8 @@ function mapStateToProps (statesInRedux) {
 		totalCount: statesInRedux.movies.totalCount,
 		selectedFilters: statesInRedux.movies.filtersTemp,
 		isFilterOpen: statesInRedux.movies.isFilterOpen,
-		filterOptions: statesInRedux.movies.filterOptions
+		filterOptions: statesInRedux.movies.filterOptions,
+		filters: statesInRedux.movies.filters
 	};
 }
 
