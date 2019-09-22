@@ -24,3 +24,7 @@ export const INPUT_TYPE = {
 	HIDDEN: 'hidden',
 	TEXTAREA: 'textarea'
 };
+
+export const FILTER_TYPE = {
+	CHECKBOX: 'checkbox'
+};

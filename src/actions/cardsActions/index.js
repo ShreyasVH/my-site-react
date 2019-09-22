@@ -1,7 +1,7 @@
-import { CARDS_EVENTS } from '../../constants/events';
+import { CARD_EVENTS } from '../../constants/events';
 
 export const updateCardList = (list, offset, count, shouldReplace = true) => ({
-    type: CARDS_EVENTS.UPDATE_CARD_LIST,
+    type: CARD_EVENTS.UPDATE_CARD_LIST,
     payload: {
         list,
         offset,
@@ -11,7 +11,7 @@ export const updateCardList = (list, offset, count, shouldReplace = true) => ({
 });
 
 export const clearCardList = () => ({
-    type: CARDS_EVENTS.CLEAR_CARD_LIST,
+    type: CARD_EVENTS.CLEAR_CARD_LIST,
     payload: {
         list: [],
         offset: 0,
@@ -20,6 +20,6 @@ export const clearCardList = () => ({
 });
 
 export const updateFilters = (filters = []) => ({
-    type: CARDS_EVENTS.UPDATE_FILTERS,
+    type: CARD_EVENTS.UPDATE_FILTERS,
     payload: filters
 });

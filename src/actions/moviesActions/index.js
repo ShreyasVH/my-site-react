@@ -34,6 +34,16 @@ export const updateFilters = (filters = []) => ({
 	payload: filters
 });
 
+export const updateTempFilters = (filtersTemp = []) => ({
+	type: MOVIE_EVENTS.UPDATE_TEMP_FILTERS,
+	payload: filtersTemp
+});
+
+export const resetTempFilters = () => ({
+	type: MOVIE_EVENTS.RESET_TEMP_FILTERS,
+	payload: {}
+});
+
 export const setMovie = (movie) => ({
 	type: MOVIE_EVENTS.SET_MOVIE,
 	payload: {
@@ -41,3 +51,19 @@ export const setMovie = (movie) => ({
 	}
 });
 
+export const toggleFilters = value => ({
+	type: MOVIE_EVENTS.TOGGLE_FILTER,
+	payload: {
+		isFilterOpen: value
+	}
+});
+
+export const clearFilters = () => ({
+	type: MOVIE_EVENTS.CLEAR_FILTERS,
+	payload: {}
+});
+
+export const clearFilter = (key) => ({
+	type: MOVIE_EVENTS.CLEAR_FILTER,
+	payload: { key }
+});

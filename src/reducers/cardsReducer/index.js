@@ -1,4 +1,4 @@
-import { CARDS_EVENTS } from "../../constants/events";
+import { CARD_EVENTS } from "../../constants/events";
 import Utils from "../../utils";
 
 let defaultState = {
@@ -15,7 +15,7 @@ let defaultState = {
 
 const cardsReducer = (state = defaultState, action) => {
     switch (action.type) {
-        case CARDS_EVENTS.UPDATE_CARD_LIST:
+        case CARD_EVENTS.UPDATE_CARD_LIST:
             let { list, shouldReplace } = action.payload;
             let newList;
             if (shouldReplace) {
@@ -29,10 +29,10 @@ const cardsReducer = (state = defaultState, action) => {
                 totalCount: action.payload.totalCount
             });
             break;
-        case CARDS_EVENTS.CLEAR_CARD_LIST:
+        case CARD_EVENTS.CLEAR_CARD_LIST:
             state = Object.assign({}, state, action.payload);
             break;
-        case CARDS_EVENTS.UPDATE_FILTERS:
+        case CARD_EVENTS.UPDATE_FILTERS:
             state = Object.assign({}, state, {
                 filters: action.payload
             });
