@@ -6,6 +6,7 @@ import NotFound from './containers/notFound';
 // import Test from './containers/test';
 import Header from './components/header';
 import Loader from './components/loader';
+import Notify from './components/notify';
 
 import MoviesDashboard from './containers/movies/dashboard';
 import BrowseMovies from './containers/movies/browseMovies';
@@ -40,6 +41,7 @@ class App extends Component {
 							</Switch>
 						</div>
 						<Loader />
+						<Notify />
 					</div>
 				</Router>
 			</div>

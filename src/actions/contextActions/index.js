@@ -16,3 +16,16 @@ export const toggleLoader = (showLoader = false) => ({
 		showLoader
 	}
 });
+
+export const showNotify = (message, type) => ({
+	type: CONTEXT_EVENTS.SHOW_NOTIFY,
+	payload: {
+		message,
+		type
+	}
+});
+
+export const hideNotify = () => ({
+	type: CONTEXT_EVENTS.HIDE_NOTIFY,
+	payload: {}
+});

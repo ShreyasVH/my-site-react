@@ -4,7 +4,12 @@
  */
 
 import store from '../../store';
-import { updateContext, toggleLoader } from '../../actions/contextActions';
+import {
+	updateContext,
+	toggleLoader,
+	showNotify,
+	hideNotify
+} from '../../actions/contextActions';
 import ApiHelper from '../apiHelper';
 import { BASE_URL, GET_MODE_URL, CHANGE_MODE_URL } from '../../constants';
 
@@ -36,4 +41,12 @@ export default class Context {
 		let body = document.getElementsByTagName('body');
 		body[0].style['overflow-y'] = 'auto';
 	};
+
+	static closeNotify = () => {
+		store.dispatch(hideNotify());
+	};
+
+	static showNotify = (message, type) => {
+		store.dispatch(showNotify(message, type));
+	}
 }

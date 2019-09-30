@@ -90,8 +90,18 @@ export default class Cards {
             let status = apiResponse.status;
             if (200 === status) {
                 Cards.resetObtainForm();
+                Context.showNotify('Card obtained successfully', 'success');
                 Cards.hideObtainForm();
+            } else {
+                Context.showNotify('Error obtaining card. Description: ' + apiResponse.data, 'error');
             }
+        }).catch(apiResponse => {
+            let message = 'Error';
+            if (apiResponse.hasOwnProperty('response') && apiResponse.response.hasOwnProperty('data') && apiResponse.response.data.hasOwnProperty('description')) {
+                let description = apiResponse.response.data.description;
+                message = 'Error obtaining card. Description: ' + description;
+            }
+            Context.showNotify(message, 'error');
         });
     };
 }
