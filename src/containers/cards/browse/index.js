@@ -61,6 +61,10 @@ class Browse extends Component {
 
     handleEvent = event => MovieFilterHandler.handleEvent('cards', event);
 
+    handleCardSearch = event => {
+        Cards.getSuggestions(event);
+    };
+
     render() {
         return (
             <div>
@@ -78,6 +82,7 @@ class Browse extends Component {
                     applyFilters={this.applyFilters}
                     clearFilters={this.clearFilters}
                     clearFilter={this.clearFilter}
+                    onCardSearch={this.handleCardSearch}
                 />
             </div>
         );
@@ -91,6 +96,7 @@ function mapStateToProps (store) {
         selectedFilters: store.cards.filtersTemp,
         isFilterOpen: store.cards.isFilterOpen,
         filterOptions: store.cards.filterOptions,
+        suggestions: store.cards.suggestions
     };
 }
 

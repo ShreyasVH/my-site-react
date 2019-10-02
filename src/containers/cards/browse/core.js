@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import ObtainForm from "../obtainForm";
 import Filters from "../../filters";
+import SearchDropDown from '../../../components/searchDropdown';
 
 
 const styles = theme => ({
@@ -69,6 +70,17 @@ class BrowseCore extends Component {
         }
     };
 
+    handleCardSearch = event => this.props.onCardSearch && this.props.onCardSearch(event);
+
+    renderSearchDropdown = () => {
+        return (
+            <SearchDropDown
+                onKeyUp={this.handleCardSearch}
+                items={this.props.suggestions}
+            />
+        );
+    };
+
     renderWaypoint = () => {
         if (!this.props.isEmpty()) {
             return (
@@ -117,6 +129,7 @@ class BrowseCore extends Component {
                     {this.renderObtainForm()}
                     {this.renderTitle()}
                     {this.renderCount()}
+                    {this.renderSearchDropdown()}
                     {this.renderCardList()}
                     {this.renderWaypoint()}
                 </div>

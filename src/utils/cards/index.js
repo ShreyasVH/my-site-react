@@ -3,7 +3,8 @@ import ApiHelper from '../apiHelper';
 import {
     BASE_URL_DUEL_LINKS,
     GET_CARDS_WITH_FILTERS_URL,
-    OBTAIN_CARDS_URL
+    OBTAIN_CARDS_URL,
+    GET_CARD_BY_NAME
 } from '../../constants';
 import {
     updateCardList,
@@ -12,7 +13,8 @@ import {
     setFoilTypeForObtainForm,
     toggleObtainForm,
     setCardIdForObtainForm,
-    resetObtainForm
+    resetObtainForm,
+    setSuggestions
 } from '../../actions/cardsActions';
 
 import Context from '../context';
@@ -157,4 +159,23 @@ export default class Cards {
             Context.showNotify(message, 'error');
         });
     };
+
+    static getSuggestions = event => {
+        let keyword = event.target.value;
+
+        if (keyword.length >= 3) {
+            let promise = ApiHelper.get(BASE_URL_DUEL_LINKS + GET_CARD_BY_NAME.replace('{keyword}', keyword));
+            promise.then(apiResponse => {
+                if (apiResponse.hasOwnProperty('data')) {
+                    let suggestions = apiResponse.data;
+                    store.dispatch(setSuggestions(suggestions));
+                }
+            });
+        } else {
+            let currentSuggestions = store.getState().cards.suggestions;
+            if (currentSuggestions.length > 0) {
+                store.dispatch(setSuggestions([]));
+            }
+        }
+    }
 }

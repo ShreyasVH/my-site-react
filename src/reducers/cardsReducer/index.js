@@ -12,6 +12,7 @@ let defaultState = {
     sortMap: {
         name: "ASC"
     },
+    suggestions: [],
     obtainForm: {
         isOpen: false,
         foilTypeOptions: [
@@ -299,10 +300,6 @@ let defaultState = {
     }
 };
 
-
-
-
-
 const cardsReducer = (state = defaultState, action) => {
     switch (action.type) {
         case CARD_EVENTS.UPDATE_CARD_LIST:
@@ -371,6 +368,10 @@ const cardsReducer = (state = defaultState, action) => {
             delete newFiltersTemp[action.payload.key];
             state = Object.assign({}, state, {filtersTemp: newFiltersTemp});
             break;
+        case CARD_EVENTS.SET_SUGGESTIONS: {
+            state = Object.assign({}, state, {suggestions: action.payload.suggestions});
+            break;
+        }
     }
     return state;
 };

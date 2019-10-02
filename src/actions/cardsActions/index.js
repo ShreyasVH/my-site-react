@@ -77,4 +77,11 @@ export const clearFilter = (key) => ({
     payload: { key }
 });
 
+export const setSuggestions = suggestions => ({
+    type: CARD_EVENTS.SET_SUGGESTIONS,
+    payload: {
+        suggestions
+    }
+});
+
 
