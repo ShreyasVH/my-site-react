@@ -88,7 +88,9 @@ export default class Movies {
 
 	static updateUrl = () => {
 		let url = Movies.getUrlFromFilters();
-		history.pushState(null, "Browse with filters", url);
+		if (url !== decodeURI(location.pathname + location.search)) {
+			history.pushState(null, "Browse with filters", url);
+		}
 	};
 
 	static getUrlFromFilters = () => {

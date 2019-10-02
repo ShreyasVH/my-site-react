@@ -18,6 +18,9 @@ import SearchDropDown from '../../../components/searchDropdown';
 const styles = theme => ({
     root: {
         flexGrow: 1,
+    },
+    cardList: {
+        marginTop: theme.typography.pxToRem(5)
     }
 });
 
@@ -106,7 +109,7 @@ class BrowseCore extends Component {
 
     renderCardList = () => {
         return (
-            <div>
+            <div className={this.props.classes.cardList}>
                 <Grid container className={this.props.classes.root} spacing={16}>
                     <Grid item xs={12}>
                         <Grid container className={this.props.classes.demo} justify="center" spacing={16}>

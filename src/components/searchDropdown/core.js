@@ -22,7 +22,8 @@ const styles = theme => ({
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        marginBottom: 0
+        marginBottom: 0,
+        marginTop: theme.typography.pxToRem(5)
     },
     dropdownList: {
         position: 'absolute',

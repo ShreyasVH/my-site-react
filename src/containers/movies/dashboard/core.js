@@ -41,7 +41,7 @@ export default class DashBoardCore extends Component {
 						this.props.data.map(row => (
 							<TableRow key={row.language_id}>
 								<TableCell component="th" scope="row">
-									<Link to={'/movies/browseMovies?language[]=' + row.language_id}>
+									<Link to={'/movies/browseMovies?language[]=' + row.language_id + '&order=name ASC'}>
 										{row.language}
 									</Link>
 								</TableCell>
