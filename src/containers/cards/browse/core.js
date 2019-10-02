@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import ObtainForm from "../obtainForm";
+import Filters from "../../filters";
 
 
 const styles = theme => ({
@@ -20,6 +21,32 @@ const styles = theme => ({
 });
 
 class BrowseCore extends Component {
+    openFilters = (event) => this.props.onFilterOpen && this.props.onFilterOpen(event);
+
+    closeFilters = (event) => this.props.onFilterClose && this.props.onFilterClose(event);
+
+    applyFilters = () => this.props.applyFilters && this.props.applyFilters();
+
+    clearFilters = (event) => this.props.clearFilters && this.props.clearFilters(event);
+
+    clearFilter = (key) => this.props.clearFilter && this.props.clearFilter(key);
+
+    renderFilter = () => {
+        return (
+            <Filters
+                isOpen={this.props.isFilterOpen}
+                selected={this.props.selectedFilters}
+                options={this.props.filterOptions}
+                onFilterOpen={this.openFilters}
+                onFilterClose={this.closeFilters}
+                handleEvent={this.props.handleEvent}
+                applyFilters={this.applyFilters}
+                clearFilters={this.clearFilters}
+                clearFilter={this.clearFilter}
+            />
+        );
+    };
+
     renderTitle = () => {
         if (!this.props.isEmpty()) {
             return (
@@ -86,6 +113,7 @@ class BrowseCore extends Component {
         if (!this.props.isEmpty()) {
             markup = (
                 <div>
+                    {this.renderFilter()}
                     {this.renderObtainForm()}
                     {this.renderTitle()}
                     {this.renderCount()}

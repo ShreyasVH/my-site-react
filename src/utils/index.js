@@ -7,24 +7,27 @@ export default class Utils {
 	static getUrlParams = () => {
 		let params = {};
 		let paramString = window.location.search.replace('?', '');
-		let urlParams = paramString.split('&');
-		for(let index in urlParams) {
-			if (urlParams.hasOwnProperty(index)) {
-				let object = urlParams[index];
-				let keyValuePair = object.split('=');
-				let key = keyValuePair[0];
-				let value = keyValuePair[1];
-				let formattedKey = key.replace('[]', '');
-				if (-1 !== key.indexOf('[')) {
-					if (params.hasOwnProperty(formattedKey)) {
-						params[formattedKey].push(value);
+
+		if ('' !== paramString) {
+			let urlParams = paramString.split('&');
+			for(let index in urlParams) {
+				if (urlParams.hasOwnProperty(index)) {
+					let object = urlParams[index];
+					let keyValuePair = object.split('=');
+					let key = keyValuePair[0];
+					let value = keyValuePair[1];
+					let formattedKey = key.replace('[]', '');
+					if (-1 !== key.indexOf('[')) {
+						if (params.hasOwnProperty(formattedKey)) {
+							params[formattedKey].push(value);
+						} else {
+							params[formattedKey] = [
+								value
+							];
+						}
 					} else {
-						params[formattedKey] = [
-							value
-						];
+						params[formattedKey] = value;
 					}
-				} else {
-					params[formattedKey] = value;
 				}
 			}
 		}

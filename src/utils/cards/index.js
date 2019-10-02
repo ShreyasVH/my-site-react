@@ -17,12 +17,21 @@ import {
 
 import Context from '../context';
 import Utils from '../index';
+import Filters from "../filters";
 
 export default class Cards {
     static getCardsWithFilters = (shouldReplace = true) => {
         let cardStore = store.getState().cards;
-        let { filters, offset, totalCount, list, sortMap } = cardStore;
-        if ((-1 === totalCount) || (list.length < totalCount)) {
+        let { filters, totalCount, sortMap } = cardStore;
+        let offset;
+
+        if (shouldReplace) {
+            offset = 0;
+        } else {
+            offset = cardStore.offset;
+        }
+
+        if ((-1 === totalCount) || (offset < totalCount) || shouldReplace) {
             let payload = {
                 filters,
                 sortMap,
@@ -33,18 +42,62 @@ export default class Cards {
             promise.then(apiResponse => {
                 let response = apiResponse.data;
                 if (0 !== Object.keys(response).length) {
+                    Cards.updateUrl();
                     store.dispatch(updateCardList(response.cards, response.offset, response.totalCount, shouldReplace));
+                    Filters.closeFilters('cards');
                     Context.hideLoader();
                 }
             });
         } else {
+            Filters.closeFilters('cards');
             Context.hideLoader();
         }
     };
 
     static updateFilters = () => {
-        let filters = Utils.getUrlParams();
-        store.dispatch(updateFilters(filters));
+        let urlParams = Utils.getUrlParams();
+        delete urlParams.order;
+        store.dispatch(updateFilters(urlParams));
+    };
+
+    static updateUrl = () => {
+        let url = Cards.getUrlFromFilters();
+        history.pushState(null, "Browse with filters", url);
+    };
+
+    static getUrlFromFilters = () => {
+        let storeValues = store.getState();
+        let movieStore = storeValues.movies;
+        let filters = movieStore.filters;
+        let sortMap = movieStore.sortMap;
+
+        let urlParams = [];
+
+        for (const key in filters) {
+            if (filters.hasOwnProperty(key)) {
+                let values = filters[key];
+                for (const index in values) {
+                    if (values.hasOwnProperty(index)) {
+                        let value = values[index];
+                        urlParams.push(key + "[]=" + value);
+                    }
+                }
+            }
+        }
+
+        let queryString = urlParams.join("&");
+
+        let sortParams = [];
+        for (const key in sortMap) {
+            if (sortMap.hasOwnProperty(key)) {
+                let value = sortMap[key];
+                sortParams.push(key + " " + value);
+            }
+        }
+        let sortString = "order=" + sortParams.join("&");
+
+        queryString = (('' !== queryString) ? (queryString + "&" + sortString) : (sortString));
+        return location.pathname + "?" + queryString;
     };
 
     static clearList = () => {

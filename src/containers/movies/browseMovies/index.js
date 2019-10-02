@@ -9,8 +9,8 @@ import { connect } from 'react-redux';
 
 import BrowseMoviesCore from './core';
 
-import { FILTER_TYPE } from '../../../constants';
 import Movies from '../../../utils/movies';
+import Filters from '../../../utils/filters';
 import Context from '../../../utils/context';
 import MovieFilterHandler from '../../../utils/movies/filterHandler';
 
@@ -18,7 +18,7 @@ class BrowseMovies extends Component {
 	componentDidMount() {
 		Context.showLoader();
 		Movies.updateFilters();
-		Movies.resetTempFilters();
+		Filters.resetTempFilters('movies');
 		Movies.getMoviesWithFilters();
 	}
 
@@ -37,28 +37,30 @@ class BrowseMovies extends Component {
 
 	openFilters = (event) => {
 		event.preventDefault();
-		Movies.openFilters();
+		Filters.openFilters('movies');
 	};
 
 	closeFilters = (event) => {
 		event.preventDefault();
-		Movies.closeFilters();
-		Movies.resetTempFilters();
+		Filters.closeFilters('movies');
+		Filters.resetTempFilters('movies');
 	};
 
 	applyFilters = () => {
 		Context.showLoader();
-		Movies.applyFilters();
+		Filters.applyFilters('movies');
 		Movies.getMoviesWithFilters();
 	};
 
 	clearFilters = event => {
-		Movies.clearFilters();
+		Filters.clearFilters('movies');
 	};
 
 	clearFilter = key => {
-		Movies.clearFilter(key);
+		Filters.clearFilter('movies', key);
 	};
+
+	handleEvent = event => MovieFilterHandler.handleEvent('movies', event);
 
 	render() {
 		return (
@@ -73,7 +75,7 @@ class BrowseMovies extends Component {
 					isEmpty={this.isEmpty}
 					onFilterOpen={this.openFilters}
 					onFilterClose={this.closeFilters}
-					handleEvent={MovieFilterHandler.handleEvent}
+					handleEvent={this.handleEvent}
 					applyFilters={this.applyFilters}
 					clearFilters={this.clearFilters}
 					clearFilter={this.clearFilter}

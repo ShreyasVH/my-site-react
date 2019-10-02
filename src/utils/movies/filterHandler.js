@@ -1,5 +1,10 @@
 import store from '../../store';
-import { updateTempFilters } from '../../actions/moviesActions';
+import {
+    updateTempFilters as updateMoviesTempFilters
+} from '../../actions/moviesActions';
+import {
+    updateTempFilters as updateCardsTempFilters
+} from '../../actions/cardsActions';
 import { FILTER_TYPE } from '../../constants';
 import Utils from '../../utils';
 
@@ -13,14 +18,18 @@ class FilterHandler {
         instance = this;
     }
 
-    disptachEvent = payload => {
-        store.dispatch(updateTempFilters(payload));
+    dispatchEvent = (type, payload) => {
+        let functions = {
+            movies: updateMoviesTempFilters,
+            cards: updateCardsTempFilters
+        };
+        store.dispatch(functions[type].call(null, payload));
     };
 
-    handleCheckbox = (event, storeValues) => {
-        let movieStore = storeValues.movies;
+    handleCheckbox = (context, event, storeValues) => {
+        let currentStore = storeValues[context];
         let target = event.target;
-        let tempFilters = movieStore.filtersTemp;
+        let tempFilters = currentStore.filtersTemp;
 
         let key = target.dataset['key'];
         let id = target.dataset['id'];
@@ -40,10 +49,10 @@ class FilterHandler {
         }
 
 
-        this.disptachEvent(tempFilters);
+        this.dispatchEvent(context, tempFilters);
     };
 
-    handleEvent = event => {
+    handleEvent = (context, event) => {
         console.log(event);
 
         let storeValues = Utils.copyObject(store.getState());
@@ -53,7 +62,7 @@ class FilterHandler {
 
         switch (type) {
             case FILTER_TYPE.CHECKBOX:
-                this.handleCheckbox(event, storeValues);
+                this.handleCheckbox(context, event, storeValues);
                 break;
         }
     }

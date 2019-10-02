@@ -50,4 +50,31 @@ export const resetObtainForm = () => ({
     payload: {}
 });
 
+export const updateTempFilters = (filtersTemp = []) => ({
+    type: CARD_EVENTS.UPDATE_TEMP_FILTERS,
+    payload: filtersTemp
+});
+
+export const resetTempFilters = () => ({
+    type: CARD_EVENTS.RESET_TEMP_FILTERS,
+    payload: {}
+});
+
+export const toggleFilters = value => ({
+    type: CARD_EVENTS.TOGGLE_FILTER,
+    payload: {
+        isFilterOpen: value
+    }
+});
+
+export const clearFilters = () => ({
+    type: CARD_EVENTS.CLEAR_FILTERS,
+    payload: {}
+});
+
+export const clearFilter = (key) => ({
+    type: CARD_EVENTS.CLEAR_FILTER,
+    payload: { key }
+});
+
 

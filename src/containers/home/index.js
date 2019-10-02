@@ -56,7 +56,7 @@ export default class Home extends Component {
 
 				<Card className="project">
 					<CardContent>
-						<Link to="/cards/browse">
+						<Link to="/cards/browse?order=name%20ASC">
 							LET'S DUEL
 						</Link>
 					</CardContent>

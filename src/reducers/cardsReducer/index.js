@@ -1,10 +1,12 @@
 import { CARD_EVENTS } from "../../constants/events";
 import Utils from "../../utils";
+import {FILTER_TYPE} from "../../constants";
 
 let defaultState = {
     individual: {},
     list: [],
     filters: {},
+    filtersTemp: {},
     offset: 0,
     totalCount: -1,
     sortMap: {
@@ -28,8 +30,277 @@ let defaultState = {
         ],
         cardId: -1,
         foilTypeId: -1
+    },
+    filterOptions: {
+        attribute: {
+            displayName: 'Attribute',
+            type: FILTER_TYPE.CHECKBOX,
+            values: [
+                {
+                    id: '0',
+                    name: 'Light'
+                },
+                {
+                    id: '1',
+                    name: 'Dark'
+                },
+                {
+                    id: '2',
+                    name: 'Water'
+                },
+                {
+                    id: '3',
+                    name: 'Fire'
+                },
+                {
+                    id: '4',
+                    name: 'Earth'
+                },
+                {
+                    id: '5',
+                    name: 'Wind'
+                },
+                {
+                    id: '6',
+                    name: 'Divine'
+                }
+            ]
+        },
+        type: {
+            displayName: 'Type',
+            type: FILTER_TYPE.CHECKBOX,
+            values: [
+                {
+                    id: '0',
+                    name: 'Dragon'
+                },
+                {
+                    id: '1',
+                    name: 'Zombie'
+                },
+                {
+                    id: '2',
+                    name: 'Fiend'
+                },
+                {
+                    id: '3',
+                    name: 'Pyro'
+                },
+                {
+                    id: '4',
+                    name: 'Sea Serpent'
+                },
+                {
+                    id: '5',
+                    name: 'Rock'
+                },
+                {
+                    id: '6',
+                    name: 'Machine'
+                },
+                {
+                    id: '7',
+                    name: 'Fish'
+                },
+                {
+                    id: '8',
+                    name: 'Dinosaur'
+                },
+                {
+                    id: '9',
+                    name: 'Insect'
+                },
+                {
+                    id: '10',
+                    name: 'Beast'
+                },
+                {
+                    id: '11',
+                    name: 'Beast Warrior'
+                },
+                {
+                    id: '12',
+                    name: 'Plant'
+                },
+                {
+                    id: '13',
+                    name: 'Aqua'
+                },
+                {
+                    id: '14',
+                    name: 'Warrior'
+                },
+                {
+                    id: '15',
+                    name: 'Winged Beast'
+                },
+                {
+                    id: '16',
+                    name: 'Fairy'
+                },
+                {
+                    id: '17',
+                    name: 'Spellcaster'
+                },
+                {
+                    id: '18',
+                    name: 'Thunder'
+                },
+                {
+                    id: '19',
+                    name: 'Reptile'
+                },
+                {
+                    id: '20',
+                    name: 'Psychic'
+                },
+                {
+                    id: '21',
+                    name: 'Wyrm'
+                },
+                {
+                    id: '22',
+                    name: 'Divine Beast'
+                }
+            ]
+        },
+        cardType: {
+            displayName: 'Card Type',
+            type: FILTER_TYPE.CHECKBOX,
+            values: [
+                {
+                    id: '0',
+                    name: 'Monster'
+                },
+                {
+                    id: '1',
+                    name: 'Spell'
+                },
+                {
+                    id: '2',
+                    name: 'Trap'
+                }
+            ]
+        },
+        cardSubType: {
+            displayName: 'Card Sub Type',
+            type: FILTER_TYPE.CHECKBOX,
+            values: [
+                {
+                    id: '0',
+                    name: 'NORMAL'
+                },
+                {
+                    id: '1',
+                    name: 'EFFECT'
+                },
+                {
+                    id: '2',
+                    name: 'RITUAL'
+                },
+                {
+                    id: '3',
+                    name: 'FUSION'
+                },
+                {
+                    id: '4',
+                    name: 'SYNCHRO'
+                },
+                {
+                    id: '5',
+                    name: 'TOON'
+                },
+                {
+                    id: '6',
+                    name: 'GEMINI'
+                },
+                {
+                    id: '7',
+                    name: 'UNION'
+                },
+                {
+                    id: '8',
+                    name: 'SPIRIT'
+                },
+                {
+                    id: '9',
+                    name: 'TUNER'
+                },
+                {
+                    id: '10',
+                    name: 'FLIP'
+                },
+                {
+                    id: '11',
+                    name: 'FIELD'
+                },
+                {
+                    id: '12',
+                    name: 'EQUIP'
+                },
+                {
+                    id: '13',
+                    name: 'CONTINUOUS'
+                },
+                {
+                    id: '14',
+                    name: 'QUICK_PLAY'
+                },
+                {
+                    id: '15',
+                    name: 'COUNTER'
+                }
+            ]
+        },
+        rarity: {
+            displayName: 'Rarity',
+            type: FILTER_TYPE.CHECKBOX,
+            values: [
+                {
+                    id: '0',
+                    name: 'NORMAL'
+                },
+                {
+                    id: '1',
+                    name: 'RARE'
+                },
+                {
+                    id: '2',
+                    name: 'SUPER RARE'
+                },
+                {
+                    id: '3',
+                    name: 'ULTRA RARE'
+                }
+            ]
+        },
+        limitType: {
+            displayName: 'Limit Type',
+            type: FILTER_TYPE.CHECKBOX,
+            values: [
+                {
+                    id: '0',
+                    name: 'UNLIMITED'
+                },
+                {
+                    id: '1',
+                    name: 'LIMITED 1'
+                },
+                {
+                    id: '2',
+                    name: 'LIMITED 2'
+                },
+                {
+                    id: '3',
+                    name: 'LIMITED 3'
+                }
+            ]
+        }
     }
 };
+
+
+
 
 
 const cardsReducer = (state = defaultState, action) => {
@@ -56,6 +327,11 @@ const cardsReducer = (state = defaultState, action) => {
                 filters: action.payload
             });
             break;
+        case CARD_EVENTS.UPDATE_TEMP_FILTERS:
+            state = Object.assign({}, state, {
+                filtersTemp: action.payload
+            });
+            break;
         case CARD_EVENTS.SET_FOIL_TYPE_IN_OBTAIN_FORM: {
             let newState = Utils.copyObject(state);
             newState.obtainForm.foilTypeId = action.payload.foilTypeId;
@@ -79,7 +355,22 @@ const cardsReducer = (state = defaultState, action) => {
             newState.obtainForm.cardId = -1;
             newState.obtainForm.foilTypeId = -1;
             state = newState;
+            break;
         }
+        case CARD_EVENTS.TOGGLE_FILTER:
+            state = Object.assign({}, state, action.payload);
+            break;
+        case CARD_EVENTS.RESET_TEMP_FILTERS:
+            state = Object.assign({}, state, {filtersTemp: state.filters});
+            break;
+        case CARD_EVENTS.CLEAR_FILTERS:
+            state = Object.assign({}, state, {filtersTemp: {}});
+            break;
+        case CARD_EVENTS.CLEAR_FILTER:
+            let newFiltersTemp = Utils.copyObject(state.filtersTemp);
+            delete newFiltersTemp[action.payload.key];
+            state = Object.assign({}, state, {filtersTemp: newFiltersTemp});
+            break;
     }
     return state;
 };

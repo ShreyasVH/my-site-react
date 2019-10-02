@@ -19,6 +19,7 @@ import {
 } from '../../actions/moviesActions';
 import Utils from '../index';
 import Context from '../context';
+import Filters from '../filters';
 
 export default class Movies {
 	static getDashBoard = () => {
@@ -65,12 +66,12 @@ export default class Movies {
 				if (0 !== Object.keys(response).length) {
 					Movies.updateUrl();
 					store.dispatch(updateMovieList(response.movies, response.offset, response.totalCount, shouldReplace));
-					Movies.closeFilters();
+					Filters.closeFilters('movies');
 					Context.hideLoader();
 				}
 			});
 		} else {
-			Movies.closeFilters();
+			Filters.closeFilters('movies');
 			Context.hideLoader();
 		}
 	};
@@ -150,36 +151,4 @@ export default class Movies {
 	static clearMovieDetails = () => {
 		store.dispatch(setMovie({}));
 	};
-
-	static openFilters = () => {
-		Movies.toggleFilters(true);
-	};
-
-	static closeFilters = () => {
-		Movies.toggleFilters(false);
-	};
-
-	static toggleFilters = (value) => {
-		store.dispatch(toggleFilters(value));
-	};
-
-	static resetTempFilters = () => {
-		store.dispatch(resetTempFilters());
-	};
-
-	static applyFilters = () => {
-		let storeValues = store.getState();
-		let movieStore = storeValues.movies;
-		let filtersTemp = movieStore.filtersTemp;
-
-		store.dispatch(updateFilters(filtersTemp));
-	};
-
-	static clearFilters = () => {
-		store.dispatch(clearFilters());
-	};
-
-	static clearFilter = (key) => {
-		store.dispatch(clearFilter(key));
-	}
 }
