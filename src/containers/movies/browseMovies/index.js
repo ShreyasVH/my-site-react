@@ -66,6 +66,10 @@ class BrowseMovies extends Component {
 		Movies.getSuggestions(event);
 	};
 
+	handleSearchClick = selectedId => {
+		location.href = ('/movies/movieDetail?id=' + selectedId);
+	};
+
 	render() {
 		return (
 			<div>
@@ -84,6 +88,7 @@ class BrowseMovies extends Component {
 					clearFilters={this.clearFilters}
 					clearFilter={this.clearFilter}
 					onSearch={this.handleSearch}
+					onSearchClick={this.handleSearchClick}
 				/>
 			</div>
 		);

@@ -354,6 +354,7 @@ const cardsReducer = (state = defaultState, action) => {
             state = newState;
             break;
         }
+        case CARD_EVENTS.SET_CARD:
         case CARD_EVENTS.TOGGLE_FILTER:
             state = Object.assign({}, state, action.payload);
             break;

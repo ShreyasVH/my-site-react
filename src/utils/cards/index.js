@@ -4,7 +4,8 @@ import {
     BASE_URL_DUEL_LINKS,
     GET_CARDS_WITH_FILTERS_URL,
     OBTAIN_CARDS_URL,
-    GET_CARD_BY_NAME
+    GET_CARD_BY_NAME,
+    GET_CARD_DETAILS
 } from '../../constants';
 import {
     updateCardList,
@@ -14,12 +15,13 @@ import {
     toggleObtainForm,
     setCardIdForObtainForm,
     resetObtainForm,
-    setSuggestions
+    setSuggestions,
+    setCard
 } from '../../actions/cardsActions';
 
 import Context from '../context';
 import Utils from '../index';
-import Filters from "../filters";
+import Filters from '../filters';
 
 export default class Cards {
     static getCardsWithFilters = (shouldReplace = true) => {
@@ -64,14 +66,16 @@ export default class Cards {
 
     static updateUrl = () => {
         let url = Cards.getUrlFromFilters();
-        history.pushState(null, "Browse with filters", url);
+        if (url !== decodeURI(location.pathname + location.search)) {
+            history.pushState(null, "Browse with filters", url);
+        }
     };
 
     static getUrlFromFilters = () => {
         let storeValues = store.getState();
-        let movieStore = storeValues.movies;
-        let filters = movieStore.filters;
-        let sortMap = movieStore.sortMap;
+        let cardStore = storeValues.cards;
+        let filters = cardStore.filters;
+        let sortMap = cardStore.sortMap;
 
         let urlParams = [];
 
@@ -177,5 +181,20 @@ export default class Cards {
                 store.dispatch(setSuggestions([]));
             }
         }
-    }
+    };
+
+    static getDetail = (id) => {
+        let promise = ApiHelper.get(BASE_URL_DUEL_LINKS + GET_CARD_DETAILS.replace('{id}', id));
+        promise.then(apiResponse => {
+            let response = apiResponse.data;
+            if (0 !== Object.keys(response).length) {
+                store.dispatch(setCard(response));
+                Context.hideLoader();
+            }
+        });
+    };
+
+    static clearDetails = () => {
+        store.dispatch(setCard({}));
+    };
 }

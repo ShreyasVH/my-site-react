@@ -19,6 +19,7 @@ export const GET_MOVIE_BY_NAME = 'movies/movies/keyword/{keyword}';
 export const GET_CARDS_WITH_FILTERS_URL = 'cards/filters';
 export const OBTAIN_CARDS_URL = 'cards/myCards';
 export const GET_CARD_BY_NAME = 'cards/keyword/{keyword}';
+export const GET_CARD_DETAILS = 'cards/{id}';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',

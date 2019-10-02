@@ -65,6 +65,10 @@ class Browse extends Component {
         Cards.getSuggestions(event);
     };
 
+    handleSearchClick = selectedId => {
+        location.href = ('/cards/detail?id=' + selectedId);
+    };
+
     render() {
         return (
             <div>
@@ -83,6 +87,7 @@ class Browse extends Component {
                     clearFilters={this.clearFilters}
                     clearFilter={this.clearFilter}
                     onSearch={this.handleSearch}
+                    onSearchClick={this.handleSearchClick}
                 />
             </div>
         );

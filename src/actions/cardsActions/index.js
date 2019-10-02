@@ -84,4 +84,11 @@ export const setSuggestions = suggestions => ({
     }
 });
 
+export const setCard = card => ({
+    type: CARD_EVENTS.SET_CARD,
+    payload: {
+        individual: card
+    }
+});
+
 

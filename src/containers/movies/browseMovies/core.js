@@ -37,6 +37,8 @@ export default class BrowseMoviesCore extends Component {
 
 	handleSearch = event => this.props.onSearch && this.props.onSearch(event);
 
+	handleSelect = event => this.props.onSearchClick && this.props.onSearchClick(event);
+
 	renderSearchDropdown = () => {
 		return (
 			<SearchDropDown
@@ -44,6 +46,7 @@ export default class BrowseMoviesCore extends Component {
 				items={this.props.suggestions}
 				label="Movie"
 				placeHolder="Search Movie"
+				onSelect={this.handleSelect}
 			/>
 		);
 	};

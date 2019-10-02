@@ -33,11 +33,25 @@ class CardCore extends Component {
             return (
                 <div className="movie-link">
                     <Link
-                        to={'#'}
+                        to={'/cards/detail?id=' + card.id}
                     >
                         {card.name}
                     </Link>
                 </div>
+            );
+        }
+    };
+
+    renderObtainLink = () => {
+        let { showObtainLink = true } = this.props;
+
+        if (showObtainLink) {
+            return (
+                <SystemUpdateIcon
+                    fontSize="large"
+                    className={this.props.classes.obtain}
+                    onClick={this.openObtainForm(this.props.card.id)}
+                />
             );
         }
     };
@@ -58,21 +72,7 @@ class CardCore extends Component {
                             src={card.imageUrl}
                             alt={card.name}
                         />
-                        {/*<a>*/}
-                        {/*    <EditIcon*/}
-                        {/*        className={}*/}
-                        {/*        fontSize="large"*/}
-                        {/*    />*/}
-                        {/*</a>*/}
-                        {/*<IconButton*/}
-                        {/*    */}
-                        {/*>*/}
-                            <SystemUpdateIcon
-                                fontSize="large"
-                                className={this.props.classes.obtain}
-                                onClick={this.openObtainForm(card.id)}
-                            />
-                        {/*</IconButton>*/}
+                        {this.renderObtainLink()}
                     </Paper>
                     {this.renderLink()}
                 </Grid>

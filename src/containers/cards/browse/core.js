@@ -77,6 +77,8 @@ class BrowseCore extends Component {
 
     handleSearch = event => this.props.onSearch && this.props.onSearch(event);
 
+    handleSelect = event => this.props.onSearchClick && this.props.onSearchClick(event);
+
     renderSearchDropdown = () => {
         return (
             <SearchDropDown
@@ -84,6 +86,7 @@ class BrowseCore extends Component {
                 items={this.props.suggestions}
                 label="Card"
                 placeHolder="Search Card"
+                onSelect={this.handleSelect}
             />
         );
     };

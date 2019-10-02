@@ -16,6 +16,7 @@ import MovieDetail from './containers/movies/movieDetail';
 // import DeletedMovies from './containers/movies/deletedMovies';
 
 import BrowseCards from './containers/cards/browse';
+import CardDetail from './containers/cards/detail';
 
 class App extends Component {
 	render() {
@@ -37,6 +38,7 @@ class App extends Component {
 
 								{/*<Route path="/test" component={Test} />*/}
 								<Route path="/cards/browse" component={BrowseCards} />
+								<Route path="/cards/detail" component={CardDetail} />
 								<Route component={NotFound} />
 							</Switch>
 						</div>

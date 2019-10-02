@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = theme => ({
@@ -71,11 +71,13 @@ class SearchDropdownCore extends Component {
                 variant="outlined"
                 fullWidth
                 onKeyUp={this.handleKeyUp}
-                autoComplete={false}
+                autoComplete="off"
                 placeholder={this.props.placeHolder}
             />
         );
     };
+
+    handleSelect = selectedId => event => this.props.onSelect && this.props.onSelect(selectedId);
 
     renderDropdown = () => {
         if (this.props.items.length > 0) {
@@ -85,7 +87,10 @@ class SearchDropdownCore extends Component {
                 if (this.props.items.hasOwnProperty(index)) {
                     let card = this.props.items[index];
                     listMarkup.push(
-                        <ListItem alignItems="center">
+                        <ListItem
+                            alignItems="center"
+                            onClick={this.handleSelect(card.id)}
+                        >
                             <ListItemAvatar>
                                 <Avatar
                                     className={this.props.classes.image}
