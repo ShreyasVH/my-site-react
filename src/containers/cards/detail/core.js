@@ -4,9 +4,13 @@ import Card from '../../cards/card';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
 import ObtainForm from '../obtainForm';
 import { Link } from 'react-router-dom';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const styles = theme => ({
     root: {
@@ -17,6 +21,10 @@ const styles = theme => ({
     },
     sectionTitle: {
         marginBottom: 0
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
     }
 });
 
@@ -79,18 +87,15 @@ class DetailCore extends Component {
     renderSources = () => {
         if ((Object.keys(this.props.card).length > 0) && (this.props.card.sources.length > 0)) {
             return (
-                <div>
-                    <h4
-                        className={this.props.classes.sectionTitle}
-                    >
-                        Sources
-                    </h4>
-                    <List component="nav">
+                <ExpansionPanel>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={this.props.classes.heading}>Sources</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
                         {this.renderSourcesListMarkup()}
-                    </List>
-                </div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
             );
-
         }
     };
 
@@ -108,21 +113,22 @@ class DetailCore extends Component {
     renderMyCards = () => {
         if ((Object.keys(this.props.card).length > 0) && (this.props.card.individualCards.length > 0)) {
             return (
-                <div>
-                    <h4>
-                        My Cards
-                    </h4>
-
-                    <div className={this.props.classes.cardList}>
-                        <Grid container className={this.props.classes.root} spacing={16}>
-                            <Grid item xs={12}>
-                                <Grid container className={this.props.classes.demo} justify="center" spacing={16}>
-                                    {this.renderMyCardListMarkup()}
+                <ExpansionPanel>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={this.props.classes.heading}>My Cards</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={this.props.classes.cardList}>
+                            <Grid container className={this.props.classes.root} spacing={16}>
+                                <Grid item xs={12}>
+                                    <Grid container className={this.props.classes.demo} justify="center" spacing={16}>
+                                        {this.renderMyCardListMarkup()}
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    </div>
-                </div>
+                        </div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
             );
         }
     };
