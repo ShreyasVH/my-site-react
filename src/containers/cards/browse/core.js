@@ -63,7 +63,9 @@ class BrowseCore extends Component {
     renderCount = () => {
         if (!this.props.isEmpty()) {
             return (
-                <h3>
+                <h3
+                    className="item-count"
+                >
                     {this.props.totalCount + ' cards'}
                 </h3>
             );
@@ -77,6 +79,8 @@ class BrowseCore extends Component {
             <SearchDropDown
                 onKeyUp={this.handleSearch}
                 items={this.props.suggestions}
+                label="Card"
+                placeHolder="Search Card"
             />
         );
     };

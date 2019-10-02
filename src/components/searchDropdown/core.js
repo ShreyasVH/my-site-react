@@ -63,7 +63,7 @@ class SearchDropdownCore extends Component {
         return (
             <TextField
                 id="outlined-name"
-                label="Card"
+                label={this.props.label}
                 className={this.props.classes.textField}
                 value={this.props.value}
                 margin="normal"
@@ -71,6 +71,7 @@ class SearchDropdownCore extends Component {
                 fullWidth
                 onKeyUp={this.handleKeyUp}
                 autoComplete={false}
+                placeholder={this.props.placeHolder}
             />
         );
     };
