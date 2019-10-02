@@ -8,6 +8,7 @@ import Waypoint from 'react-waypoint';
 
 import MovieList from '../movieList/index';
 import Filters from '../../filters';
+import SearchDropDown from '../../../components/searchDropdown';
 
 export default class BrowseMoviesCore extends Component {
 	renderTitle = () => {
@@ -30,6 +31,17 @@ export default class BrowseMoviesCore extends Component {
 				</h3>
 			);
 		}
+	};
+
+	handleSearch = event => this.props.onSearch && this.props.onSearch(event);
+
+	renderSearchDropdown = () => {
+		return (
+			<SearchDropDown
+				onKeyUp={this.handleSearch}
+				items={this.props.suggestions}
+			/>
+		);
 	};
 
 	renderWaypoint = () => {
@@ -68,6 +80,14 @@ export default class BrowseMoviesCore extends Component {
 		);
 	};
 
+	renderMovieList = () => {
+		return (
+			<MovieList
+				{...this.props}
+			/>
+		);
+	};
+
 	renderMarkup = () => {
 		let markup = [];
 		if (!this.props.isEmpty()) {
@@ -76,9 +96,8 @@ export default class BrowseMoviesCore extends Component {
 					{this.renderFilter()}
 					{this.renderTitle()}
 					{this.renderCount()}
-					<MovieList
-						{...this.props}
-					/>
+					{this.renderSearchDropdown()}
+					{this.renderMovieList()}
 					{this.renderWaypoint()}
 				</div>
 			);

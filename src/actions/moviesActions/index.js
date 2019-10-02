@@ -67,3 +67,10 @@ export const clearFilter = (key) => ({
 	type: MOVIE_EVENTS.CLEAR_FILTER,
 	payload: { key }
 });
+
+export const setSuggestions = suggestions => ({
+	type: MOVIE_EVENTS.SET_SUGGESTIONS,
+	payload: {
+		suggestions
+	}
+});

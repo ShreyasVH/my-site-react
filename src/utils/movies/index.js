@@ -3,7 +3,14 @@
  *
  */
 
-import { BASE_URL, MOVIES_DASHBOARD_URL, GET_MOVIES_WITH_FILTERS_URL, GET_DELETED_MOVIES, GET_MOVIE_DETAILS } from '../../constants';
+import {
+	BASE_URL,
+	MOVIES_DASHBOARD_URL,
+	GET_MOVIES_WITH_FILTERS_URL,
+	GET_DELETED_MOVIES,
+	GET_MOVIE_DETAILS,
+	GET_MOVIE_BY_NAME
+} from '../../constants';
 import ApiHelper from '../apiHelper';
 import store from '../../store';
 import {
@@ -12,10 +19,7 @@ import {
 	clearMovieList,
 	updateFilters,
 	setMovie,
-	toggleFilters,
-	resetTempFilters,
-	clearFilters,
-	clearFilter
+	setSuggestions
 } from '../../actions/moviesActions';
 import Utils from '../index';
 import Context from '../context';
@@ -151,4 +155,23 @@ export default class Movies {
 	static clearMovieDetails = () => {
 		store.dispatch(setMovie({}));
 	};
+
+	static getSuggestions = event => {
+		let keyword = event.target.value;
+
+		if (keyword.length >= 3) {
+			let promise = ApiHelper.get(BASE_URL + GET_MOVIE_BY_NAME.replace('{keyword}', keyword));
+			promise.then(apiResponse => {
+				if (apiResponse.hasOwnProperty('data')) {
+					let suggestions = apiResponse.data;
+					store.dispatch(setSuggestions(suggestions));
+				}
+			});
+		} else {
+			let currentSuggestions = store.getState().movies.suggestions;
+			if (currentSuggestions.length > 0) {
+				store.dispatch(setSuggestions([]));
+			}
+		}
+	}
 }

@@ -70,12 +70,12 @@ class BrowseCore extends Component {
         }
     };
 
-    handleCardSearch = event => this.props.onCardSearch && this.props.onCardSearch(event);
+    handleSearch = event => this.props.onSearch && this.props.onSearch(event);
 
     renderSearchDropdown = () => {
         return (
             <SearchDropDown
-                onKeyUp={this.handleCardSearch}
+                onKeyUp={this.handleSearch}
                 items={this.props.suggestions}
             />
         );

@@ -61,7 +61,7 @@ class Browse extends Component {
 
     handleEvent = event => MovieFilterHandler.handleEvent('cards', event);
 
-    handleCardSearch = event => {
+    handleSearch = event => {
         Cards.getSuggestions(event);
     };
 
@@ -82,7 +82,7 @@ class Browse extends Component {
                     applyFilters={this.applyFilters}
                     clearFilters={this.clearFilters}
                     clearFilter={this.clearFilter}
-                    onCardSearch={this.handleCardSearch}
+                    onSearch={this.handleSearch}
                 />
             </div>
         );

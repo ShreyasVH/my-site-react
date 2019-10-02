@@ -62,6 +62,10 @@ class BrowseMovies extends Component {
 
 	handleEvent = event => MovieFilterHandler.handleEvent('movies', event);
 
+	handleSearch = event => {
+		Movies.getSuggestions(event);
+	};
+
 	render() {
 		return (
 			<div>
@@ -79,19 +83,21 @@ class BrowseMovies extends Component {
 					applyFilters={this.applyFilters}
 					clearFilters={this.clearFilters}
 					clearFilter={this.clearFilter}
+					onSearch={this.handleSearch}
 				/>
 			</div>
 		);
 	}
 }
 
-function mapStateToProps (statesInRedux) {
+function mapStateToProps (store) {
 	return {
-		movieList: statesInRedux.movies.list,
-		totalCount: statesInRedux.movies.totalCount,
-		selectedFilters: statesInRedux.movies.filtersTemp,
-		isFilterOpen: statesInRedux.movies.isFilterOpen,
-		filterOptions: statesInRedux.movies.filterOptions,
+		movieList: store.movies.list,
+		totalCount: store.movies.totalCount,
+		selectedFilters: store.movies.filtersTemp,
+		isFilterOpen: store.movies.isFilterOpen,
+		filterOptions: store.movies.filterOptions,
+		suggestions: store.movies.suggestions
 	};
 }
 

@@ -19,6 +19,7 @@ const defaultState = {
 	sortMap: {
 		name: "ASC"
 	},
+	suggestions: [],
 	filterOptions: {
 		language: {
 			displayName: 'Language',
@@ -184,6 +185,10 @@ const moviesReducer = (state = defaultState, action) => {
             delete newFiltersTemp[action.payload.key];
             state = Object.assign({}, state, {filtersTemp: newFiltersTemp});
             break;
+		case MOVIE_EVENTS.SET_SUGGESTIONS: {
+			state = Object.assign({}, state, {suggestions: action.payload.suggestions});
+			break;
+		}
 	}
 
 	return state;
