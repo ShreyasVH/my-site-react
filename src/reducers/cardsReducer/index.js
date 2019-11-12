@@ -373,6 +373,12 @@ const cardsReducer = (state = defaultState, action) => {
             state = Object.assign({}, state, {suggestions: action.payload.suggestions});
             break;
         }
+        case CARD_EVENTS.SET_MY_CARDS: {
+            let individual = Utils.copyObject(state.individual);
+            individual.myCards = action.payload.myCards;
+            state = Object.assign({}, state, { individual });
+            break;
+        }
     }
     return state;
 };
