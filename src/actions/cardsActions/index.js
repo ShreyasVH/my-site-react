@@ -98,4 +98,10 @@ export const setMyCards = myCards => ({
     }
 });
 
+export const setSourcesForCard = sources => ({
+    type: CARD_EVENTS.SET_CARD_SOURCES,
+    payload: {
+        sources
+    }
+});
 

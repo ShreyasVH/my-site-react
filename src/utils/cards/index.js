@@ -6,7 +6,8 @@ import {
     OBTAIN_CARDS_URL,
     GET_CARD_BY_NAME,
     GET_CARD_DETAILS,
-    GET_MY_CARDS
+    GET_MY_CARDS,
+    GET_SOURCES_FOR_CARD
 } from '../../constants';
 import {
     updateCardList,
@@ -18,7 +19,8 @@ import {
     resetObtainForm,
     setSuggestions,
     setCard,
-    setMyCards
+    setMyCards,
+    setSourcesForCard
 } from '../../actions/cardsActions';
 
 import Context from '../context';
@@ -193,6 +195,7 @@ export default class Cards {
                 store.dispatch(setCard(response));
                 Context.hideLoader();
                 Cards.getMyCards(id);
+                Cards.getSourcesForCard(id);
             }
         });
     };
@@ -201,11 +204,19 @@ export default class Cards {
         store.dispatch(setCard({}));
     };
 
-    static getMyCards = (cardId, imageUrl) => {
+    static getMyCards = cardId => {
         let promise = ApiHelper.get(BASE_URL_DUEL_LINKS + GET_MY_CARDS.replace('{cardId}', cardId));
         promise.then(apiResponse => {
             let myCards = apiResponse.data;
             store.dispatch(setMyCards(myCards));
         });
     };
+
+    static getSourcesForCard = cardId => {
+        let promise = ApiHelper.get(BASE_URL_DUEL_LINKS + GET_SOURCES_FOR_CARD.replace('{cardId}', cardId));
+        promise.then(apiResponse => {
+            let sources = apiResponse.data;
+            store.dispatch(setSourcesForCard(sources));
+        });
+    }
 }

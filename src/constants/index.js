@@ -21,6 +21,7 @@ export const OBTAIN_CARDS_URL = 'cards/myCards';
 export const GET_CARD_BY_NAME = 'cards/keyword/{keyword}';
 export const GET_CARD_DETAILS = 'cards/{id}';
 export const GET_MY_CARDS = 'cards/myCards/{cardId}';
+export const GET_SOURCES_FOR_CARD = 'cards/source/card/{cardId}';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',

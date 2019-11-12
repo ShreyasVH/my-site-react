@@ -85,18 +85,18 @@ class DetailCore extends Component {
     };
 
     renderSources = () => {
-        // if ((Object.keys(this.props.card).length > 0) && (this.props.card.sources.length > 0)) {
-        //     return (
-        //         <ExpansionPanel>
-        //             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        //                 <Typography className={this.props.classes.heading}>Sources</Typography>
-        //             </ExpansionPanelSummary>
-        //             <ExpansionPanelDetails>
-        //                 {this.renderSourcesListMarkup()}
-        //             </ExpansionPanelDetails>
-        //         </ExpansionPanel>
-        //     );
-        // }
+        if ((Object.keys(this.props.card).length > 0) && this.props.card.sources && (this.props.card.sources.length > 0)) {
+            return (
+                <ExpansionPanel>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={this.props.classes.heading}>Sources</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        {this.renderSourcesListMarkup()}
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            );
+        }
     };
 
     renderMyCardListMarkup = () => (

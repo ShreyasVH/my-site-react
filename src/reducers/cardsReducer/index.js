@@ -379,6 +379,12 @@ const cardsReducer = (state = defaultState, action) => {
             state = Object.assign({}, state, { individual });
             break;
         }
+        case CARD_EVENTS.SET_CARD_SOURCES: {
+            let individual = Utils.copyObject(state.individual);
+            individual.sources = action.payload.sources;
+            state = Object.assign({}, state, { individual });
+            break;
+        }
     }
     return state;
 };
