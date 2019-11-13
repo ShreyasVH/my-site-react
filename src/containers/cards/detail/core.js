@@ -85,7 +85,7 @@ class DetailCore extends Component {
     };
 
     renderSources = () => {
-        if ((Object.keys(this.props.card).length > 0) && (this.props.card.sources.length > 0)) {
+        if ((Object.keys(this.props.card).length > 0) && this.props.card.sources && (this.props.card.sources.length > 0)) {
             return (
                 <ExpansionPanel>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -100,7 +100,7 @@ class DetailCore extends Component {
     };
 
     renderMyCardListMarkup = () => (
-        this.props.card.individualCards.map((myCard) => (
+        this.props.card.myCards.map((myCard) => (
             <Card
                 key={'card-' + this.props.card.id}
                 card={this.props.card}
@@ -111,7 +111,7 @@ class DetailCore extends Component {
     );
 
     renderMyCards = () => {
-        if ((Object.keys(this.props.card).length > 0) && (this.props.card.individualCards.length > 0)) {
+        if ((Object.keys(this.props.card).length > 0) && this.props.card.myCards && (this.props.card.myCards.length > 0)) {
             return (
                 <ExpansionPanel>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
