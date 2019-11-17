@@ -139,6 +139,29 @@ class DetailCore extends Component {
         );
     };
 
+    renderFoilTypeStats = () => {
+        if (Object.keys(this.props.card).length > 0) {
+            let stats = JSON.parse(this.props.card.glossTypeStats);
+            let keyOrder = [
+                'PRISMATIC',
+                'GLOSSY',
+                'NORMAL'
+            ];
+
+            return (
+                <ExpansionPanel expanded={true}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={this.props.classes.heading}>Foil Type Stats</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        {keyOrder.map(key => <ListItem>{key + ': ' + stats[key]}</ListItem>)}
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            );
+        }
+
+    };
+
     render () {
         return (
             <div className="movieDetailsContainer">
@@ -146,6 +169,7 @@ class DetailCore extends Component {
                 {this.renderTitle()}
                 {this.renderImage()}
                 {this.renderDetails()}
+                {this.renderFoilTypeStats()}
                 {this.renderSources()}
                 {this.renderMyCards()}
             </div>
