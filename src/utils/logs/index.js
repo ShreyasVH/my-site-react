@@ -12,7 +12,7 @@ export default class Logs
         let logsStore = Utils.copyObject(store.getState().logs);
 
         let url = BASE_URL_LOGGER + GET_LOGS;
-        const count = 4;
+        const count = 20;
 
         let offset;
         if (shouldReplace) {
