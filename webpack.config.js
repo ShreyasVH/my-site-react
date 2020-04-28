@@ -60,7 +60,8 @@ module.exports = {
 		// new BundleAnalyzerPlugin(),
 		new webpack.DefinePlugin({
 			'process.env.API_ENDPOINT': JSON.stringify(process.env.REACT_APP_API_ENDPOINT),
-			'process.env.API_ENDPOINT_DUEL_LINKS': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_DUEL_LINKS)
+			'process.env.API_ENDPOINT_DUEL_LINKS': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_DUEL_LINKS),
+			'process.env.API_ENDPOINT_LOGGER': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_LOGGER)
 		}),
 	],
 	optimization: {

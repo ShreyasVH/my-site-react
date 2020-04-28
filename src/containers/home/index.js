@@ -61,6 +61,16 @@ export default class Home extends Component {
 						</Link>
 					</CardContent>
 				</Card>
+
+				<br />
+
+				<Card className="project">
+					<CardContent>
+						<Link to="/logs/filters">
+							LOGS
+						</Link>
+					</CardContent>
+				</Card>
 			</div>
 		);
 	}
