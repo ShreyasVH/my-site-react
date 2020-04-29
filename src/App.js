@@ -20,6 +20,11 @@ import CardDetail from './containers/cards/detail';
 
 import Logs from './containers/logs';
 
+import CricbuzzBrowse from './containers/cricbuzz/browse';
+import Tour from './containers/cricbuzz/tour/detail';
+import Series from './containers/cricbuzz/series/detail';
+import Match from './containers/cricbuzz/match/detail';
+
 class App extends Component {
 	render() {
 		return (
@@ -43,6 +48,12 @@ class App extends Component {
 								<Route path="/cards/detail" component={CardDetail} />
 
 								<Route path="/logs/filters" component={Logs} />
+
+								<Route path="/cricbuzz/browse" component={CricbuzzBrowse} />
+								<Route path="/cricbuzz/tours/detail" component={Tour} />
+								<Route path="/cricbuzz/series/detail" component={Series} />
+								<Route path="/cricbuzz/matches/detail" component={Match} />
+
 								<Route component={NotFound} />
 							</Switch>
 						</div>
