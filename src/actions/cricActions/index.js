@@ -25,3 +25,16 @@ export const updateMatch = match => ({
         match
     }
 });
+
+export const updateSuggestions = (type, suggestions) => ({
+    type: CRIC_EVENTS.UPDATE_SUGGESTIONS,
+    payload: {
+        type,
+        suggestions
+    }
+});
+
+export const updateContext = payload => ({
+    type: CRIC_EVENTS.UPDATE_CONTEXT,
+    payload
+});

@@ -1,7 +1,7 @@
 import {BASE_URL_CRICBUZZ, GET_TOURS, GET_TOUR_BY_ID, GET_SERIES_BY_ID, GET_MATCH_BY_ID} from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
-import {updateTours, updateTour, updateSeries, updateMatch} from "../../actions/cricActions";
+import {updateTours, updateTour, updateSeries, updateMatch, updateSuggestions, updateContext} from "../../actions/cricActions";
 import Context from "../context";
 import Utils from '../';
 
@@ -154,4 +154,19 @@ export default class CricBuzzUtils {
 
         return match;
     };
+
+    static search = (type, keyword) => {
+        let cricStore = Utils.copyObject(store.getState().cric);
+        let url = BASE_URL_CRICBUZZ + 'cricbuzz/' + type + '/keyword/' + keyword;
+        let promise = ApiHelper.get(url);
+        // promise.then(apiResponse => {
+        //     let response = apiResponse.data;
+        //     console.log(response);
+        //     cricStore[type + 'Suggestions'] = response;
+        //     // store.dispatch(updateContext(cricStore));
+        //     store.dispatch(updateSuggestions(type, response));
+        // });
+
+        return promise;
+    }
 }

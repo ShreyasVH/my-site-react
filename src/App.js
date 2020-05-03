@@ -24,6 +24,7 @@ import CricbuzzBrowse from './containers/cricbuzz/browse';
 import Tour from './containers/cricbuzz/tour/detail';
 import Series from './containers/cricbuzz/series/detail';
 import Match from './containers/cricbuzz/match/detail';
+import CreateMatch from './containers/cricbuzz/match/create';
 
 class App extends Component {
 	render() {
@@ -53,6 +54,7 @@ class App extends Component {
 								<Route path="/cricbuzz/tours/detail" component={Tour} />
 								<Route path="/cricbuzz/series/detail" component={Series} />
 								<Route path="/cricbuzz/matches/detail" component={Match} />
+								<Route path="/cricbuzz/matches/create" component={CreateMatch} />
 
 								<Route component={NotFound} />
 							</Switch>

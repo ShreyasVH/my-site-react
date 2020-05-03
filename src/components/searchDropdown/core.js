@@ -12,18 +12,19 @@ import ListItemText from '@material-ui/core/ListItemText';
 const styles = theme => ({
     dropdown: {
         width: '100%',
-        maxWidth: 360,
+        // maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
-        position: 'relative'
+        position: 'relative',
+        display: 'inline-block'
     },
     inline: {
         display: 'inline',
     },
     textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
+        // marginLeft: theme.spacing.unit,
+        // marginRight: theme.spacing.unit,
         marginBottom: 0,
-        marginTop: theme.typography.pxToRem(5)
+        marginTop: 0
     },
     dropdownList: {
         position: 'absolute',
@@ -42,11 +43,11 @@ const styles = theme => ({
         border: '1px solid rgba(0,0,0,.15)',
         webkitBoxShadow: '0 6px 12px rgba(0,0,0,.175)',
         boxShadow: '0 6px 12px rgba(0,0,0,.175)',
-        width: '99%',
+        width: '100%',
         minWidth: 'initial',
         maxHeight: theme.typography.pxToRem(245),
         overflowY: 'auto',
-        margin: '0 9px',
+        marginTop: '0',
         borderRadius: '0 0 5px 5px'
     },
     image: {
@@ -57,13 +58,32 @@ const styles = theme => ({
 });
 
 class SearchDropdownCore extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFocussed: false
+        };
+    }
 
     handleKeyUp = event => this.props.onKeyUp && this.props.onKeyUp(event);
+
+    handleTextFieldClick = event => {
+        this.setState(({
+            isFocussed: true
+        }));
+    };
+
+    handleTextFieldBlur = event => {
+        setTimeout(() => {
+            this.setState(({
+                isFocussed: false
+            }));
+        }, 100);
+    };
 
     renderInput = () => {
         return (
             <TextField
-                id="outlined-name"
                 label={this.props.label}
                 className={this.props.classes.textField}
                 value={this.props.value}
@@ -73,33 +93,49 @@ class SearchDropdownCore extends Component {
                 onKeyUp={this.handleKeyUp}
                 autoComplete="off"
                 placeholder={this.props.placeHolder}
+                onClick={this.handleTextFieldClick}
+                onBlur={this.handleTextFieldBlur}
+                inputRef={inputField => this.inputField = inputField}
             />
         );
     };
 
-    handleSelect = selectedId => event => this.props.onSelect && this.props.onSelect(selectedId);
+    handleSelect = (selectedId, selectedName) => event => {
+        this.props.onSelect && this.props.onSelect(selectedId, selectedName);
+        console.log(this.inputField.value);
+        this.inputField.value = '';
+    };
+
+    renderAvatar = entity => {
+        if (entity.imageUrl) {
+            return (
+                <ListItemAvatar>
+                    <Avatar
+                        className={this.props.classes.image}
+                        alt={entity.name}
+                        src={entity.imageUrl}
+                    />
+                </ListItemAvatar>
+            );
+        }
+    };
 
     renderDropdown = () => {
-        if (this.props.items.length > 0) {
+        if ((this.state.isFocussed) && (this.props.items.length > 0)) {
+        // if ((this.props.items.length > 0)) {
             let listMarkup = [];
 
             for (let index in this.props.items) {
                 if (this.props.items.hasOwnProperty(index)) {
-                    let card = this.props.items[index];
+                    let entity = this.props.items[index];
                     listMarkup.push(
                         <ListItem
                             alignItems="center"
-                            onClick={this.handleSelect(card.id)}
+                            onClick={this.handleSelect(entity.id, entity.name)}
                         >
-                            <ListItemAvatar>
-                                <Avatar
-                                    className={this.props.classes.image}
-                                    alt={card.name}
-                                    src={card.imageUrl}
-                                />
-                            </ListItemAvatar>
+                            {this.renderAvatar(entity)}
                             <ListItemText
-                                primary={card.name}
+                                primary={entity.name}
                             />
                         </ListItem>
                     );
