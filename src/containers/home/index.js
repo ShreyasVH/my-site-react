@@ -76,7 +76,7 @@ export default class Home extends Component {
 
 				<Card className="project">
 					<CardContent>
-						<Link to="cricbuzz/browse">
+						<Link to="/cricbuzz/browse">
 							HOWZZAT
 						</Link>
 					</CardContent>

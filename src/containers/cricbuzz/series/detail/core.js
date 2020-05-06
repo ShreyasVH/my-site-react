@@ -52,7 +52,7 @@ class SeriesCore extends Component {
         return stadium;
     };
 
-    renderWinMargin = (winMargin, winMarginType) => {
+    getWinMargin = (winMargin, winMarginType) => {
         let margin = winMarginType.toLowerCase();
 
         if (winMargin > 1) {
@@ -66,7 +66,19 @@ class SeriesCore extends Component {
         let result = '';
 
         if (match.winner) {
-            result += match.winner.name + " won by " + match.winMargin + " " + this.renderWinMargin(match.winMargin, match.winMarginType);
+            result += match.winner.name + " won by " + match.winMargin + " " + this.getWinMargin(match.winMargin, match.winMarginType);
+
+            if ('SUPER_OVER' === match.result) {
+                result += ' (Super Over)';
+            }
+        } else {
+            if (match.result === 'TIE') {
+                result = 'Match Tied';
+            } else if(match.result === 'DRAW') {
+                result = 'Match Drawn';
+            } else if(match.result === 'WASHED_OUT') {
+                result = 'Match Washed Out';
+            }
         }
 
         return result;

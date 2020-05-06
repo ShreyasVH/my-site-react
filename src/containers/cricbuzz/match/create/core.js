@@ -7,38 +7,6 @@ import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
 
 const styles = theme => ({
-    // textField: {
-    //     marginRight: 'auto',
-    //     marginLeft: 'auto',
-    //     marginBottom: '2%',
-    //     display: 'inline-block'
-    // },
-    // halfWidth: {
-    //     paddingLeft: '2%',
-    //     paddingRight: '2%',
-    //     width: '45%'
-    // },
-    // quarterWidth: {
-    //     paddingLeft: '1%',
-    //     paddingRight: '1%',
-    //     width: '22%'
-    // },
-    // selectedPlayers: {
-    //     // border: '1px solid',
-    //     padding: '1%',
-    //     // display: 'inline-block'
-    // },
-    // playerChip: {
-    //     margin: '1%'
-    // },
-    // battingScoreField: {
-    //     width: '5%',
-    //     marginLeft: '0.5%',
-    //     marginRight: '0.5%'
-    // },
-    // dismissalMode: {
-    //     width: '12%'
-    // },
     form: {
         margin: '2.5%',
         border: '1px solid black',
@@ -81,6 +49,9 @@ const styles = theme => ({
         // minHeight: '100px',
         borderRadius: '5px'
     },
+    manOfTheMatchContainer: {
+        minHeight: '60px'
+    },
     submit: {
         backgroundColor: '#428bca',
         marginLeft: '48%'
@@ -114,19 +85,14 @@ const styles = theme => ({
     },
     extrasField: {
         width: '20%'
+    },
+    playerChip: {
+        margin: '0.25%'
     }
 });
 
 class CreateCore extends Component {
     handleEvent = type => event => this.props.handleEvent && this.props.handleEvent(event);
-
-    handleSearch = type => event => {
-        this.props.onSearch && this.props.onSearch(type, event);
-    };
-
-    handleSelect = event => {
-
-    };
 
     handleSeriesSelect = (id, name) => this.props.onSeriesSelect && this.props.onSeriesSelect(id, name);
 
@@ -134,15 +100,35 @@ class CreateCore extends Component {
 
     handleTeamSelect = number => (id, name) => this.props.onTeamSelect && this.props.onTeamSelect(id, name, number);
 
-    handleTossWinnerSelect = (id, name) => this.props.onTossWinnerSelect && this.props.onTossWinnerSelect(id, name);
+    handleTeamSelectForInnings = number => (id, name) => this.props.onTeamSelectForInnings && this.props.onTeamSelectForInnings(id, name, number);
 
     handlePlayerSelect = number => (id, name) => this.props.onPlayerSelect && this.props.onPlayerSelect(id, name, number);
 
-    handlePlayerRemove = (teamNumber, playerId) => event => {
-
-    };
+    handlePlayerRemove = (teamNumber, playerId) => event => this.props.onPlayerRemove && this.props.onPlayerRemove(teamNumber, playerId);
 
     handlePlayerSearch = event => this.props.onPlayerSearch && this.props.onPlayerSearch(event);
+
+    handleSeriesSearch = event => this.props.onSeriesSearch && this.props.onSeriesSearch(event);
+
+    handlePlayerSelectForBattingScore = (inning, scoreIndex) => (id, name) => this.props.onPlayerSelectForBattingScore && this.props.onPlayerSelectForBattingScore(scoreIndex, inning, id, name);
+
+    handleBowlerSelectForBattingScore = (inning, scoreIndex) => (id, name) => this.props.onBowlerSelectForBattingScore && this.props.onBowlerSelectForBattingScore(scoreIndex, inning, id, name);
+
+    handleFielderSelectForBattingScore = (inning, scoreIndex) => (id, name) => this.props.onFielderSelectForBattingScore && this.props.onFielderSelectForBattingScore(scoreIndex, inning, id, name);
+
+    handleDismissalSelectForBattingScore = (inning, scoreIndex) => (id, name) => this.props.onDismissalModeSelect && this.props.onDismissalModeSelect(scoreIndex, inning, id, name);
+
+    handleBattingScoreFieldKeyUp = (inning, scoreIndex, fieldName) => event => this.props.onBattingScoreFieldKeyUp && this.props.onBattingScoreFieldKeyUp(scoreIndex, inning, fieldName, event);
+
+    handleExtrasKeyUp = (inning, index, type) => event => this.props.onExtrasKeyUp && this.props.onExtrasKeyUp(index, inning, type, event);
+
+    handleBowlerSelectForBowlingFigure = (inning, index) => (id, name) => this.props.onBowlerSelectForBowlingFigure && this.props.onBowlerSelectForBowlingFigure(index, inning, id, name);
+
+    handleBowlingFigureFieldKeyUp = (inning, index, fieldName) => event => this.props.onBowlingFigureFieldKeyUp && this.props.onBowlingFigureFieldKeyUp(index, inning, fieldName, event);
+
+    handleSelectManOfTheMatch = (id, name) => this.props.onSelectManOfTheMatch && this.props.onSelectManOfTheMatch(id, name);
+
+    handleManOfTheMatchRemove = playerId => event => this.props.onManOfTheMatchRemove && this.props.onManOfTheMatchRemove(playerId);
 
     renderPlayersMarkup = (number) => {
         let markup = [];
@@ -167,6 +153,21 @@ class CreateCore extends Component {
         return markup;
     };
 
+    renderManOfTheMatchListMarkup = () => {
+        return this.props.manOfTheMatchNames.map((player, index) => {
+            let playerId = this.props.manOfTheMatchIds[index];
+
+            return (
+                <Chip
+                    className={this.props.classes.playerChip}
+                    label={player}
+                    onDelete={this.handleManOfTheMatchRemove(playerId)}
+                    color="primary"
+                />
+            );
+        });
+    };
+
     renderScoreCards = () => {
         return this.props.scoreCards.map((inning, inningNum) => {
             return (
@@ -177,12 +178,11 @@ class CreateCore extends Component {
                                 <div className={` ${this.props.classes.formField} ${this.props.classes.quarterWidth}`}>
                                     <div className={this.props.classes.formFieldInput}>
                                         <SearchDropDown
-                                            onKeyUp={this.handleSearch('teams')}
-                                            items={this.props.teamsSuggestions}
+                                            items={this.props.teams}
                                             label="Batting Team"
                                             placeHolder="Batting Team"
-                                            onSelect={this.handleTeamSelect(1)}
-                                            value={inning.battingTeamName}
+                                            onSelect={this.handleTeamSelectForInnings(inningNum)}
+                                            displayValue={inning.battingTeamName}
                                         />
                                     </div>
                                 </div>
@@ -237,8 +237,7 @@ class CreateCore extends Component {
 
     renderFieldersForBattingScore = fielderNames => {
         if (fielderNames) {
-
-            let parts = fielderNames.split(", ");
+            let parts = fielderNames.split(', ');
             let fielders = parts.map(fielder => {
                 let nameParts = fielder.split(' ');
                 return nameParts[nameParts.length - 1];
@@ -248,17 +247,17 @@ class CreateCore extends Component {
         }
     };
 
-    renderBattingScores = (scores, innings) => (scores.map(scoreObject => (
+    renderBattingScores = (scores, innings) => (scores.map((scoreObject, scoreRowIndex) => (
         <div className={this.props.classes.row}>
             <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
                 <div className={this.props.classes.formFieldInput}>
                     <SearchDropDown
                         onKeyUp={this.handlePlayerSearch}
-                        items={this.props.playersSuggestions}
+                        items={this.props.playerSuggestions}
                         label="Batsman"
                         placeHolder="Batsman"
-                        onSelect={this.handlePlayerSelectForBattingScore}
-                        value={scoreObject.batsmanName}
+                        onSelect={this.handlePlayerSelectForBattingScore(innings, scoreRowIndex)}
+                        displayValue={scoreObject.batsmanName}
                     />
                 </div>
             </div>
@@ -268,7 +267,7 @@ class CreateCore extends Component {
                         label="Runs"
                         variant="outlined"
                         fullWidth
-                        value={scoreObject.runs}
+                        onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'runs')}
                     />
                 </div>
             </div>
@@ -278,7 +277,7 @@ class CreateCore extends Component {
                         label="Balls"
                         variant="outlined"
                         fullWidth
-                        value={scoreObject.balls}
+                        onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'balls')}
                     />
                 </div>
             </div>
@@ -288,7 +287,7 @@ class CreateCore extends Component {
                         label="Fours"
                         variant="outlined"
                         fullWidth
-                        value={scoreObject.fours}
+                        onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'fours')}
                     />
                 </div>
             </div>
@@ -298,19 +297,18 @@ class CreateCore extends Component {
                         label="Sixes"
                         variant="outlined"
                         fullWidth
-                        value={scoreObject.sixes}
+                        onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'sixes')}
                     />
                 </div>
             </div>
             <div className={`${this.props.classes.formField} ${this.props.classes.dismissalMode}`}>
                 <div className={this.props.classes.formFieldInput}>
                     <SearchDropDown
-                        onKeyUp={this.handleSearch}
                         items={this.props.dismissalModes}
                         label="Dismissal Mode"
                         placeHolder="Dismissal Mode"
-                        onSelect={this.handleSelect}
-                        value={this.renderDisimissal(scoreObject.dismissalModeName)}
+                        onSelect={this.handleDismissalSelectForBattingScore(innings, scoreRowIndex)}
+                        displayValue={this.renderDisimissal(scoreObject.dismissalModeName)}
                     />
                 </div>
             </div>
@@ -318,11 +316,11 @@ class CreateCore extends Component {
                 <div className={this.props.classes.formFieldInput}>
                     <SearchDropDown
                         onKeyUp={this.handlePlayerSearch}
-                        items={this.props.playersSuggestions}
+                        items={this.props.playerSuggestions}
                         label="Bowler"
                         placeHolder="Bowler"
-                        onSelect={this.handlePlayerSelectForBattingScore}
-                        value={this.renderBowlerForBattingScore(scoreObject.bowlerName)}
+                        onSelect={this.handleBowlerSelectForBattingScore(innings, scoreRowIndex)}
+                        displayValue={this.renderBowlerForBattingScore(scoreObject.bowlerName)}
                     />
                 </div>
             </div>
@@ -330,41 +328,41 @@ class CreateCore extends Component {
                 <div className={this.props.classes.formFieldInput}>
                     <SearchDropDown
                         onKeyUp={this.handlePlayerSearch}
-                        items={this.props.playersSuggestions}
+                        items={this.props.playerSuggestions}
                         label="Fielders"
                         placeHolder="Fielders"
-                        onSelect={this.handlePlayerSelectForBattingScore}
-                        value={this.renderFieldersForBattingScore(scoreObject.fielderNames)}
+                        onSelect={this.handleFielderSelectForBattingScore(innings, scoreRowIndex)}
+                        displayValue={this.renderFieldersForBattingScore(scoreObject.fielderNames)}
                     />
                 </div>
             </div>
         </div>)
     ));
 
-    renderExtras = (extras, innings) => ( extras.map(extraObject => (
+    renderExtras = (extras, innings) => ( extras.map((extraObject, index) => (
         <div className={`${this.props.classes.formField} ${this.props.classes.extrasField}`}>
             <div className={this.props.classes.formFieldInput}>
                 <TextField
                     label={extraObject.type}
                     variant="outlined"
                     fullWidth
-                    value={extraObject.runs}
+                    onKeyUp={this.handleExtrasKeyUp(innings, index, extraObject.type)}
                 />
             </div>
         </div>
     )));
 
-    renderBowlingFigures = (bowlingFigures, innings) => (bowlingFigures.map(bowlingFigure => (
+    renderBowlingFigures = (bowlingFigures, innings) => (bowlingFigures.map((bowlingFigure, index) => (
         <div className={this.props.classes.row}>
             <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
                 <div className={this.props.classes.formFieldInput}>
                     <SearchDropDown
                         onKeyUp={this.handlePlayerSearch}
-                        items={this.props.playersSuggestions}
+                        items={this.props.playerSuggestions}
                         label="Bowler"
                         placeHolder="Bowler"
-                        onSelect={this.handlePlayerSelectForBattingScore}
-                        value={bowlingFigure.bowlerName}
+                        onSelect={this.handleBowlerSelectForBowlingFigure(innings, index)}
+                        displayValue={bowlingFigure.bowlerName}
                     />
                 </div>
             </div>
@@ -374,7 +372,7 @@ class CreateCore extends Component {
                         label="Balls"
                         variant="outlined"
                         fullWidth
-                        value={bowlingFigure.balls}
+                        onKeyUp={this.handleBowlingFigureFieldKeyUp(innings, index, 'balls')}
                     />
                 </div>
             </div>
@@ -384,7 +382,7 @@ class CreateCore extends Component {
                         label="Maidens"
                         variant="outlined"
                         fullWidth
-                        value={bowlingFigure.maidens}
+                        onKeyUp={this.handleBowlingFigureFieldKeyUp(innings, index, 'maidens')}
                     />
                 </div>
             </div>
@@ -394,7 +392,7 @@ class CreateCore extends Component {
                         label="Runs"
                         variant="outlined"
                         fullWidth
-                        value={bowlingFigure.runs}
+                        onKeyUp={this.handleBowlingFigureFieldKeyUp(innings, index, 'runs')}
                     />
                 </div>
             </div>
@@ -404,7 +402,7 @@ class CreateCore extends Component {
                         label="Wickets"
                         variant="outlined"
                         fullWidth
-                        value={bowlingFigure.wickets}
+                        onKeyUp={this.handleBowlingFigureFieldKeyUp(innings, index, 'wickets')}
                     />
                 </div>
             </div>
@@ -423,10 +421,14 @@ class CreateCore extends Component {
         }
     };
 
+    renderManOfTheMatchMarkup = () => {
+
+    };
+
     render() {
         return (
             <div>
-                <form className={this.props.classes.form} >
+                <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
                         Add Match
                     </div>
@@ -435,12 +437,12 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleSearch('series')}
+                                        onKeyUp={this.handleSeriesSearch}
                                         items={this.props.seriesSuggestions}
                                         label="Series"
                                         placeHolder="Series"
                                         onSelect={this.handleSeriesSelect}
-                                        value={this.props.seriesName}
+                                        displayValue={this.props.seriesName}
                                     />
                                 </div>
                             </div>
@@ -448,12 +450,12 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleSearch('stadium')}
+                                        onKeyUp={this.props.onStadiumSearch}
                                         items={this.props.stadiumSuggestions}
                                         label="Stadium"
                                         placeHolder="Stadium"
                                         onSelect={this.handleStadiumSelect}
-                                        value={this.props.seriesName}
+                                        displayValue={this.props.stadiumName}
                                     />
                                 </div>
                             </div>
@@ -463,12 +465,11 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleSearch('teams')}
-                                        items={this.props.teamsSuggestions}
+                                        items={this.props.teamSuggestions}
                                         label="Team 1"
                                         placeHolder="Team 1"
                                         onSelect={this.handleTeamSelect(1)}
-                                        value={this.props.seriesName}
+                                        displayValue={this.props.team1Name}
                                     />
                                 </div>
                             </div>
@@ -476,12 +477,11 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleSearch('teams')}
-                                        items={this.props.teamsSuggestions}
+                                        items={this.props.teamSuggestions}
                                         label="Team 2"
                                         placeHolder="Team 2"
                                         onSelect={this.handleTeamSelect(2)}
-                                        value={this.props.seriesName}
+                                        displayValue={this.props.team2Name}
                                     />
                                 </div>
                             </div>
@@ -494,8 +494,8 @@ class CreateCore extends Component {
                                         items={this.props.teams}
                                         label="Toss Winner"
                                         placeHolder="Toss Winner"
-                                        onSelect={this.handleSeriesSelect}
-                                        value={this.props.seriesName}
+                                        onSelect={this.props.onTossWinnerSelect}
+                                        displayValue={this.props.tossWinnerName}
                                     />
                                 </div>
                             </div>
@@ -506,8 +506,8 @@ class CreateCore extends Component {
                                         items={this.props.teams}
                                         label="Batting First"
                                         placeHolder="Batting First"
-                                        onSelect={this.handleSeriesSelect}
-                                        value={this.props.seriesName}
+                                        onSelect={this.props.onBattingFirstSelect}
+                                        displayValue={this.props.battingFirstName}
                                     />
                                 </div>
                             </div>
@@ -520,8 +520,8 @@ class CreateCore extends Component {
                                         items={this.props.resultSuggestions}
                                         label="Result"
                                         placeHolder="Result"
-                                        onSelect={this.handleSeriesSelect}
-                                        value={this.props.result}
+                                        onSelect={this.props.onResultSelect}
+                                        displayValue={this.props.resultName}
                                     />
                                 </div>
                             </div>
@@ -532,8 +532,8 @@ class CreateCore extends Component {
                                         items={this.props.teams}
                                         label="Winner"
                                         placeHolder="Winner"
-                                        onSelect={this.handleSeriesSelect}
-                                        value={this.props.winnerName}
+                                        onSelect={this.props.onWinnerSelect}
+                                        displayValue={this.props.winnerName}
                                     />
                                 </div>
                             </div>
@@ -541,10 +541,10 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.quarterWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
+                                        onKeyUp={this.props.onWinMarginKeyUp}
                                         label="Win Margin"
                                         variant="outlined"
                                         fullWidth
-                                        value={this.props.winMargin}
                                     />
                                 </div>
                             </div>
@@ -552,12 +552,24 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.quarterWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleSearch('series')}
                                         items={this.props.winMarginTypes}
                                         label="Win Margin Type"
                                         placeHolder="Win Margin Type"
-                                        onSelect={this.handleSeriesSelect}
-                                        value={this.props.winMarginTypeName}
+                                        onSelect={this.props.onWinMarginTypeSelect}
+                                        displayValue={this.props.winMarginTypeName}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={this.props.classes.row}>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <TextField
+                                        onKeyUp={this.props.onStartTimeKeyUp}
+                                        label="Start Time"
+                                        variant="outlined"
+                                        fullWidth
                                     />
                                 </div>
                             </div>
@@ -567,11 +579,12 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleSearch('players')}
-                                        items={this.props.playersSuggestions}
+                                        onKeyUp={this.props.onPlayerSearchAll}
+                                        items={this.props.playerSuggestions}
                                         label="Team 1 Players"
                                         placeHolder="Team 1 Players"
-                                        onSelect={this.handleTeamSelect(1)}
+                                        onSelect={this.handlePlayerSelect(1)}
+                                        clearOnSelect={true}
                                     />
                                 </div>
                             </div>
@@ -579,11 +592,12 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleSearch('players')}
-                                        items={this.props.playersSuggestions}
+                                        onKeyUp={this.props.onPlayerSearchAll}
+                                        items={this.props.playerSuggestions}
                                         label="Team 2 Players"
                                         placeHolder="Team 2 Players"
-                                        onSelect={this.handleTeamSelect(1)}
+                                        onSelect={this.handlePlayerSelect(2)}
+                                        clearOnSelect={true}
                                     />
                                 </div>
                             </div>
@@ -622,10 +636,44 @@ class CreateCore extends Component {
                         </div>
 
                         <div className={`${this.props.classes.row}`}>
+                            <div className={this.props.classes.playersContainer}>
+                                <div className={this.props.classes.container}>
+                                    <div className={this.props.classes.row}>
+                                        <strong>Man of The Match:</strong>
+                                    </div>
+
+                                    <div className={`${this.props.classes.row}`}>
+                                        <div className={` ${this.props.classes.formField} ${this.props.classes.quarterWidth}`}>
+                                            <div className={this.props.classes.formFieldInput}>
+                                                <SearchDropDown
+                                                    onKeyUp={this.handlePlayerSearch}
+                                                    items={this.props.playerSuggestions}
+                                                    label="Man of the Match"
+                                                    placeHolder="Man of the Match"
+                                                    onSelect={this.handleSelectManOfTheMatch}
+                                                    clearOnSelect={true}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className={`${this.props.classes.row}`}>
+                                        <div className={`${this.props.classes.playersContainer} ${this.props.classes.manOfTheMatchContainer}`}>
+                                            <div className={this.props.classes.container}>
+                                                {this.renderManOfTheMatchListMarkup()}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={`${this.props.classes.row}`}>
                             <Button
                                 color="secondary"
                                 variant="contained"
                                 className={this.props.classes.submit}
+                                type="submit"
                             >
                                 Submit
                             </Button>

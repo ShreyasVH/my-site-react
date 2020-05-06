@@ -58,52 +58,72 @@ const styles = theme => ({
 });
 
 class SearchDropdownCore extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isFocussed: false
-        };
-    }
-
     handleKeyUp = event => this.props.onKeyUp && this.props.onKeyUp(event);
 
-    handleTextFieldClick = event => {
-        this.setState(({
-            isFocussed: true
-        }));
-    };
+    // handleDisplayFieldClick = event => {
+    //     this.setState(({
+    //         isFocussed: true
+    //     }));
+    //     if (this.inputField) {
+    //         console.log(this.inputField);
+    //         this.inputField.value = "";
+    //     }
+    // };
 
-    handleTextFieldBlur = event => {
-        setTimeout(() => {
-            this.setState(({
-                isFocussed: false
-            }));
-        }, 100);
-    };
+    handleDisplayFieldClick = event => this.props.onDisplayFieldClick && this.props.onDisplayFieldClick();
+
+    // handleTextFieldBlur = event => {
+    //     setTimeout(() => {
+    //         this.setState(({
+    //             isFocussed: false
+    //         }));
+    //     }, 100);
+    // };
+
+    handleTextFieldBlur = event => this.props.onTextFieldBlur && this.props.onTextFieldBlur();
+
+    // handleSelect = (selectedId, selectedName) => event => {
+    //     this.props.onSelect && this.props.onSelect(selectedId, selectedName);
+    //     if (this.props.clearOnSelect && this.displayField) {
+    //         this.displayField.value = '';
+    //     }
+    // };
+
+    handleSelect = (selectedId, selectedName) => event => this.props.onSelect && this.props.onSelect(selectedId, selectedName);
 
     renderInput = () => {
-        return (
-            <TextField
-                label={this.props.label}
-                className={this.props.classes.textField}
-                value={this.props.value}
-                margin="normal"
-                variant="outlined"
-                fullWidth
-                onKeyUp={this.handleKeyUp}
-                autoComplete="off"
-                placeholder={this.props.placeHolder}
-                onClick={this.handleTextFieldClick}
-                onBlur={this.handleTextFieldBlur}
-                inputRef={inputField => this.inputField = inputField}
-            />
-        );
-    };
+        if (this.props.isFocussed) {
+            return (
+                <TextField
+                    label={this.props.label}
+                    className={this.props.classes.textField}
+                    margin="normal"
+                    variant="outlined"
+                    fullWidth
+                    onKeyUp={this.handleKeyUp}
+                    autoComplete="off"
+                    placeholder={this.props.placeHolder}
+                    onBlur={this.handleTextFieldBlur}
+                    inputRef={inputField => this.inputField = inputField}
+                />
+            );
+        } else {
+            return (
+                <TextField
+                    label={this.props.label + 'display'}
+                    className={this.props.classes.textField}
+                    margin="normal"
+                    variant="outlined"
+                    fullWidth
+                    autoComplete="off"
+                    placeholder={this.props.placeHolder + 'display'}
+                    onClick={this.handleDisplayFieldClick}
+                    value={this.props.displayValue}
+                    inputRef={displayField => this.displayField = displayField}
+                />
+            );
+        }
 
-    handleSelect = (selectedId, selectedName) => event => {
-        this.props.onSelect && this.props.onSelect(selectedId, selectedName);
-        console.log(this.inputField.value);
-        this.inputField.value = '';
     };
 
     renderAvatar = entity => {
@@ -121,8 +141,7 @@ class SearchDropdownCore extends Component {
     };
 
     renderDropdown = () => {
-        if ((this.state.isFocussed) && (this.props.items.length > 0)) {
-        // if ((this.props.items.length > 0)) {
+        if ((this.props.isFocussed) && this.props.items && (this.props.items.length > 0)) {
             let listMarkup = [];
 
             for (let index in this.props.items) {
