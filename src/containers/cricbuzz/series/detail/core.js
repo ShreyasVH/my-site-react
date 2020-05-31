@@ -66,7 +66,11 @@ class SeriesCore extends Component {
         let result = '';
 
         if (match.winner) {
-            result += match.winner.name + " won by " + match.winMargin + " " + this.getWinMargin(match.winMargin, match.winMarginType);
+            result += match.winner.name + " won";
+
+            if (match.winMarginType) {
+                result += " by " + match.winMargin + " " + this.getWinMargin(match.winMargin, match.winMarginType);
+            }
 
             if ('SUPER_OVER' === match.result) {
                 result += ' (Super Over)';
