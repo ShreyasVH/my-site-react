@@ -137,10 +137,22 @@ class MatchCore extends Component {
                     return text;
                 case 'Caught':
                     return 'c ' + score.fielders[0].player.name + ' b ' + score.bowler.player.name;
+                case 'Stumped':
+                    return 'st ' + score.fielders[0].player.name + ' b ' + score.bowler.player.name;
                 case 'LBW':
                     return 'lbw b ' + score.bowler.player.name;
                 case 'Retired Hurt':
                     return 'Retired Hurt';
+                case 'Hit Twice':
+                    return 'Hit Twice';
+                case 'Hit Wicket':
+                    return 'Hit Wicket b ' + score.bowler.player.name;
+                case 'Obstructing the Field':
+                    return 'Obstructing the field';
+                case 'Timed Out':
+                    return 'Timed Out';
+                case 'Handled the Ball':
+                    return 'Handled the ball';
             }
         } else {
             return 'Not Out';
