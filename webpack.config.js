@@ -75,8 +75,9 @@ module.exports = {
 	},
 	devServer: {
 		port: 3000,
-		host: 'my-site-react.herokuapp.com',
-		historyApiFallback: true
+		host: '0.0.0.0',
+		historyApiFallback: true,
+		disableHostCheck: true
 	},
 	devtool: 'cheap-module-eval-source-map'
 };

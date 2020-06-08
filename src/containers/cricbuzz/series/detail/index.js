@@ -16,7 +16,7 @@ class Series extends Component {
     handleMatchClick = id => {
         ContextUtils.showLoader();
         CricUtils.setMatch(CricUtils.getMatch(id));
-
+        window.scrollTo(0, 0);
         this.props.history.push('/cricbuzz/matches/detail?id=' + id);
     };
 

@@ -143,11 +143,16 @@ export default class CricBuzzUtils {
         id = parseInt(id, 10);
         let match = {};
 
-        let cricStore = store.getState().cric;
+        let cricStore = Utils.copyObject(store.getState().cric);
         for (let index in cricStore.series.matches) {
             let currentMatch = cricStore.series.matches[index];
             if (id === currentMatch.id) {
                 match = currentMatch;
+                match.series = {
+                    name: cricStore.series.name,
+                    id: cricStore.series.id,
+                    gameType: cricStore.series.gameType
+                };
                 break;
             }
         }

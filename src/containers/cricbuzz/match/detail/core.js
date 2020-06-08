@@ -451,20 +451,28 @@ class MatchCore extends Component {
         ));
     };
 
+    renderSeriesName = () => {
+        if (this.props.match.series) {
+            return (
+                <div className={this.props.classes.row}>
+                    <strong>
+                        Series:
+                        &nbsp;
+                    </strong>
+
+                    <span>
+                            {this.props.match.series.name + ' - ' + this.props.match.series.gameType}
+                        </span>
+                </div>
+            );
+        }
+    }
+
     renderMatchDetails = () => {
         if (Object.keys(this.props.match).length > 0) {
             return (
                 <div className={this.props.classes.row}>
-                    <div className={this.props.classes.row}>
-                        <strong>
-                            Series:
-                            &nbsp;
-                        </strong>
-
-                        <span>
-                            {this.props.match.series.name + ' - ' + this.props.match.series.gameType}
-                        </span>
-                    </div>
+                    {this.renderSeriesName()}
 
                     <div className={this.props.classes.row}>
                         <strong>
