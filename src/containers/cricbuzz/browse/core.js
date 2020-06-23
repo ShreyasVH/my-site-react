@@ -51,7 +51,7 @@ class BrowseCore extends Component {
     render () {
         return (
             <div>
-                <GridList cols={6}>
+                <GridList cols={6} cellHeight={'auto'}>
                     {this.renderTours()}
                 </GridList>
                 {this.renderWaypoint()}
