@@ -1,10 +1,10 @@
 import { CRIC_EVENTS } from '../../constants/events';
 
-import Utils from '../../utils';
+import CricUtils from '../../utils/cricbuzz';
 
 const defaultState = {
     tours: [],
-    year: (new Date()).getFullYear(),
+    year: CricUtils.getYearForBrowse(),
     offset: 0,
     hasReachedEnd: false,
     tour: {},
