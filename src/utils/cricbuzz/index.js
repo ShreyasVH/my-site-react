@@ -174,4 +174,15 @@ export default class CricBuzzUtils {
 
         return promise;
     }
+
+    static getYearForBrowse = () => {
+        let year = (new Date()).getFullYear();
+
+        let yearFromURL = Utils.getUrlParam('year');
+        if (yearFromURL) {
+            year = yearFromURL;
+        }
+
+        return year;
+    };
 }
