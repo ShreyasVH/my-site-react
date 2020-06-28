@@ -61,21 +61,23 @@ module.exports = {
 		new webpack.DefinePlugin({
 			'process.env.API_ENDPOINT': JSON.stringify(process.env.REACT_APP_API_ENDPOINT),
 			'process.env.API_ENDPOINT_DUEL_LINKS': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_DUEL_LINKS),
-			'process.env.API_ENDPOINT_LOGGER': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_LOGGER)
+			'process.env.API_ENDPOINT_LOGGER': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_LOGGER),
+			'process.env.API_ENDPOINT_CRICBUZZ': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_CRICBUZZ)
 		}),
 	],
 	optimization: {
 		splitChunks: {
 			chunks: 'all',
-			name: true,
+			// name: true,
 			maxSize: 0,
 			minSize: 30000
 		}
 	},
 	devServer: {
 		port: 3000,
-		host: 'my-site-react.herokuapp.com',
-		historyApiFallback: true
+		host: '0.0.0.0',
+		historyApiFallback: true,
+		disableHostCheck: true
 	},
 	devtool: 'cheap-module-eval-source-map'
 };
