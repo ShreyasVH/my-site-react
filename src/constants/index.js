@@ -7,6 +7,7 @@ import Utils from '../utils';
 export const BASE_URL = process.env.API_ENDPOINT;
 export const BASE_URL_DUEL_LINKS = process.env.API_ENDPOINT_DUEL_LINKS;
 export const BASE_URL_LOGGER = process.env.API_ENDPOINT_LOGGER;
+export const BASE_URL_CRICBUZZ = process.env.API_ENDPOINT_CRICBUZZ;
 export const GET_MODE_URL = 'data/getMode';
 // export const CHANGE_MODE_URL = 'index/changeMode?newMode={newMode}';
 export const MOVIES_DASHBOARD_URL = 'movies/dashboard';
@@ -25,6 +26,11 @@ export const GET_MY_CARDS = 'cards/myCards/{cardId}';
 export const GET_SOURCES_FOR_CARD = 'cards/source/card/{cardId}';
 
 export const GET_LOGS = 'logs/filters';
+
+export const GET_TOURS = 'cricbuzz/tours/filter';
+export const GET_TOUR_BY_ID = 'cricbuzz/tours/{id}';
+export const GET_SERIES_BY_ID = 'cricbuzz/series/{id}';
+export const GET_MATCH_BY_ID = 'cricbuzz/matches/{id}';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',

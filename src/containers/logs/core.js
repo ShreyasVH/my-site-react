@@ -34,7 +34,7 @@ const styles = theme => ({
         backgroundColor: '#43a047'
     },
     column: {
-        flexBasis: '45%',
+        flexBasis: '45%'
     }
 });
 
