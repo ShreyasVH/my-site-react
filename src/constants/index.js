@@ -3,7 +3,6 @@
  *
  */
 import Utils from '../utils';
-
 export const BASE_URL = process.env.API_ENDPOINT;
 export const BASE_URL_DUEL_LINKS = process.env.API_ENDPOINT_DUEL_LINKS;
 export const BASE_URL_LOGGER = process.env.API_ENDPOINT_LOGGER;
