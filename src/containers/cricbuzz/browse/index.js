@@ -19,8 +19,6 @@ class Browse extends Component {
 
     setTour = id => {
         ContextUtils.showLoader();
-        CricUtils.setTour(CricUtils.getTour(id));
-
         this.props.history.push('/cricbuzz/tours/detail?id=' + id);
     };
 
