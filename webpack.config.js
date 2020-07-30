@@ -67,15 +67,16 @@ module.exports = {
 	optimization: {
 		splitChunks: {
 			chunks: 'all',
-			name: true,
+			// name: true,
 			maxSize: 0,
 			minSize: 30000
 		}
 	},
 	devServer: {
 		port: 3000,
-		host: 'my-site-react.herokuapp.com',
-		historyApiFallback: true
+		host: '0.0.0.0',
+		historyApiFallback: true,
+		disableHostCheck: true
 	},
 	devtool: 'cheap-module-eval-source-map'
 };
