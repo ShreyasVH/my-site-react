@@ -31,21 +31,10 @@ class TourCore extends Component {
         return date.toLocaleDateString('en-GB', options);
     };
 
-    renderSeriesEndDay = (series) => {
-        let date = new Date(series.endTime);
-        let options = {
-            day: 'numeric',
-            month: 'short'
-        };
-        return date.toLocaleDateString('en-GB', options);
-    };
-
     renderSeriesDuration = (series) => {
         return (
             <div>
                 {this.renderSeriesStartDay(series)}
-                {' - '}
-                {this.renderSeriesEndDay(series)}
             </div>
         );
     };
