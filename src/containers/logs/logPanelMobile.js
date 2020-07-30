@@ -41,7 +41,7 @@ class LogPanelMobile extends Component {
         return (
             <div>
                 <ExpansionPanel>
-                    <ExpansionPanelSummary className={this.props.classes[log.type]}>
+                    <ExpansionPanelSummary className={this.props.classes[log.type.toLowerCase()]}>
                         <div>
                             <Typography className={`${this.props.classes.heading} ${this.props.classes.column}`}>
                                 {log.source}
