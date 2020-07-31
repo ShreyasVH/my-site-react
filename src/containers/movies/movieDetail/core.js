@@ -13,7 +13,6 @@ import { withStyles } from '@material-ui/core/styles';
 import MovieCard from '../movieList/card';
 
 import Utils from '../../../utils';
-import './styles.css';
 
 const styles = theme => ({
 	paper: {
@@ -21,6 +20,22 @@ const styles = theme => ({
 		width: 60,
 		marginLeft: 'auto',
 		marginRight: 'auto'
+	},
+	artistImage: {
+		height: '80px',
+		width: '60px'
+	},
+	artistLink: {
+		textAlign: 'center'
+	},
+	link: {
+		fontWeight: 'bold',
+		textDecoration: 'none',
+		color: '#35A4F5'
+	},
+	title: {
+		textAlign: 'center',
+		color: '#FF3C3C'
 	}
 });
 
@@ -29,7 +44,7 @@ class MovieDetailCore extends Component {
 		if (!this.props.isEmpty()) {
 			return (
 				<h1
-					className="title"
+					className={this.props.classes.title}
 				>
 					{this.props.movie.name}
 				</h1>
@@ -90,7 +105,9 @@ class MovieDetailCore extends Component {
 			<Link
 				to={'/movies/browseMovies?year[]=' + year + '&year[]=' + year}
 			>
-				{year}
+				<span className={this.props.classes.link}>
+					{year}
+				</span>
 			</Link>
 		);
 		return (this.renderField('Year', markup));
@@ -132,22 +149,23 @@ class MovieDetailCore extends Component {
 				<Paper
 					className={this.props.classes.paper}
 				>
-					<div
-						className="artist-image"
-					>
+					<div>
 						<img
+							className={this.props.classes.artistImage}
 							src={director.imageUrl}
 							alt={director.name}
 						/>
 					</div>
 				</Paper>
 				<div
-					className="artist-link"
+					className={this.props.classes.artistLink}
 				>
 					<Link
 						to={'/movies/browseMovies?directors[]=' + director.id}
 					>
-						{director.name}
+						<span className={this.props.classes.link}>
+							{director.name}
+						</span>
 					</Link>
 				</div>
 			</Grid>
@@ -176,22 +194,23 @@ class MovieDetailCore extends Component {
 				<Paper
 					className={this.props.classes.paper}
 				>
-					<div
-						className="artist-image"
-					>
+					<div>
 						<img
+							className={this.props.classes.artistImage}
 							src={actor.imageUrl}
 							alt={actor.name}
 						/>
 					</div>
 				</Paper>
 				<div
-					className="artist-link"
+					className={this.props.classes.artistLink}
 				>
 					<Link
 						to={'/movies/browseMovies?actors[]=' + actor.id}
 					>
-						{actor.name}
+						<span className={this.props.classes.link}>
+							{actor.name}
+						</span>
 					</Link>
 				</div>
 			</Grid>

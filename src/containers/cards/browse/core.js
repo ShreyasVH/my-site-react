@@ -14,13 +14,16 @@ import ObtainForm from "../obtainForm";
 import Filters from "../../filters";
 import SearchDropDown from '../../../components/searchDropdown';
 
-
 const styles = theme => ({
     root: {
         flexGrow: 1,
     },
     cardList: {
         marginTop: theme.typography.pxToRem(5)
+    },
+    title: {
+        textAlign: 'center',
+        color: '#FF3C3C'
     }
 });
 
@@ -55,7 +58,7 @@ class BrowseCore extends Component {
         if (!this.props.isEmpty()) {
             return (
                 <h1
-                    className="title"
+                    className={this.props.classes.title}
                 >
                     Browse Cards
                 </h1>
