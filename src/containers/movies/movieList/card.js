@@ -14,6 +14,26 @@ const styles = theme => ({
 	paper: {
 		height: 240,
 		width: 180,
+	},
+	movieLink: {
+		textAlign: 'center',
+		width: '180px',
+		marginTop: '10px'
+	},
+	cardWrapper: {
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		marginTop: '15px',
+		marginBottom: '15px'
+	},
+	movieImage: {
+		height: '240px',
+		width: '180px'
+	},
+	link: {
+		fontWeight: 'bold',
+		textDecoration: 'none',
+		color: '#35A4F5'
 	}
 });
 
@@ -22,11 +42,13 @@ class MovieCard extends Component {
 		let { movie, showLink = true } = this.props;
 		if (showLink) {
 			return (
-				<div className="movie-link">
+				<div className={this.props.classes.movieLink}>
 					<Link
 						to={'/movies/movieDetail?id=' + movie.id}
 					>
-						{movie.name}
+						<span className={this.props.classes.link}>
+							{movie.name}
+						</span>
 					</Link>
 				</div>
 			);
@@ -36,7 +58,7 @@ class MovieCard extends Component {
 	render() {
 		let { movie } = this.props;
 		return (
-			<div className="cardWrapper">
+			<div className={this.props.classes.cardWrapper}>
 				<Grid
 					item
 					xs={6}
@@ -46,6 +68,7 @@ class MovieCard extends Component {
 						className={this.props.classes.paper}
 					>
 						<img
+							className={this.props.classes.movieImage}
 							src={movie.imageUrl}
 							alt={movie.name}
 						/>

@@ -25,6 +25,10 @@ const styles = theme => ({
     heading: {
         fontSize: theme.typography.pxToRem(15),
         fontWeight: theme.typography.fontWeightRegular,
+    },
+    title: {
+        textAlign: 'center',
+        color: '#FF3C3C'
     }
 });
 
@@ -33,7 +37,7 @@ class DetailCore extends Component {
         if (!this.props.isEmpty()) {
             return (
                 <h1
-                    className="title"
+                    className={this.props.classes.title}
                 >
                     {this.props.card.name}
                 </h1>

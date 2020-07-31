@@ -29,7 +29,8 @@ module.exports = {
 						}
 					},
 					'css-loader'
-				]
+				],
+				exclude: /node_modules/
 			},
 			{
 				test: /.jsx?$/,
@@ -40,7 +41,8 @@ module.exports = {
 						'react'
 					],
 					plugins: [
-						'transform-class-properties'
+						'transform-class-properties',
+						'syntax-dynamic-import'
 					]
 				},
 				exclude: /node_modules/
@@ -57,7 +59,9 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: 'src/template.html'
 		}),
-		// new BundleAnalyzerPlugin(),
+		// new BundleAnalyzerPlugin({
+		// 	analyzerHost: "0.0.0.0"
+		// }),
 		new webpack.DefinePlugin({
 			'process.env.API_ENDPOINT': JSON.stringify(process.env.REACT_APP_API_ENDPOINT),
 			'process.env.API_ENDPOINT_DUEL_LINKS': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_DUEL_LINKS),

@@ -10,8 +10,6 @@ import Grid from '@material-ui/core/Grid';
 
 import MovieCard from './card';
 
-import './styles.css';
-
 const styles = theme => ({
 	root: {
 		flexGrow: 1,

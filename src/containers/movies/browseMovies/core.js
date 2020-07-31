@@ -9,13 +9,22 @@ import Waypoint from 'react-waypoint';
 import MovieList from '../movieList/index';
 import Filters from '../../filters';
 import SearchDropDown from '../../../components/searchDropdown';
+import PropTypes from "prop-types";
+import {withStyles} from "@material-ui/core";
 
-export default class BrowseMoviesCore extends Component {
+const styles = theme => ({
+	title: {
+		textAlign: 'center',
+		color: '#FF3C3C'
+	}
+});
+
+class BrowseMoviesCore extends Component {
 	renderTitle = () => {
 		if (!this.props.isEmpty()) {
 			return (
 				<h1
-					className="title"
+					className={this.props.classes.title}
 				>
 					Browse Movies
 				</h1>
@@ -26,9 +35,7 @@ export default class BrowseMoviesCore extends Component {
 	renderCount = () => {
 		if (!this.props.isEmpty()) {
 			return (
-				<h3
-					className="item-count"
-				>
+				<h3>
 					{this.props.totalCount + ' movies'}
 				</h3>
 			);
@@ -120,3 +127,10 @@ export default class BrowseMoviesCore extends Component {
 		);
 	}
 }
+
+BrowseMoviesCore.propTypes = {
+	classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(BrowseMoviesCore);
+
