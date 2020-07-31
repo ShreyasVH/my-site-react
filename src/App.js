@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-// import Home from './containers/home';
 import NotFound from './containers/notFound';
-// import Test from './containers/test';
 import Header from './components/header';
 import Loader from './components/loader';
 import Notify from './components/notify';
@@ -72,11 +70,7 @@ class App extends Component {
 								<Route path="/movies/dashboard" component={LoadableMoviesDashboard} />
 								<Route path="/movies/browseMovies" component={LoadableBrowseMovies} />
 								<Route path="/movies/movieDetail" component={LoadableMovieDetail} />
-								{/*<Route path="/movies/actorList" component={ActorList} />*/}
-								{/*<Route path="/movies/directorList" component={DirectorList} />*/}
-								{/*<Route path="/movies/deletedMovies" component={DeletedMovies} />*/}
 
-								{/*<Route path="/test" component={Test} />*/}
 								<Route path="/cards/browse" component={LoadableBrowseCards} />
 								<Route path="/cards/detail" component={LoadableCardDetail} />
 

@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import EditIcon from '@material-ui/icons/Edit';
 import SystemUpdateIcon from '@material-ui/icons/SystemUpdate';
 
 
