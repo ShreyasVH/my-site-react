@@ -39,7 +39,7 @@ class BrowseCore extends Component {
     };
 
     renderWaypoint = () => {
-        if (!this.props.hasReachedEnd) {
+        if (!this.props.hasReachedEnd && (this.props.tours.length > 0)) {
             return (
                 <Waypoint
                     onEnter={this.props.onScroll}
