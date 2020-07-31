@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import EditIcon from '@material-ui/icons/Edit';
 import SystemUpdateIcon from '@material-ui/icons/SystemUpdate';
 
 
@@ -21,6 +20,26 @@ const styles = theme => ({
     obtain: {
         float: 'right',
         color: '#5cb85c'
+    },
+    cardImage: {
+        height: 240,
+        width: 180
+    },
+    link: {
+        textDecoration: 'none',
+        color: '#35A4F5',
+        fontWeight: 'bold'
+    },
+    cardWrapper: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: '15px',
+        marginBottom: '15px'
+    },
+    cardLink: {
+        textAlign: 'center',
+        width: '180px',
+        marginTop: '10px'
     }
 });
 
@@ -31,11 +50,13 @@ class CardCore extends Component {
         let { card, showLink = true } = this.props;
         if (showLink) {
             return (
-                <div className="movie-link">
+                <div className={this.props.classes.cardLink}>
                     <Link
                         to={'/cards/detail?id=' + card.id}
                     >
-                        {card.name}
+                        <span className={this.props.classes.link}>
+                            {card.name}
+                        </span>
                     </Link>
                 </div>
             );
@@ -59,7 +80,7 @@ class CardCore extends Component {
     render() {
         let { card } = this.props;
         return (
-            <div className="cardWrapper">
+            <div className={this.props.classes.cardWrapper}>
                 <Grid
                     item
                     xs={6}
@@ -69,6 +90,7 @@ class CardCore extends Component {
                         className={this.props.classes.paper}
                     >
                         <img
+                            className={this.props.classes.cardImage}
                             src={card.imageUrl}
                             alt={card.name}
                         />

@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 
-import '../../movies/movieList/styles.css';
 import BrowseCore from './core';
 
 import Context from '../../../utils/context';
 import Cards from '../../../utils/cards';
 import Filters from "../../../utils/filters";
-import Movies from "../../../utils/movies";
 import MovieFilterHandler from "../../../utils/movies/filterHandler";
-import BrowseMoviesCore from "../../movies/browseMovies/core";
-
 
 class Browse extends Component {
     componentDidMount () {
