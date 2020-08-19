@@ -60,34 +60,9 @@ const styles = theme => ({
 class SearchDropdownCore extends Component {
     handleKeyUp = event => this.props.onKeyUp && this.props.onKeyUp(event);
 
-    // handleDisplayFieldClick = event => {
-    //     this.setState(({
-    //         isFocussed: true
-    //     }));
-    //     if (this.inputField) {
-    //         console.log(this.inputField);
-    //         this.inputField.value = "";
-    //     }
-    // };
-
     handleDisplayFieldClick = event => this.props.onDisplayFieldClick && this.props.onDisplayFieldClick();
 
-    // handleTextFieldBlur = event => {
-    //     setTimeout(() => {
-    //         this.setState(({
-    //             isFocussed: false
-    //         }));
-    //     }, 100);
-    // };
-
     handleTextFieldBlur = event => this.props.onTextFieldBlur && this.props.onTextFieldBlur();
-
-    // handleSelect = (selectedId, selectedName) => event => {
-    //     this.props.onSelect && this.props.onSelect(selectedId, selectedName);
-    //     if (this.props.clearOnSelect && this.displayField) {
-    //         this.displayField.value = '';
-    //     }
-    // };
 
     handleSelect = (selectedId, selectedName) => event => this.props.onSelect && this.props.onSelect(selectedId, selectedName);
 
@@ -110,13 +85,13 @@ class SearchDropdownCore extends Component {
         } else {
             return (
                 <TextField
-                    label={this.props.label + 'display'}
+                    label={this.props.label}
                     className={this.props.classes.textField}
                     margin="normal"
                     variant="outlined"
                     fullWidth
                     autoComplete="off"
-                    placeholder={this.props.placeHolder + 'display'}
+                    placeholder={this.props.placeHolder}
                     onClick={this.handleDisplayFieldClick}
                     value={this.props.displayValue}
                     inputRef={displayField => this.displayField = displayField}
