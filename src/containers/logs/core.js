@@ -9,7 +9,7 @@ import LogPanelMobile from './logPanelMobile';
 
 const styles = theme => ({
     root: {
-        width: '100%',
+        width: '100%'
     }
 });
 

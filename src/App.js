@@ -56,6 +56,41 @@ const LoadableLogs = Loadable({
 	}
 });
 
+const LoadableCricBrowse = Loadable({
+	loader: () => import('./containers/cricbuzz/browse'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
+const LoadableTourDetail = Loadable({
+	loader: () => import('./containers/cricbuzz/tour/detail'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
+const LoadableSeries = Loadable({
+	loader: () => import('./containers/cricbuzz/series/detail'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
+const LoadableMatch = Loadable({
+	loader: () => import('./containers/cricbuzz/match/detail'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
+const LoadableCreateMatch = Loadable({
+	loader: () => import('./containers/cricbuzz/match/create'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
 class App extends Component {
 	render() {
 		return (
@@ -75,6 +110,13 @@ class App extends Component {
 								<Route path="/cards/detail" component={LoadableCardDetail} />
 
 								<Route path="/logs/filters" component={LoadableLogs} />
+
+								<Route path="/cricbuzz/browse" component={LoadableCricBrowse} />
+								<Route path="/cricbuzz/tours/detail" component={LoadableTourDetail} />
+								<Route path="/cricbuzz/series/detail" component={LoadableSeries} />
+								<Route path="/cricbuzz/matches/detail" component={LoadableMatch} />
+								<Route path="/cricbuzz/matches/create" component={LoadableCreateMatch} />
+
 								<Route component={NotFound} />
 							</Switch>
 						</div>

@@ -42,7 +42,6 @@ export default class Logs
             Context.hideLoader();
 
         }).catch(apiResponse => {
-            console.log(apiResponse);
             Context.hideLoader();
         });
     }
