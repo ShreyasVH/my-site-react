@@ -30,6 +30,7 @@ export const GET_TOURS = 'cricbuzz/tours/filter';
 export const GET_TOUR_BY_ID = 'cricbuzz/tours/{id}';
 export const GET_SERIES_BY_ID = 'cricbuzz/series/{id}';
 export const GET_MATCH_BY_ID = 'cricbuzz/matches/{id}';
+export const UPDATE_TOUR = 'cricbuzz/tours/{id}';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',

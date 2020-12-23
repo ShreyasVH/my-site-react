@@ -70,6 +70,13 @@ const LoadableTourDetail = Loadable({
 	}
 });
 
+const LoadableUpdateTour = Loadable({
+	loader: () => import('./containers/cricbuzz/tour/update'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
 const LoadableSeries = Loadable({
 	loader: () => import('./containers/cricbuzz/series/detail'),
 	loading() {
@@ -112,8 +119,12 @@ class App extends Component {
 								<Route path="/logs/filters" component={LoadableLogs} />
 
 								<Route path="/cricbuzz/browse" component={LoadableCricBrowse} />
+
 								<Route path="/cricbuzz/tours/detail" component={LoadableTourDetail} />
+								<Route path="/cricbuzz/tours/update" component={LoadableUpdateTour} />
+
 								<Route path="/cricbuzz/series/detail" component={LoadableSeries} />
+
 								<Route path="/cricbuzz/matches/detail" component={LoadableMatch} />
 								<Route path="/cricbuzz/matches/create" component={LoadableCreateMatch} />
 

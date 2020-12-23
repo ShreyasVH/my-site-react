@@ -50,4 +50,16 @@ export default class Utils {
 	static getProtocol = () => (window.location.protocol + '//');
 
 	static getDomain = () => (window.location.hostname);
+
+	static formatDateToString = timestamp => {
+		const date = new Date(timestamp);
+		const dateString = date.toLocaleDateString("en-IN", {month: '2-digit', year: 'numeric', day: '2-digit'});
+		const dateParts = dateString.split("/");
+		return dateParts[2] + "-" + dateParts[1] + '-' + dateParts[0];
+	}
+
+	static formatTimeToString = timestamp => {
+		const date = new Date(timestamp);
+		return ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+	}
 }
