@@ -26,28 +26,27 @@ export default class ApiHelper {
 		};
 		let headers = Object.assign({}, defaultHeaders, additionalHeaders);
 
-		// let data = new URLSearchParams();
-		// for (let key in payload) {
-		// 	console.log('key:' + key);
-		// 	if (payload.hasOwnProperty(key)) {
-		// 		let value = payload[key];
-		// 		if (Array.isArray(value)) {
-		// 			for(let index in value) {
-		// 				if (value.hasOwnProperty(index)) {
-		// 					data.append(key + '[]', value[index]);
-		// 				}
-		// 			}
-		// 		} else {
-		// 			data.append(key, value);
-		// 		}
-		//
-		// 	}
-		// }
-		// console.log(data);
 		let data = JSON.stringify(payload);
 
 		return ApiHelper.execute({
 			method: 'post',
+			data,
+			url,
+			headers
+		});
+	};
+
+	static put = (url, payload, additionalHeaders = {}) => {
+		let defaultHeaders = {
+			'X-Requested-With': 'XMLHttpRequest',
+			'Content-Type': 'application/json'
+		};
+		let headers = Object.assign({}, defaultHeaders, additionalHeaders);
+
+		let data = JSON.stringify(payload);
+
+		return ApiHelper.execute({
+			method: 'put',
 			data,
 			url,
 			headers

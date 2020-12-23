@@ -1,4 +1,11 @@
-import {BASE_URL_CRICBUZZ, GET_TOURS, GET_TOUR_BY_ID, GET_SERIES_BY_ID, GET_MATCH_BY_ID} from "../../constants";
+import {
+    BASE_URL_CRICBUZZ,
+    GET_TOURS,
+    GET_TOUR_BY_ID,
+    GET_SERIES_BY_ID,
+    GET_MATCH_BY_ID,
+    UPDATE_TOUR
+} from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
 import {updateTours, updateTour, updateSeries, updateMatch, updateSuggestions, updateContext} from "../../actions/cricActions";
@@ -185,4 +192,9 @@ export default class CricBuzzUtils {
 
         return year;
     };
+
+    static updateTour = (id, payload) => {
+        let url = BASE_URL_CRICBUZZ + UPDATE_TOUR.replace('{id}', id);
+        return ApiHelper.put(url, payload);
+    }
 }
