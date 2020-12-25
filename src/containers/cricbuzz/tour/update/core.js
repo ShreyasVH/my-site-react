@@ -89,7 +89,7 @@ class UpdateCore extends Component {
                                 color="secondary"
                                 variant="contained"
                                 className={this.props.classes.submit}
-                                type="submit"su
+                                type="submit"
                             >
                                 Submit
                             </Button>

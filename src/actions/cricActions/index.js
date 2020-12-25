@@ -38,3 +38,10 @@ export const updateContext = payload => ({
     type: CRIC_EVENTS.UPDATE_CONTEXT,
     payload
 });
+
+export const updateStadium = stadium => ({
+    type: CRIC_EVENTS.UPDATE_STADIUM,
+    payload: {
+        stadium
+    }
+});

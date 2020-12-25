@@ -31,6 +31,9 @@ export const GET_TOUR_BY_ID = 'cricbuzz/tours/{id}';
 export const GET_SERIES_BY_ID = 'cricbuzz/series/{id}';
 export const GET_MATCH_BY_ID = 'cricbuzz/matches/{id}';
 export const UPDATE_TOUR = 'cricbuzz/tours/{id}';
+export const GET_STADIUM_BY_ID = 'cricbuzz/stadiums/{id}';
+export const GET_ALL_COUNTRIES = 'cricbuzz/countries';
+export const UPDATE_STADIUM = 'cricbuzz/stadiums/{id}';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',

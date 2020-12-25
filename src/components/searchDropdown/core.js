@@ -123,15 +123,18 @@ class SearchDropdownCore extends Component {
                 if (this.props.items.hasOwnProperty(index)) {
                     let entity = this.props.items[index];
                     listMarkup.push(
-                        <ListItem
-                            alignItems="center"
+                        <div
                             onClick={this.handleSelect(entity.id, entity.name)}
                         >
-                            {this.renderAvatar(entity)}
-                            <ListItemText
-                                primary={entity.name}
-                            />
-                        </ListItem>
+                            <ListItem
+                                alignItems="center"
+                            >
+                                {this.renderAvatar(entity)}
+                                <ListItemText
+                                    primary={entity.name}
+                                />
+                            </ListItem>
+                        </div>
                     );
                 }
             }
