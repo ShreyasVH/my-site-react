@@ -45,3 +45,10 @@ export const updateStadium = stadium => ({
         stadium
     }
 });
+
+export const updateCountry = country => ({
+    type: CRIC_EVENTS.UPDATE_COUNTRY,
+    payload: {
+        country
+    }
+});

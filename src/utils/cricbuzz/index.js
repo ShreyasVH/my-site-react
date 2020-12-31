@@ -7,7 +7,9 @@ import {
     UPDATE_TOUR,
     GET_STADIUM_BY_ID,
     GET_ALL_COUNTRIES,
-    UPDATE_STADIUM
+    UPDATE_STADIUM,
+    GET_COUNTRY_BY_ID,
+    UPDATE_COUNTRY
 } from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
@@ -18,7 +20,8 @@ import {
     updateMatch,
     updateSuggestions,
     updateContext,
-    updateStadium
+    updateStadium,
+    updateCountry
 } from "../../actions/cricActions";
 import Context from "../context";
 import Utils from '../';
@@ -240,6 +243,35 @@ export default class CricBuzzUtils {
 
     static updateStadium = (id, payload) => {
         let url = BASE_URL_CRICBUZZ + UPDATE_STADIUM.replace('{id}', id);
+        return ApiHelper.put(url, payload);
+    };
+
+    static loadCountry = (id) => {
+        id = parseInt(id, 10);
+        let cricStore = Utils.copyObject(store.getState().cric);
+
+        if((Object.keys(cricStore.country).length === 0) || (id !== cricStore.country.id)) {
+            let url = BASE_URL_CRICBUZZ + GET_COUNTRY_BY_ID.replace('{id}', id);
+            let promise = ApiHelper.get(url);
+
+            promise.then(apiResponse => {
+                let response = apiResponse.data;
+                CricBuzzUtils.setCountry(response);
+                Context.hideLoader();
+            }).catch(apiResponse => {
+                Context.hideLoader();
+            });
+        } else {
+            Context.hideLoader();
+        }
+    };
+
+    static setCountry = country => {
+        store.dispatch(updateCountry(country));
+    };
+
+    static updateCountry = (id, payload) => {
+        let url = BASE_URL_CRICBUZZ + UPDATE_COUNTRY.replace('{id}', id);
         return ApiHelper.put(url, payload);
     };
 }
