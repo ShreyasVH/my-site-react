@@ -98,6 +98,13 @@ const LoadableCreateMatch = Loadable({
 	}
 });
 
+const LoadableUpdateStadium = Loadable({
+	loader: () => import('./containers/cricbuzz/stadium/update'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
 class App extends Component {
 	render() {
 		return (
@@ -127,6 +134,8 @@ class App extends Component {
 
 								<Route path="/cricbuzz/matches/detail" component={LoadableMatch} />
 								<Route path="/cricbuzz/matches/create" component={LoadableCreateMatch} />
+
+								<Route path="/cricbuzz/stadiums/update" component={LoadableUpdateStadium} />
 
 								<Route component={NotFound} />
 							</Switch>

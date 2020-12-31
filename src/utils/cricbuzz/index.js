@@ -4,11 +4,22 @@ import {
     GET_TOUR_BY_ID,
     GET_SERIES_BY_ID,
     GET_MATCH_BY_ID,
-    UPDATE_TOUR
+    UPDATE_TOUR,
+    GET_STADIUM_BY_ID,
+    GET_ALL_COUNTRIES,
+    UPDATE_STADIUM
 } from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
-import {updateTours, updateTour, updateSeries, updateMatch, updateSuggestions, updateContext} from "../../actions/cricActions";
+import {
+    updateTours,
+    updateTour,
+    updateSeries,
+    updateMatch,
+    updateSuggestions,
+    updateContext,
+    updateStadium
+} from "../../actions/cricActions";
 import Context from "../context";
 import Utils from '../';
 
@@ -197,4 +208,38 @@ export default class CricBuzzUtils {
         let url = BASE_URL_CRICBUZZ + UPDATE_TOUR.replace('{id}', id);
         return ApiHelper.put(url, payload);
     }
+
+    static loadStadium = (id) => {
+        id = parseInt(id, 10);
+        let cricStore = Utils.copyObject(store.getState().cric);
+
+        if((Object.keys(cricStore.stadium).length === 0) || (id !== cricStore.stadium.id)) {
+            let url = BASE_URL_CRICBUZZ + GET_STADIUM_BY_ID.replace('{id}', id);
+            let promise = ApiHelper.get(url);
+
+            promise.then(apiResponse => {
+                let response = apiResponse.data;
+                CricBuzzUtils.setStadium(response);
+                Context.hideLoader();
+            }).catch(apiResponse => {
+                Context.hideLoader();
+            });
+        } else {
+            Context.hideLoader();
+        }
+    };
+
+    static setStadium = stadium => {
+        store.dispatch(updateStadium(stadium));
+    };
+
+    static getAllCountries = () => {
+        let url = BASE_URL_CRICBUZZ + GET_ALL_COUNTRIES;
+        return ApiHelper.get(url);
+    };
+
+    static updateStadium = (id, payload) => {
+        let url = BASE_URL_CRICBUZZ + UPDATE_STADIUM.replace('{id}', id);
+        return ApiHelper.put(url, payload);
+    };
 }

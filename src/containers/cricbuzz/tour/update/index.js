@@ -44,7 +44,7 @@ class Update extends Component {
             startTime: this.state.startTime
         }
         Context.showLoader();
-        const updatePromise = CricBuzzUtils.updateTour(0, payload);
+        const updatePromise = CricBuzzUtils.updateTour(this.tourId, payload);
         updatePromise.then(apiResponse => {
             Context.hideLoader();
             Context.showNotify('Updated Successfully', 'success');
