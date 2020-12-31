@@ -31,7 +31,7 @@ export default class SearchDropDown extends Component {
             this.setState(({
                 isFocussed: false
             }));
-        }, 100);
+        }, 200);
     };
 
     handleKeyUp = event => {
@@ -42,6 +42,10 @@ export default class SearchDropDown extends Component {
 
     handleSelect = (selectedId, selectedName)  => {
         this.props.onSelect && this.props.onSelect(selectedId, selectedName);
+        this.setState({
+            isFocussed: false
+        });
+
         if (this.props.clearOnSelect) {
             this.setState({
                 displayValue: ''

@@ -65,7 +65,7 @@ class UpdateCore extends Component {
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
                                         label="Tour"
-                                        placeHolder="Tour"
+                                        placeholder="Tour"
                                         variant="outlined"
                                         fullWidth
                                         value={this.props.name}

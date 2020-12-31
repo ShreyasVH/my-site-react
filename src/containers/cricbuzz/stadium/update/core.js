@@ -43,7 +43,10 @@ const styles = theme => ({
     },
     submit: {
         backgroundColor: '#428bca',
-        marginLeft: '48%'
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: '2%',
+        display: 'block'
     }
 });
 
@@ -69,7 +72,7 @@ class UpdateCore extends Component {
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
                                         label="Name"
-                                        placeHolder="Name"
+                                        placeholder="Name"
                                         variant="outlined"
                                         fullWidth
                                         value={this.props.name}
@@ -83,7 +86,7 @@ class UpdateCore extends Component {
                                     <SearchDropDown
                                         items={this.props.countries}
                                         label="Country"
-                                        placeHolder="Country"
+                                        placeholder="Country"
                                         onSelect={this.handleCountrySelect}
                                         displayValue={this.props.countryName}
                                     />
@@ -96,7 +99,7 @@ class UpdateCore extends Component {
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
                                         label="State"
-                                        placeHolder="State"
+                                        placeholder="State"
                                         variant="outlined"
                                         fullWidth
                                         value={this.props.state}
@@ -109,7 +112,7 @@ class UpdateCore extends Component {
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
                                         label="City"
-                                        placeHolder="City"
+                                        placeholder="City"
                                         variant="outlined"
                                         fullWidth
                                         value={this.props.city}

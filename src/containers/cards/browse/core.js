@@ -88,7 +88,7 @@ class BrowseCore extends Component {
                 onKeyUp={this.handleSearch}
                 items={this.props.suggestions}
                 label="Card"
-                placeHolder="Search Card"
+                placeholder="Search Card"
                 onSelect={this.handleSelect}
             />
         );

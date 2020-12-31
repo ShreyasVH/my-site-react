@@ -54,6 +54,11 @@ const styles = theme => ({
         width: 50,
         height: 75,
         borderRadius: 'initial !important'
+    },
+    item: {
+        '&:hover': {
+            backgroundColor: '#57CBB6'
+        }
     }
 });
 
@@ -66,35 +71,39 @@ class SearchDropdownCore extends Component {
 
     handleSelect = (selectedId, selectedName) => event => this.props.onSelect && this.props.onSelect(selectedId, selectedName);
 
+    getDisplayValue = () => ((this.props.displayValue) ? this.props.displayValue : '');
+
+    getLabel = () => ((this.props.label) ? this.props.label : '');
+
+    getPlaceHolder = () => ((this.props.placeholder) ? this.props.placeholder : '');
+
     renderInput = () => {
         if (this.props.isFocussed) {
             return (
                 <TextField
-                    label={this.props.label}
+                    label={this.getLabel()}
                     className={this.props.classes.textField}
                     margin="normal"
                     variant="outlined"
                     fullWidth
                     onKeyUp={this.handleKeyUp}
                     autoComplete="off"
-                    placeholder={this.props.placeHolder}
+                    placeholder={this.getPlaceHolder()}
                     onBlur={this.handleTextFieldBlur}
-                    inputRef={inputField => this.inputField = inputField}
                 />
             );
         } else {
             return (
                 <TextField
-                    label={this.props.label}
+                    label={this.getLabel()}
                     className={this.props.classes.textField}
                     margin="normal"
                     variant="outlined"
                     fullWidth
                     autoComplete="off"
-                    placeholder={this.props.placeHolder}
+                    placeholder={this.getPlaceHolder()}
                     onClick={this.handleDisplayFieldClick}
-                    value={this.props.displayValue}
-                    inputRef={displayField => this.displayField = displayField}
+                    value={this.getDisplayValue()}
                 />
             );
         }
@@ -125,9 +134,11 @@ class SearchDropdownCore extends Component {
                     listMarkup.push(
                         <div
                             onClick={this.handleSelect(entity.id, entity.name)}
+                            key={entity.id}
                         >
                             <ListItem
                                 alignItems="center"
+                                className={this.props.classes.item}
                             >
                                 {this.renderAvatar(entity)}
                                 <ListItemText

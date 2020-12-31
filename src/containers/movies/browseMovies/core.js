@@ -52,7 +52,7 @@ class BrowseMoviesCore extends Component {
 				onKeyUp={this.handleSearch}
 				items={this.props.suggestions}
 				label="Movie"
-				placeHolder="Search Movie"
+				placeholder="Search Movie"
 				onSelect={this.handleSelect}
 			/>
 		);

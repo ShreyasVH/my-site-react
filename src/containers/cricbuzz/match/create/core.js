@@ -180,7 +180,7 @@ class CreateCore extends Component {
                                         <SearchDropDown
                                             items={this.props.teams}
                                             label="Batting Team"
-                                            placeHolder="Batting Team"
+                                            placeholder="Batting Team"
                                             onSelect={this.handleTeamSelectForInnings(inningNum)}
                                             displayValue={inning.battingTeamName}
                                         />
@@ -255,7 +255,7 @@ class CreateCore extends Component {
                         onKeyUp={this.handlePlayerSearch}
                         items={this.props.playerSuggestions}
                         label="Batsman"
-                        placeHolder="Batsman"
+                        placeholder="Batsman"
                         onSelect={this.handlePlayerSelectForBattingScore(innings, scoreRowIndex)}
                         displayValue={scoreObject.batsmanName}
                     />
@@ -306,7 +306,7 @@ class CreateCore extends Component {
                     <SearchDropDown
                         items={this.props.dismissalModes}
                         label="Dismissal Mode"
-                        placeHolder="Dismissal Mode"
+                        placeholder="Dismissal Mode"
                         onSelect={this.handleDismissalSelectForBattingScore(innings, scoreRowIndex)}
                         displayValue={this.renderDisimissal(scoreObject.dismissalModeName)}
                     />
@@ -318,7 +318,7 @@ class CreateCore extends Component {
                         onKeyUp={this.handlePlayerSearch}
                         items={this.props.playerSuggestions}
                         label="Bowler"
-                        placeHolder="Bowler"
+                        placeholder="Bowler"
                         onSelect={this.handleBowlerSelectForBattingScore(innings, scoreRowIndex)}
                         displayValue={this.renderBowlerForBattingScore(scoreObject.bowlerName)}
                     />
@@ -330,7 +330,7 @@ class CreateCore extends Component {
                         onKeyUp={this.handlePlayerSearch}
                         items={this.props.playerSuggestions}
                         label="Fielders"
-                        placeHolder="Fielders"
+                        placeholder="Fielders"
                         onSelect={this.handleFielderSelectForBattingScore(innings, scoreRowIndex)}
                         displayValue={this.renderFieldersForBattingScore(scoreObject.fielderNames)}
                     />
@@ -360,7 +360,7 @@ class CreateCore extends Component {
                         onKeyUp={this.handlePlayerSearch}
                         items={this.props.playerSuggestions}
                         label="Bowler"
-                        placeHolder="Bowler"
+                        placeholder="Bowler"
                         onSelect={this.handleBowlerSelectForBowlingFigure(innings, index)}
                         displayValue={bowlingFigure.bowlerName}
                     />
@@ -440,7 +440,7 @@ class CreateCore extends Component {
                                         onKeyUp={this.handleSeriesSearch}
                                         items={this.props.seriesSuggestions}
                                         label="Series"
-                                        placeHolder="Series"
+                                        placeholder="Series"
                                         onSelect={this.handleSeriesSelect}
                                         displayValue={this.props.seriesName}
                                     />
@@ -453,7 +453,7 @@ class CreateCore extends Component {
                                         onKeyUp={this.props.onStadiumSearch}
                                         items={this.props.stadiumSuggestions}
                                         label="Stadium"
-                                        placeHolder="Stadium"
+                                        placeholder="Stadium"
                                         onSelect={this.handleStadiumSelect}
                                         displayValue={this.props.stadiumName}
                                     />
@@ -467,7 +467,7 @@ class CreateCore extends Component {
                                     <SearchDropDown
                                         items={this.props.teamSuggestions}
                                         label="Team 1"
-                                        placeHolder="Team 1"
+                                        placeholder="Team 1"
                                         onSelect={this.handleTeamSelect(1)}
                                         displayValue={this.props.team1Name}
                                     />
@@ -479,7 +479,7 @@ class CreateCore extends Component {
                                     <SearchDropDown
                                         items={this.props.teamSuggestions}
                                         label="Team 2"
-                                        placeHolder="Team 2"
+                                        placeholder="Team 2"
                                         onSelect={this.handleTeamSelect(2)}
                                         displayValue={this.props.team2Name}
                                     />
@@ -493,7 +493,7 @@ class CreateCore extends Component {
                                     <SearchDropDown
                                         items={this.props.teams}
                                         label="Toss Winner"
-                                        placeHolder="Toss Winner"
+                                        placeholder="Toss Winner"
                                         onSelect={this.props.onTossWinnerSelect}
                                         displayValue={this.props.tossWinnerName}
                                     />
@@ -505,7 +505,7 @@ class CreateCore extends Component {
                                     <SearchDropDown
                                         items={this.props.teams}
                                         label="Batting First"
-                                        placeHolder="Batting First"
+                                        placeholder="Batting First"
                                         onSelect={this.props.onBattingFirstSelect}
                                         displayValue={this.props.battingFirstName}
                                     />
@@ -519,7 +519,7 @@ class CreateCore extends Component {
                                     <SearchDropDown
                                         items={this.props.resultSuggestions}
                                         label="Result"
-                                        placeHolder="Result"
+                                        placeholder="Result"
                                         onSelect={this.props.onResultSelect}
                                         displayValue={this.props.resultName}
                                     />
@@ -531,7 +531,7 @@ class CreateCore extends Component {
                                     <SearchDropDown
                                         items={this.props.teams}
                                         label="Winner"
-                                        placeHolder="Winner"
+                                        placeholder="Winner"
                                         onSelect={this.props.onWinnerSelect}
                                         displayValue={this.props.winnerName}
                                     />
@@ -554,7 +554,7 @@ class CreateCore extends Component {
                                     <SearchDropDown
                                         items={this.props.winMarginTypes}
                                         label="Win Margin Type"
-                                        placeHolder="Win Margin Type"
+                                        placeholder="Win Margin Type"
                                         onSelect={this.props.onWinMarginTypeSelect}
                                         displayValue={this.props.winMarginTypeName}
                                     />
@@ -582,7 +582,7 @@ class CreateCore extends Component {
                                         onKeyUp={this.props.onPlayerSearchAll}
                                         items={this.props.playerSuggestions}
                                         label="Team 1 Players"
-                                        placeHolder="Team 1 Players"
+                                        placeholder="Team 1 Players"
                                         onSelect={this.handlePlayerSelect(1)}
                                         clearOnSelect={true}
                                     />
@@ -595,7 +595,7 @@ class CreateCore extends Component {
                                         onKeyUp={this.props.onPlayerSearchAll}
                                         items={this.props.playerSuggestions}
                                         label="Team 2 Players"
-                                        placeHolder="Team 2 Players"
+                                        placeholder="Team 2 Players"
                                         onSelect={this.handlePlayerSelect(2)}
                                         clearOnSelect={true}
                                     />
@@ -649,7 +649,7 @@ class CreateCore extends Component {
                                                     onKeyUp={this.handlePlayerSearch}
                                                     items={this.props.playerSuggestions}
                                                     label="Man of the Match"
-                                                    placeHolder="Man of the Match"
+                                                    placeholder="Man of the Match"
                                                     onSelect={this.handleSelectManOfTheMatch}
                                                     clearOnSelect={true}
                                                 />
