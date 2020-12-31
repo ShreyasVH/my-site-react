@@ -52,3 +52,10 @@ export const updateCountry = country => ({
         country
     }
 });
+
+export const updateTeam = team => ({
+    type: CRIC_EVENTS.UPDATE_TEAM,
+    payload: {
+        team
+    }
+});

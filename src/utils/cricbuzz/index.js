@@ -9,7 +9,9 @@ import {
     GET_ALL_COUNTRIES,
     UPDATE_STADIUM,
     GET_COUNTRY_BY_ID,
-    UPDATE_COUNTRY
+    UPDATE_COUNTRY,
+    GET_TEAM_BY_ID,
+    UPDATE_TEAM
 } from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
@@ -21,7 +23,8 @@ import {
     updateSuggestions,
     updateContext,
     updateStadium,
-    updateCountry
+    updateCountry,
+    updateTeam
 } from "../../actions/cricActions";
 import Context from "../context";
 import Utils from '../';
@@ -272,6 +275,35 @@ export default class CricBuzzUtils {
 
     static updateCountry = (id, payload) => {
         let url = BASE_URL_CRICBUZZ + UPDATE_COUNTRY.replace('{id}', id);
+        return ApiHelper.put(url, payload);
+    };
+
+    static loadTeam = (id) => {
+        id = parseInt(id, 10);
+        let cricStore = Utils.copyObject(store.getState().cric);
+
+        if((Object.keys(cricStore.team).length === 0) || (id !== cricStore.team.id)) {
+            let url = BASE_URL_CRICBUZZ + GET_TEAM_BY_ID.replace('{id}', id);
+            let promise = ApiHelper.get(url);
+
+            promise.then(apiResponse => {
+                let response = apiResponse.data;
+                CricBuzzUtils.setTeam(response);
+                Context.hideLoader();
+            }).catch(apiResponse => {
+                Context.hideLoader();
+            });
+        } else {
+            Context.hideLoader();
+        }
+    };
+
+    static setTeam = team => {
+        store.dispatch(updateTeam(team));
+    };
+
+    static updateTeam = (id, payload) => {
+        let url = BASE_URL_CRICBUZZ + UPDATE_TEAM.replace('{id}', id);
         return ApiHelper.put(url, payload);
     };
 }

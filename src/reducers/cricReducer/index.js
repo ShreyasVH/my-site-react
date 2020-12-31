@@ -14,7 +14,8 @@ const defaultState = {
     playersSuggestions: [],
     teamsSuggestions: [],
     stadium: {},
-    country: {}
+    country: {},
+    team: {}
 };
 
 const cricReducer = (state = defaultState, action) => {
@@ -26,6 +27,7 @@ const cricReducer = (state = defaultState, action) => {
         case CRIC_EVENTS.UPDATE_CONTEXT:
         case CRIC_EVENTS.UPDATE_STADIUM:
         case CRIC_EVENTS.UPDATE_COUNTRY:
+        case CRIC_EVENTS.UPDATE_TEAM:
             state = Object.assign(state, action.payload);
             break;
         case CRIC_EVENTS.UPDATE_SUGGESTIONS:

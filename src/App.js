@@ -112,6 +112,13 @@ const LoadableUpdateCountry = Loadable({
 	}
 });
 
+const LoadableUpdateTeam = Loadable({
+	loader: () => import('./containers/cricbuzz/team/update'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
 class App extends Component {
 	render() {
 		return (
@@ -145,6 +152,8 @@ class App extends Component {
 								<Route path="/cricbuzz/stadiums/update" component={LoadableUpdateStadium} />
 
 								<Route path="/cricbuzz/countries/update" component={LoadableUpdateCountry} />
+
+								<Route path="/cricbuzz/teams/update" component={LoadableUpdateTeam} />
 
 								<Route component={NotFound} />
 							</Switch>
