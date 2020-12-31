@@ -37,8 +37,6 @@ class Update extends Component {
 
     handleSubmit = async event => {
         event.preventDefault();
-        // Context.showLoader();
-        // await response = CricBuzzUtils.updateSeries()
         let payload = {
             name: this.state.name,
             startTime: this.state.startTime

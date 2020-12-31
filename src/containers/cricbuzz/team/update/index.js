@@ -13,15 +13,28 @@ class Update extends Component {
         this.state = {
             name: '',
             countries: [],
-            state: '',
-            city: ''
+            types: [
+                {
+                    id: 0,
+                    name: 'INTERNATIONAL'
+                },
+                {
+                    id: 1,
+                    name: 'DOMESTIC'
+                },
+                {
+                    id: 2,
+                    name: 'FRANCHISE'
+                }
+            ],
+            type: ''
         };
-        this.stadiumId = Utils.getUrlParam('id');
+        this.teamId = Utils.getUrlParam('id');
     }
 
     componentDidMount() {
         Context.showLoader();
-        CricBuzzUtils.loadStadium(this.stadiumId);
+        CricBuzzUtils.loadTeam(this.teamId);
         const countriesResponse = CricBuzzUtils.getAllCountries();
         countriesResponse.then(apiResponse => {
             const countries = apiResponse.data;
@@ -34,7 +47,7 @@ class Update extends Component {
     }
 
     componentDidUpdate = (prevProps, prevState, snapshot) => {
-        if ((Object.keys(this.props.stadium).length > 0) && (Object.keys(prevProps.stadium).length === 0)) {
+        if ((Object.keys(this.props.team).length > 0) && (Object.keys(prevProps.team).length === 0)) {
             this.setState(this.constructStateFromDetails());
         }
     }
@@ -42,12 +55,11 @@ class Update extends Component {
     constructStateFromDetails = () => {
         let state = {};
 
-        let stadium = this.props.stadium;
-        state.name = stadium.name;
-        state.city = stadium.city;
-        state.state = stadium.state;
-        state.countryId = stadium.country.id;
-        state.countryName = stadium.country.name;
+        let team = this.props.team;
+        state.name = team.name;
+        state.countryId = team.country.id;
+        state.countryName = team.country.name;
+        state.type = team.teamType
 
         return state;
     }
@@ -56,18 +68,12 @@ class Update extends Component {
         event.preventDefault();
         let payload = {
             name: this.state.name,
-            countryId: this.state.countryId
-        }
-        if (this.state.city) {
-            payload.city = this.state.city;
-        }
-
-        if (this.state.state) {
-            payload.state = this.state.state;
+            countryId: this.state.countryId,
+            type: this.state.type
         }
 
         Context.showLoader();
-        const updatePromise = CricBuzzUtils.updateStadium(this.stadiumId, payload);
+        const updatePromise = CricBuzzUtils.updateTeam(this.teamId, payload);
         updatePromise.then(apiResponse => {
             Context.hideLoader();
             Context.showNotify('Updated Successfully', 'success');
@@ -87,18 +93,6 @@ class Update extends Component {
         this.setState(updatedState);
     };
 
-    handleCityChange = event => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.city = event.target.value;
-        this.setState(updatedState);
-    };
-
-    handleStateChange = event => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.state = event.target.value;
-        this.setState(updatedState);
-    };
-
     handleCountrySelect = (id, name) => {
         this.setState({
             countryId: id,
@@ -106,15 +100,25 @@ class Update extends Component {
         });
     }
 
+    handleTypeSelect = (id, name) => {
+        this.setState({
+            type: name
+        });
+    }
+
+    isFormValid = () => {
+        return this.state.name;
+    };
+
     renderPage = () => {
         if (Object.keys(this.state).length > 0) {
             return (
                 <UpdateCore
                     {...this.state}
                     onNameChange={this.handleNameChange}
-                    onCityChange={this.handleCityChange}
-                    onStateChange={this.handleStateChange}
                     onCountrySelect={this.handleCountrySelect}
+                    onTypeSelect={this.handleTypeSelect}
+                    isFormValid={this.isFormValid()}
                     onSubmit={this.handleSubmit}
                 />
             );
@@ -132,7 +136,7 @@ class Update extends Component {
 
 function mapStateToProps(store) {
     return ({
-        stadium: store.cric.stadium
+        team: store.cric.team
     });
 }
 

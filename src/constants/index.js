@@ -36,6 +36,8 @@ export const GET_ALL_COUNTRIES = 'cricbuzz/countries';
 export const UPDATE_STADIUM = 'cricbuzz/stadiums/{id}';
 export const GET_COUNTRY_BY_ID = 'cricbuzz/countries/{id}';
 export const UPDATE_COUNTRY = 'cricbuzz/countries/{id}';
+export const GET_TEAM_BY_ID = 'cricbuzz/teams/{id}';
+export const UPDATE_TEAM = 'cricbuzz/teams/{id}';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',
