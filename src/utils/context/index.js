@@ -49,4 +49,8 @@ export default class Context {
 	static showNotify = (message, type) => {
 		store.dispatch(showNotify(message, type));
 	}
+
+	static updateContext = payload => {
+		store.dispatch(updateContext(payload));
+	}
 }

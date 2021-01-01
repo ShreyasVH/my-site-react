@@ -6,6 +6,9 @@ import NotFound from './containers/notFound';
 import Header from './components/header';
 import Loader from './components/loader';
 import Notify from './components/notify';
+import Context from "./utils/context";
+import Utils from "./utils";
+import store from './store';
 
 const LoadableHome = Loadable({
 	loader: () => import('./containers/home'),
@@ -119,7 +122,30 @@ const LoadableUpdateTeam = Loadable({
 	}
 });
 
+const LoadableUpdatePlayer = Loadable({
+	loader: () => import('./containers/cricbuzz/player/update'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
 class App extends Component {
+	componentDidMount() {
+		window.addEventListener('resize', this.onResize.bind(this));
+	}
+
+	onResize = (event) => {
+		let storeValues = store.getState();
+		let previousIsMobile = storeValues.context.isMobile;
+		let newIsMobile = Utils.isMobile(window.innerWidth);
+
+		if (newIsMobile !== previousIsMobile) {
+			Context.updateContext({
+				isMobile: newIsMobile
+			});
+		}
+	}
+
 	render() {
 		return (
 			<div>
@@ -155,6 +181,7 @@ class App extends Component {
 
 								<Route path="/cricbuzz/teams/update" component={LoadableUpdateTeam} />
 
+								<Route path="/cricbuzz/players/update" a={'A'} component={LoadableUpdatePlayer} />
 								<Route component={NotFound} />
 							</Switch>
 						</div>

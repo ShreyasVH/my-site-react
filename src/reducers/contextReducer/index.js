@@ -13,17 +13,12 @@ const defaultContext = {
 		isOpen: false,
 		type: '',
 		content: ''
-	}
+	},
+	isMobile: Utils.isMobile(window.innerWidth)
 };
 
 const contextReducer = (state = defaultContext, action) => {
 	switch (action.type) {
-		case CONTEXT_EVENTS.UPDATE_CONTEXT:
-			state = Object.assign({}, state, action.payload);
-			break;
-		case CONTEXT_EVENTS.TOGGLE_LOADER:
-			state = Object.assign({}, state, action.payload);
-			break;
 		case CONTEXT_EVENTS.SHOW_NOTIFY: {
 			let newState = Utils.copyObject(state);
 			newState.notify.content = action.payload.message;
@@ -40,6 +35,9 @@ const contextReducer = (state = defaultContext, action) => {
 			state = newState;
 			break;
 		}
+		default:
+			state = Object.assign({}, state, action.payload);
+			break;
 	}
 	return state;
 };

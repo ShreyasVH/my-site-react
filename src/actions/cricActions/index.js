@@ -59,3 +59,10 @@ export const updateTeam = team => ({
         team
     }
 });
+
+export const updatePlayer = player => ({
+    type: CRIC_EVENTS.UPDATE_PLAYER,
+    payload: {
+        player
+    }
+});

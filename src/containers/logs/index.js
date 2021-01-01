@@ -30,7 +30,8 @@ class Logs extends Component {
 function mapStateToProps(store) {
     return {
         logs: store.logs.logs,
-        hasReachedEnd: store.logs.hasReachedEnd
+        hasReachedEnd: store.logs.hasReachedEnd,
+        isMobile: store.context.isMobile
     };
 }
 
