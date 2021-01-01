@@ -181,7 +181,7 @@ class App extends Component {
 
 								<Route path="/cricbuzz/teams/update" component={LoadableUpdateTeam} />
 
-								<Route path="/cricbuzz/players/update" a={'A'} component={LoadableUpdatePlayer} />
+								<Route path="/cricbuzz/players/update" component={LoadableUpdatePlayer} />
 								<Route component={NotFound} />
 							</Switch>
 						</div>
