@@ -37,23 +37,25 @@ class Update extends Component {
 
     handleSubmit = async event => {
         event.preventDefault();
-        let payload = {
-            name: this.state.name,
-            startTime: this.state.startTime
-        }
-        Context.showLoader();
-        const updatePromise = CricBuzzUtils.updateTour(this.tourId, payload);
-        updatePromise.then(apiResponse => {
-            Context.hideLoader();
-            Context.showNotify('Updated Successfully', 'success');
-        }).catch(apiResponse => {
-            Context.hideLoader();
-            if (apiResponse.response) {
-                console.log(apiResponse.response.status);
-                console.log(apiResponse.response.data);
+        if (this.isFormValid()) {
+            let payload = {
+                name: this.state.name,
+                startTime: this.state.startTime
             }
-            Context.showNotify('Failed to update. Please try again', 'error');
-        });
+            Context.showLoader();
+            const updatePromise = CricBuzzUtils.updateTour(this.tourId, payload);
+            updatePromise.then(apiResponse => {
+                Context.hideLoader();
+                Context.showNotify('Updated Successfully', 'success');
+            }).catch(apiResponse => {
+                Context.hideLoader();
+                if (apiResponse.response) {
+                    console.log(apiResponse.response.status);
+                    console.log(apiResponse.response.data);
+                }
+                Context.showNotify('Failed to update. Please try again', 'error');
+            });
+        }
     };
 
     handleStartTimeChange = (event) => {
@@ -64,14 +66,26 @@ class Update extends Component {
         this.setState(updatedState);
     }
 
+    handleNameChange = (event) => {
+
+        let updatedState = Utils.copyObject(this.state);
+        updatedState.name = event.target.value;
+        this.setState(updatedState);
+    }
+
+    isFormValid = () => {
+        return this.state.name;
+    };
+
     renderPage = () => {
         if (Object.keys(this.state).length > 0) {
             return (
                 <UpdateCore
                     {...this.state}
-                    onSearch={this.handleSearch}
+                    onNameChange={this.handleNameChange}
                     onSubmit={this.handleSubmit}
                     onStartTimeChange={this.handleStartTimeChange}
+                    isFormValid={this.isFormValid()}
                 />
             );
         }

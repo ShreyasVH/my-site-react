@@ -52,6 +52,8 @@ class UpdateCore extends Component {
 
     handleStartTimeChange = event => (this.props.onStartTimeChange && this.props.onStartTimeChange(event));
 
+    handleNameChange = event => (this.props.onNameChange && this.props.onNameChange(event));
+
     render() {
         return (
             <div>
@@ -69,7 +71,9 @@ class UpdateCore extends Component {
                                         variant="outlined"
                                         fullWidth
                                         value={this.props.name}
-                                        onKeyUp={this.props.onWinMarginKeyUp}
+                                        onChange={this.handleNameChange}
+                                        error={!this.props.name}
+                                        helperText={((!this.props.name) ? 'Name cannot be empty' : '')}
                                     />
                                 </div>
                             </div>
@@ -90,6 +94,7 @@ class UpdateCore extends Component {
                                 variant="contained"
                                 className={this.props.classes.submit}
                                 type="submit"
+                                disabled={!this.props.isFormValid}
                             >
                                 Submit
                             </Button>

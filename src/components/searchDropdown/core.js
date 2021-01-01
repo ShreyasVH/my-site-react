@@ -104,6 +104,8 @@ class SearchDropdownCore extends Component {
                     placeholder={this.getPlaceHolder()}
                     onClick={this.handleDisplayFieldClick}
                     value={this.getDisplayValue()}
+                    error={this.props.error}
+                    helperText={this.props.helperText}
                 />
             );
         }
