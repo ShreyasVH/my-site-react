@@ -13,7 +13,10 @@ import {
     GET_TEAM_BY_ID,
     UPDATE_TEAM,
     GET_PLAYER_BY_ID,
-    UPDATE_PLAYER
+    UPDATE_PLAYER,
+    GET_ALL_TEAMS,
+    GET_ALL_PLAYERS,
+    UPDATE_SERIES
 } from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
@@ -107,8 +110,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.series).length === 0) || (id !== cricStore.series.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_SERIES_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
+            let promise = CricBuzzUtils.getSeriesByApi(id);
 
             promise.then(apiResponse => {
                 let response = apiResponse.data;
@@ -121,6 +123,11 @@ export default class CricBuzzUtils {
             Context.hideLoader();
         }
     };
+
+    static getSeriesByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_SERIES_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
+    }
 
     static setSeries = series => {
         store.dispatch(updateSeries(series));
@@ -338,4 +345,34 @@ export default class CricBuzzUtils {
         let url = BASE_URL_CRICBUZZ + UPDATE_PLAYER.replace('{id}', id);
         return ApiHelper.put(url, payload);
     };
+
+    static updateSeries = (id, payload) => {
+        let url = BASE_URL_CRICBUZZ + UPDATE_SERIES.replace('{id}', id);
+        return ApiHelper.put(url, payload);
+    };
+
+    static getAllTeams = () => {
+        let url = BASE_URL_CRICBUZZ + GET_ALL_TEAMS;
+        return ApiHelper.get(url);
+    };
+
+    static getAllPlayers = async () => {
+        let players = [];
+        let offset = 0;
+        const count = 1000;
+        let isFetchRequired = true;
+        while (isFetchRequired) {
+            let url = BASE_URL_CRICBUZZ + GET_ALL_PLAYERS.replace('{offset}', offset).replace('{count}', count);
+            let apiResponse = await ApiHelper.get(url);
+            let batchPlayers = apiResponse.data;
+            players = players.concat(batchPlayers);
+
+            if (batchPlayers.length < count) {
+                isFetchRequired = false;
+            }
+            offset += count;
+        }
+
+        return players;
+    }
 }

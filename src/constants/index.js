@@ -29,6 +29,7 @@ export const GET_LOGS = 'logs/filters';
 export const GET_TOURS = 'cricbuzz/tours/filter';
 export const GET_TOUR_BY_ID = 'cricbuzz/tours/{id}';
 export const GET_SERIES_BY_ID = 'cricbuzz/series/{id}';
+export const UPDATE_SERIES = 'cricbuzz/series/{id}';
 export const GET_MATCH_BY_ID = 'cricbuzz/matches/{id}';
 export const UPDATE_TOUR = 'cricbuzz/tours/{id}';
 export const GET_STADIUM_BY_ID = 'cricbuzz/stadiums/{id}';
@@ -40,6 +41,8 @@ export const GET_TEAM_BY_ID = 'cricbuzz/teams/{id}';
 export const UPDATE_TEAM = 'cricbuzz/teams/{id}';
 export const GET_PLAYER_BY_ID = 'cricbuzz/players/{id}';
 export const UPDATE_PLAYER = 'cricbuzz/players/{id}';
+export const GET_ALL_TEAMS = 'cricbuzz/teams';
+export const GET_ALL_PLAYERS = 'cricbuzz/players/all/{offset}/{count}';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',
