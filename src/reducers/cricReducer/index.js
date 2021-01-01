@@ -15,25 +15,19 @@ const defaultState = {
     teamsSuggestions: [],
     stadium: {},
     country: {},
-    team: {}
+    team: {},
+    player: {}
 };
 
 const cricReducer = (state = defaultState, action) => {
     switch (action.type) {
-        case CRIC_EVENTS.UPDATE_TOURS:
-        case CRIC_EVENTS.UPDATE_TOUR:
-        case CRIC_EVENTS.UPDATE_SERIES:
-        case CRIC_EVENTS.UPDATE_MATCH:
-        case CRIC_EVENTS.UPDATE_CONTEXT:
-        case CRIC_EVENTS.UPDATE_STADIUM:
-        case CRIC_EVENTS.UPDATE_COUNTRY:
-        case CRIC_EVENTS.UPDATE_TEAM:
-            state = Object.assign(state, action.payload);
-            break;
         case CRIC_EVENTS.UPDATE_SUGGESTIONS:
             state = Object.assign({}, state, {
                 [action.payload.type + 'Suggestions']: action.payload.suggestions
             });
+            break;
+        default:
+            state = Object.assign(state, action.payload);
             break;
     }
     return state;

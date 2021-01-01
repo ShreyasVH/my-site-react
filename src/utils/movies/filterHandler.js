@@ -53,8 +53,6 @@ class FilterHandler {
     };
 
     handleEvent = (context, event) => {
-        console.log(event);
-
         let storeValues = Utils.copyObject(store.getState());
 
         let target = event.target;

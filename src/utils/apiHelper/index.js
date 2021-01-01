@@ -26,7 +26,7 @@ export default class ApiHelper {
 		};
 		let headers = Object.assign({}, defaultHeaders, additionalHeaders);
 
-		let data = JSON.stringify(payload);
+		let data = (('application/json' === headers["Content-Type"]) ? JSON.stringify(payload) : payload);
 
 		return ApiHelper.execute({
 			method: 'post',
@@ -43,7 +43,7 @@ export default class ApiHelper {
 		};
 		let headers = Object.assign({}, defaultHeaders, additionalHeaders);
 
-		let data = JSON.stringify(payload);
+		let data = (('application/json' === headers["Content-Type"]) ? JSON.stringify(payload) : payload);
 
 		return ApiHelper.execute({
 			method: 'put',
@@ -54,4 +54,16 @@ export default class ApiHelper {
 	};
 
 	static execute = options => (axios(options));
+
+	static uploadFile = (file, folder, fileName) => {
+		let url = 'https://api.cloudinary.com/v1_1/' + process.env.CLOUDINARY_ACCOUNT_NAME + '/upload';
+		let formData = new FormData();
+		formData.append('upload_preset', process.env.CLOUDINARY_PRESET_NAME);
+		formData.append('file', file);
+		formData.append('public_id', fileName);
+		formData.append('folder', folder);
+		return ApiHelper.post(url, formData, {
+			'Content-Type': 'multipart/form-data'
+		});
+	}
 }

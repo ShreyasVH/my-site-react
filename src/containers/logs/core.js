@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/core";
 import Waypoint from "react-waypoint";
-import {isMobile} from 'react-device-detect';
 
 import LogPanelDesktop from './logPanelDesktop';
 import LogPanelMobile from './logPanelMobile';
@@ -28,7 +27,7 @@ class LogsCore extends Component {
     };
 
     renderLog = (log) => {
-        if (isMobile) {
+        if (this.props.isMobile) {
             return (
                 <LogPanelMobile
                     log={log}
