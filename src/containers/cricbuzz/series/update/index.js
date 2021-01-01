@@ -67,8 +67,9 @@ class Update extends Component {
             name: team.name
         }));
         state.manOfTheSeriesList = series.manOfTheSeriesList.map(mots => ({
-            id: mots.player.id,
-            name: mots.player.name
+            id: mots.playerId,
+            name: mots.playerName,
+            teamId: mots.teamId
         }));
 
         const countriesResponse = await CricBuzzUtils.getAllCountries();
