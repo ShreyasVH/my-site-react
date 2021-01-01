@@ -72,11 +72,7 @@ class Update extends Component {
             const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'cric', 'player_' + this.playerId);
             let response = uploadResponse.data;
             payload.image = response.secure_url;
-            console.log(response);
         }
-
-        console.log(payload);
-
 
         const updatePromise = CricBuzzUtils.updatePlayer(this.playerId, payload);
         updatePromise.then(apiResponse => {

@@ -80,7 +80,6 @@ class UpdateCore extends Component {
     handleFileUpload = event => files => (this.props.onImageSelect && this.props.onImageSelect(files[0]));
 
     getDeviceClass = () => {
-        console.log('isMobile', this.props.isMobile);
         return ((this.props.isMobile) ? this.props.classes.mobile : '');
     }
 
