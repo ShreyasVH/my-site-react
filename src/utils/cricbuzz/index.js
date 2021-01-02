@@ -16,7 +16,8 @@ import {
     UPDATE_PLAYER,
     GET_ALL_TEAMS,
     GET_ALL_PLAYERS,
-    UPDATE_SERIES
+    UPDATE_SERIES,
+    GET_ALL_STADIUMS
 } from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
@@ -154,8 +155,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.match).length === 0) || (id !== cricStore.match.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_MATCH_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
+            let promise = CricBuzzUtils.getMatchByApi(id);
 
             promise.then(apiResponse => {
                 let response = apiResponse.data;
@@ -168,6 +168,11 @@ export default class CricBuzzUtils {
             Context.hideLoader();
         }
     };
+
+    static getMatchByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_MATCH_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
+    }
 
     static setMatch = match => {
         store.dispatch(updateMatch(match));
@@ -375,4 +380,9 @@ export default class CricBuzzUtils {
 
         return players;
     }
+
+    static getAllStadiums = () => {
+        let url = BASE_URL_CRICBUZZ + GET_ALL_STADIUMS;
+        return ApiHelper.get(url);
+    };
 }

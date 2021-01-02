@@ -34,6 +34,7 @@ export const GET_MATCH_BY_ID = 'cricbuzz/matches/{id}';
 export const UPDATE_TOUR = 'cricbuzz/tours/{id}';
 export const GET_STADIUM_BY_ID = 'cricbuzz/stadiums/{id}';
 export const GET_ALL_COUNTRIES = 'cricbuzz/countries';
+export const GET_ALL_STADIUMS = 'cricbuzz/stadiums';
 export const UPDATE_STADIUM = 'cricbuzz/stadiums/{id}';
 export const GET_COUNTRY_BY_ID = 'cricbuzz/countries/{id}';
 export const UPDATE_COUNTRY = 'cricbuzz/countries/{id}';

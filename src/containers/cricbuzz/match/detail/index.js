@@ -4,28 +4,88 @@ import { connect } from 'react-redux';
 import MatchCore from './core';
 
 import ContextUtils from '../../../../utils/context';
-import CricUtils from '../../../../utils/cricbuzz';
 import Utils from '../../../../utils';
+import CricBuzzUtils from "../../../../utils/cricbuzz";
 
-class Match extends Component {
-    componentDidMount() {
+export default class Match extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoaded: false,
+            stadiumSuggestions: []
+        };
+    }
+
+    async componentDidMount() {
         ContextUtils.showLoader();
-        CricUtils.loadMatch(Utils.getUrlParam('id'));
+        const matchResponse = await CricBuzzUtils.getMatchByApi(Utils.getUrlParam('id'));
+        const match = matchResponse.data;
+
+        let state = match;
+        const stadiumsResponse = await CricBuzzUtils.getAllStadiums();
+        let allStadiums = stadiumsResponse.data;
+        state.stadiumMap = allStadiums.reduce((map, stadium) => {
+            map[stadium.id] = stadium;
+            return map;
+        });
+
+        const teamsResponse = await CricBuzzUtils.getAllTeams();
+        let allTeams = teamsResponse.data.map(team => ({
+            id: team.id,
+            name: team.name
+        }));
+        state.teamMap = allTeams.reduce((map, team) => {
+            map[team.id] = team.name;
+            return map;
+        });
+
+        const countryResponse = await CricBuzzUtils.getAllCountries();
+        let allCountries = countryResponse.data.map(country => ({
+            id: country.id,
+            name: country.name
+        }));
+        state.countryMap = allCountries.reduce((map, country) => {
+            map[country.id] = country.name;
+            return map;
+        });
+
+        let allPlayers = (await CricBuzzUtils.getAllPlayers()).map(team => ({
+            id: team.id,
+            name: team.name
+        }));
+        state.playerMap = allPlayers.reduce((map, player) => {
+            map[player.id] = player.name;
+            return map;
+        });
+
+        state.dismissalMap = {
+            1: 'Bowled',
+            2: 'Caught',
+            3: 'LBW',
+            4: 'Run Out',
+            5: 'Stumped',
+            6: 'Hit Twice',
+            7: 'Hit Wicket',
+            8: 'Obstructing the Field',
+            9: 'Timed Out',
+            10: 'Retired Hurt',
+            11: 'Handled the Ball'
+        };
+
+        state.isLoaded = true;
+        console.log(state);
+        this.setState(state);
+        ContextUtils.hideLoader();
     }
 
     render() {
         return (
             <MatchCore
-                {...this.props}
+                {...this.state}
             />
         );
+        // return (<div>
+        //     Hello
+        // </div>);
     }
 }
-
-function mapStateToProps(store) {
-    return ({
-        match: store.cric.match
-    });
-}
-
-export default connect(mapStateToProps)(Match);
