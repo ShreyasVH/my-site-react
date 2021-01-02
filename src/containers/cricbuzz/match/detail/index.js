@@ -23,40 +23,44 @@ export default class Match extends Component {
 
         let state = match;
         const stadiumsResponse = await CricBuzzUtils.getAllStadiums();
-        let allStadiums = stadiumsResponse.data;
-        state.stadiumMap = allStadiums.reduce((map, stadium) => {
-            map[stadium.id] = stadium;
-            return map;
+        const allStadiums = stadiumsResponse.data;
+        let stadiumMap = {};
+        allStadiums.forEach(stadium => {
+            stadiumMap[stadium.id] = stadium;
         });
+        state.stadiumMap = stadiumMap;
 
         const teamsResponse = await CricBuzzUtils.getAllTeams();
-        let allTeams = teamsResponse.data.map(team => ({
+        const allTeams = teamsResponse.data.map(team => ({
             id: team.id,
             name: team.name
         }));
-        state.teamMap = allTeams.reduce((map, team) => {
-            map[team.id] = team.name;
-            return map;
+        let teamMap = {};
+        allTeams.forEach(team => {
+           teamMap[team.id] = team.name;
         });
+        state.teamMap = teamMap;
 
         const countryResponse = await CricBuzzUtils.getAllCountries();
-        let allCountries = countryResponse.data.map(country => ({
+        const allCountries = countryResponse.data.map(country => ({
             id: country.id,
             name: country.name
         }));
-        state.countryMap = allCountries.reduce((map, country) => {
-            map[country.id] = country.name;
-            return map;
+        let countryMap = {};
+        allCountries.forEach(country => {
+            countryMap[country.id] = country.name
         });
+        state.countryMap = countryMap;
 
-        let allPlayers = (await CricBuzzUtils.getAllPlayers()).map(team => ({
+        const allPlayers = (await CricBuzzUtils.getAllPlayers()).map(team => ({
             id: team.id,
             name: team.name
         }));
-        state.playerMap = allPlayers.reduce((map, player) => {
-            map[player.id] = player.name;
-            return map;
+        let playerMap = {};
+        allPlayers.forEach(player => {
+            playerMap[player.id] = player.name;
         });
+        state.playerMap = playerMap;
 
         state.dismissalMap = {
             1: 'Bowled',

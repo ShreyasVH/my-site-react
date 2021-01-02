@@ -136,6 +136,13 @@ const LoadableUpdatePlayer = Loadable({
 	}
 });
 
+const LoadableUpdateMatch = Loadable({
+	loader: () => import('./containers/cricbuzz/match/update'),
+	loading() {
+		return <div>Loading...</div>
+	}
+});
+
 class App extends Component {
 	componentDidMount() {
 		window.addEventListener('resize', this.onResize.bind(this));
@@ -182,6 +189,7 @@ class App extends Component {
 
 								<Route path="/cricbuzz/matches/detail" component={LoadableMatch} />
 								<Route path="/cricbuzz/matches/create" component={LoadableCreateMatch} />
+								<Route path="/cricbuzz/matches/update" component={LoadableUpdateMatch} />
 
 								<Route path="/cricbuzz/stadiums/update" component={LoadableUpdateStadium} />
 
