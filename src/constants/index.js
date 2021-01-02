@@ -44,6 +44,7 @@ export const GET_PLAYER_BY_ID = 'cricbuzz/players/{id}';
 export const UPDATE_PLAYER = 'cricbuzz/players/{id}';
 export const GET_ALL_TEAMS = 'cricbuzz/teams';
 export const GET_ALL_PLAYERS = 'cricbuzz/players/all/{offset}/{count}';
+export const CREATE_MATCH = 'cricbuzz/matches';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',

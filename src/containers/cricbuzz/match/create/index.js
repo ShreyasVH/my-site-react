@@ -5,19 +5,17 @@ import CreateCore from "./core";
 
 import CricBuzzUtils from "../../../../utils/cricbuzz";
 import Utils from '../../../../utils';
+import Context from "../../../../utils/context";
 
 class Create extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            seriesSuggestions: [],
-            seriesSuggestionsTemp: [],
+            isLoaded: false,
             stadiumSuggestions: [],
             teamSuggestions: [],
             playerSuggestions: [],
             teams: [],
-            seriesId: '',
-            seriesName: '',
             stadiumId: '',
             stadiumName: '',
             team1Id: '',
@@ -89,12 +87,20 @@ class Create extends Component {
                     name: 'DRAW'
                 },
                 {
-                    id: 0,
+                    id: 3,
                     name: 'SUPER_OVER'
                 },
                 {
-                    id: 0,
+                    id: 4,
                     name: 'WASHED_OUT'
+                },
+                {
+                    id: 5,
+                    name: 'BOWL_OUT'
+                },
+                {
+                    id: 6,
+                    name: 'FORFEIT'
                 }
             ],
             winnerId: '',
@@ -118,56 +124,67 @@ class Create extends Component {
         }
     }
 
+    async componentDidMount() {
+        Context.showLoader();
+
+        const state = {};
+        const stadiumsResponse = await CricBuzzUtils.getAllStadiums();
+        state.stadiums = stadiumsResponse.data.map(stadium => ({
+            id: stadium.id,
+            name: stadium.name
+        }));
+
+        const teamsResponse = await CricBuzzUtils.getAllTeams();
+        state.allTeams = teamsResponse.data.map(team => ({
+            id: team.id,
+            name: team.name
+        }));
+
+        state.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => ({
+            id: player.id,
+            name: player.name
+        }));
+
+        state.isLoaded = true;
+        this.setState(state);
+
+        Context.hideLoader();
+    }
+
     handlePlayerSearchAll = event => {
         let keyword = event.target.value;
-        let promise = CricBuzzUtils.search('players', keyword);
-        promise.then(apiResponse => {
-            let response = apiResponse.data;
+        let playerSuggestions = [];
+        if (keyword.length > 2) {
+            playerSuggestions = this.state.allPlayers.filter(player => (player.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+        }
 
-            this.setState({
-                playerSuggestions: response
-            });
-        });
-    };
-
-    handleSeriesSearch = event => {
-        let keyword = event.target.value;
-        let promise = CricBuzzUtils.search('series', keyword);
-        promise.then(apiResponse => {
-            let response = apiResponse.data;
-
-            let seriesSuggestions = response.map(suggestion => (
-                {
-                    id: suggestion.id,
-                    name: suggestion.name + ' - ' + suggestion.gameType,
-                    teams: suggestion.teams
-                }
-            ));
-
-            this.setState({
-                seriesSuggestions,
-                seriesSuggestionsTemp: seriesSuggestions
-            });
+        this.setState({
+            playerSuggestions
         });
     };
 
     handleStadiumSearch = event => {
         let keyword = event.target.value;
-        let promise = CricBuzzUtils.search('stadiums', keyword);
-        promise.then(apiResponse => {
-            let response = apiResponse.data;
+        let stadiumSuggestions = [];
+        if (keyword.length > 2) {
+            stadiumSuggestions = this.state.stadiums.filter(stadium => (stadium.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+        }
 
-            let stadiumSuggestions = response.map(suggestion => (
-                {
-                    id: suggestion.id,
-                    name: suggestion.name + ', ' + suggestion.country.name,
-                }
-            ));
+        this.setState({
+            stadiumSuggestions
+        })
+    };
 
-            this.setState({
-                stadiumSuggestions
-            });
-        });
+    handleTeamSearch = event => {
+        let keyword = event.target.value;
+        let teamSuggestions = [];
+        if (keyword.length > 2) {
+            teamSuggestions = this.state.allTeams.filter(team => (team.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+        }
+
+        this.setState({
+            teamSuggestions
+        })
     };
 
     handlePlayerSearch = event => {
@@ -190,29 +207,6 @@ class Create extends Component {
         updatedState.playerSuggestions = filteredPlayers;
 
         this.setState(updatedState);
-    };
-
-    handleSeriesSelect = (id, name) => {
-        this.setState({
-            seriesId: id,
-            seriesName: name,
-            seriesSuggestions: []
-        });
-
-        for (let index in this.state.seriesSuggestionsTemp) {
-            let series = this.state.seriesSuggestionsTemp[index];
-            if (id === series.id) {
-                let teams = series.teams;
-                let teamSuggestions = teams.map(team => ({
-                    id: team.id,
-                    name: team.name
-                }));
-
-                this.setState({
-                    teamSuggestions
-                });
-            }
-        }
     };
 
     handleStadiumSelect = (id, name) => {
@@ -250,6 +244,7 @@ class Create extends Component {
                 });
             }
             updatedState.teams = teams;
+            updatedState.teamSuggestions = [];
 
             this.setState(updatedState);
         }
@@ -297,7 +292,7 @@ class Create extends Component {
         })
     };
 
-    handleWinMarginKeyUp = event => {
+    handleWinMarginChange = event => {
         this.setState({
             winMargin: parseInt(event.target.value, 10)
         });
@@ -364,6 +359,14 @@ class Create extends Component {
 
             this.setState(updatedState);
         }
+    };
+
+    handleStartTimeChange = (event) => {
+        const startTime = (new Date(event.target.value)).getTime();
+
+        let updatedState = Utils.copyObject(this.state);
+        updatedState.startTime = startTime;
+        this.setState(updatedState);
     };
 
     getDefaultBattingScoreRow = () => ({
@@ -469,6 +472,7 @@ class Create extends Component {
 
             scoreObject.fielderIds = fielderIds.join(', ');
             scoreObject.fielderNames = fielderNames.join(', ');
+            updatedState.playerSuggestions = [];
             this.setState(updatedState);
         }
     };
@@ -534,12 +538,6 @@ class Create extends Component {
         this.setState(updatedState);
     };
 
-    handleStartTimeKeyUp = event => {
-        this.setState({
-            startTime: event.target.value
-        })
-    };
-
     handleSelectManOfTheMatch = (id, name) => {
         let updatedState = Utils.copyObject(this.state);
 
@@ -553,6 +551,30 @@ class Create extends Component {
 
     handleSelectManOfTheSeries = (id, name) => {
 
+    };
+
+    handleFielderRemove = (scoreNum, inning, playerId) => {
+        let updatedState = Utils.copyObject(this.state);
+
+        let scoresForInning = updatedState.scoreCards[inning].battingScores;
+
+        for (let i in scoresForInning) {
+            let index = parseInt(i, 10);
+            let score = scoresForInning[index];
+            if (scoreNum === index) {
+                let fielderIds = score.fielderIds.split(', ');
+                let fielderNames = score.fielderNames.split(', ');
+                let pos = fielderIds.indexOf(playerId);
+                if (pos !== -1) {
+                    fielderIds.splice(pos, 1);
+                    fielderNames.splice(pos, 1);
+                    updatedState.scoreCards[inning].battingScores[scoreNum].fielderIds = fielderIds.join(', ');
+                    updatedState.scoreCards[inning].battingScores[scoreNum].fielderNames = fielderNames.join(', ');
+                    break;
+                }
+            }
+        }
+        this.setState(updatedState);
     };
 
     handleSubmit = event => {
@@ -596,7 +618,7 @@ class Create extends Component {
                 let runs = parseInt(scoreObject.runs, 10);
 
                 if (!isNaN(runs)) {
-                    battingScores.push({
+                    let score = {
                         playerId: scoreObject.batsmanId,
                         runs: scoreObject.runs,
                         balls: scoreObject.balls,
@@ -604,10 +626,13 @@ class Create extends Component {
                         sixes: scoreObject.sixes,
                         dismissalMode: scoreObject.dismissalModeId,
                         bowlerId: scoreObject.bowlerId,
-                        fielders: scoreObject.fielderIds,
                         innings: inningsNum,
                         teamInnings
-                    });
+                    };
+                    if (scoreObject.fielderIds) {
+                        score.fielders = scoreObject.fielderIds;
+                    }
+                    battingScores.push(score);
                 }
             }
 
@@ -654,7 +679,7 @@ class Create extends Component {
         }
 
         let payload = {
-            seriesId: this.state.seriesId,
+            seriesId: Utils.getUrlParam('seriesId'),
             team1: this.state.team1Id,
             team2: this.state.team2Id,
             tossWinner: this.state.tossWinnerId,
@@ -685,18 +710,25 @@ class Create extends Component {
             payload.manOfTheMatchList = this.state.manOfTheMatchIds;
         }
 
-        console.log(JSON.stringify(payload));
+        Context.showLoader();
+        const createMatchPromise = CricBuzzUtils.createMatch(payload);
+        createMatchPromise.then(apiResponse => {
+            Context.showNotify('Created successfully', 'success');
+            Context.hideLoader();
+        }).catch(apiResponse => {
+            console.log(apiResponse.data);
+            Context.showNotify('Failed to create match', 'error');
+            Context.hideLoader();
+        });
     };
 
     render () {
         return (
             <CreateCore
                 {...this.state}
-                onSearch={this.handleSearch}
-                onSeriesSearch={this.handleSeriesSearch}
-                onSeriesSelect={this.handleSeriesSelect}
                 onStadiumSearch={this.handleStadiumSearch}
                 onStadiumSelect={this.handleStadiumSelect}
+                onTeamSearch={this.handleTeamSearch}
                 onTeamSelect={this.handleTeamSelect}
                 onTossWinnerSelect={this.handleTossWinnerSelect}
                 onBattingFirstSelect={this.handleBattingFirstSelect}
@@ -705,6 +737,7 @@ class Create extends Component {
                 onPlayerSelectForBattingScore={this.handlePlayerSelectForBattingScore}
                 onBowlerSelectForBattingScore={this.handleBowlerSelectForBattingScore}
                 onFielderSelectForBattingScore={this.handleFielderSelectForBattingScore}
+                onFilderRemoveForBattingScore={this.handleFielderRemove}
                 onDismissalModeSelect={this.handleDismissalSelectForBattingScore}
                 onBattingScoreFieldKeyUp={this.handleBattingScoreFieldKeyUp}
                 onBowlerSelectForBowlingFigure={this.handleBowlerSelectForBowlingFigure}
@@ -713,16 +746,16 @@ class Create extends Component {
                 onPlayerSearch={this.handlePlayerSearch}
                 onInningsAdd={this.handleInningAdd}
                 onResultSelect={this.handleResultSelect}
-                onWinMarginKeyUp={this.handleWinMarginKeyUp}
+                onWinMarginChange={this.handleWinMarginChange}
                 onWinMarginTypeSelect={this.handleWinMarginTypeSelect}
                 onPlayerSearchAll={this.handlePlayerSearchAll}
                 onPlayerRemove={this.handlePlayerRemove}
                 onManOfTheMatchRemove={this.handleManOfTheMatchRemove}
                 onSubmit={this.handleSubmit}
-                onStartTimeKeyUp={this.handleStartTimeKeyUp}
                 onTeamSelectForInnings={this.handleTeamSelectForInnings}
                 onSelectManOfTheMatch={this.handleSelectManOfTheMatch}
                 onSelectManOfTheSeries={this.handleSelectManOfTheSeries}
+                onStartTimeChange={this.handleStartTimeChange}
             />
         );
     }

@@ -5,6 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import SearchDropDown from "../../../../components/searchDropdown";
 import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
+import DateTimePicker from "../../../../components/dateTimePicker";
 
 const styles = theme => ({
     form: {
@@ -92,12 +93,10 @@ const styles = theme => ({
 });
 
 class CreateCore extends Component {
-    handleEvent = type => event => this.props.handleEvent && this.props.handleEvent(event);
-
-    handleSeriesSelect = (id, name) => this.props.onSeriesSelect && this.props.onSeriesSelect(id, name);
-
+    handleStadiumSearch = event => this.props.onStadiumSearch && this.props.onStadiumSearch(event);
     handleStadiumSelect = (id, name) => this.props.onStadiumSelect && this.props.onStadiumSelect(id, name);
 
+    handleTeamSearch = event => this.props.onTeamSearch && this.props.onTeamSearch(event);
     handleTeamSelect = number => (id, name) => this.props.onTeamSelect && this.props.onTeamSelect(id, name, number);
 
     handleTeamSelectForInnings = number => (id, name) => this.props.onTeamSelectForInnings && this.props.onTeamSelectForInnings(id, name, number);
@@ -107,8 +106,6 @@ class CreateCore extends Component {
     handlePlayerRemove = (teamNumber, playerId) => event => this.props.onPlayerRemove && this.props.onPlayerRemove(teamNumber, playerId);
 
     handlePlayerSearch = event => this.props.onPlayerSearch && this.props.onPlayerSearch(event);
-
-    handleSeriesSearch = event => this.props.onSeriesSearch && this.props.onSeriesSearch(event);
 
     handlePlayerSelectForBattingScore = (inning, scoreIndex) => (id, name) => this.props.onPlayerSelectForBattingScore && this.props.onPlayerSelectForBattingScore(scoreIndex, inning, id, name);
 
@@ -129,6 +126,12 @@ class CreateCore extends Component {
     handleSelectManOfTheMatch = (id, name) => this.props.onSelectManOfTheMatch && this.props.onSelectManOfTheMatch(id, name);
 
     handleManOfTheMatchRemove = playerId => event => this.props.onManOfTheMatchRemove && this.props.onManOfTheMatchRemove(playerId);
+
+    handleStartTimeChange = event => (this.props.onStartTimeChange && this.props.onStartTimeChange(event));
+
+    handleWinMarginChange = event => (this.props.onWinMarginChange && this.props.onWinMarginChange(event));
+
+    handleFielderRemove = (scoreNum, inning, playerId) => event => this.props.onFilderRemoveForBattingScore && this.props.onFilderRemoveForBattingScore(scoreNum, inning, playerId);
 
     renderPlayersMarkup = (number) => {
         let markup = [];
@@ -247,84 +250,112 @@ class CreateCore extends Component {
         }
     };
 
+    renderFieldersMarkup = (fielderIdsString, fielderNamesString, scoreNum, inning) => {
+        let markup = [];
+
+        let color = 'primary';
+
+        if (fielderIdsString) {
+            const fielderIds = fielderIdsString.split(', ');
+            const fielderNames = fielderNamesString.split(', ');
+
+            for (let index in fielderIds) {
+                const fielderId = fielderIds[index];
+                const fielderName = fielderNames[index];
+                markup.push(
+                    <Chip
+                        className={this.props.classes.playerChip}
+                        label={fielderName}
+                        onDelete={this.handleFielderRemove(scoreNum, inning, fielderId)}
+                        color={color}
+                    />
+                );
+            }
+        }
+
+        return markup;
+    };
+
     renderBattingScores = (scores, innings) => (scores.map((scoreObject, scoreRowIndex) => (
         <div className={this.props.classes.row}>
-            <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
-                <div className={this.props.classes.formFieldInput}>
-                    <SearchDropDown
-                        onKeyUp={this.handlePlayerSearch}
-                        items={this.props.playerSuggestions}
-                        label="Batsman"
-                        placeholder="Batsman"
-                        onSelect={this.handlePlayerSelectForBattingScore(innings, scoreRowIndex)}
-                        displayValue={scoreObject.batsmanName}
-                    />
-                </div>
-            </div>
-            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
-                <div className={this.props.classes.formFieldInput}>
-                    <TextField
-                        label="Runs"
-                        variant="outlined"
-                        fullWidth
-                        onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'runs')}
-                    />
-                </div>
-            </div>
-            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
-                <div className={this.props.classes.formFieldInput}>
-                    <TextField
-                        label="Balls"
-                        variant="outlined"
-                        fullWidth
-                        onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'balls')}
-                    />
-                </div>
-            </div>
-            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
-                <div className={this.props.classes.formFieldInput}>
-                    <TextField
-                        label="Fours"
-                        variant="outlined"
-                        fullWidth
-                        onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'fours')}
-                    />
-                </div>
-            </div>
-            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
-                <div className={this.props.classes.formFieldInput}>
-                    <TextField
-                        label="Sixes"
-                        variant="outlined"
-                        fullWidth
-                        onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'sixes')}
-                    />
-                </div>
-            </div>
-            <div className={`${this.props.classes.formField} ${this.props.classes.dismissalMode}`}>
-                <div className={this.props.classes.formFieldInput}>
-                    <SearchDropDown
-                        items={this.props.dismissalModes}
-                        label="Dismissal Mode"
-                        placeholder="Dismissal Mode"
-                        onSelect={this.handleDismissalSelectForBattingScore(innings, scoreRowIndex)}
-                        displayValue={this.renderDisimissal(scoreObject.dismissalModeName)}
-                    />
-                </div>
-            </div>
-            <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
-                <div className={this.props.classes.formFieldInput}>
-                    <SearchDropDown
-                        onKeyUp={this.handlePlayerSearch}
-                        items={this.props.playerSuggestions}
-                        label="Bowler"
-                        placeholder="Bowler"
-                        onSelect={this.handleBowlerSelectForBattingScore(innings, scoreRowIndex)}
-                        displayValue={this.renderBowlerForBattingScore(scoreObject.bowlerName)}
-                    />
-                </div>
-            </div>
-            <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
+            <div className={this.props.classes.playersContainer}>
+                <div className={this.props.classes.row}>
+                    <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
+                        <div className={this.props.classes.formFieldInput}>
+                            <SearchDropDown
+                                onKeyUp={this.handlePlayerSearch}
+                                items={this.props.playerSuggestions}
+                                label="Batsman"
+                                placeholder="Batsman"
+                                onSelect={this.handlePlayerSelectForBattingScore(innings, scoreRowIndex)}
+                                displayValue={scoreObject.batsmanName}
+                            />
+                        </div>
+                    </div>
+                    <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
+                        <div className={this.props.classes.formFieldInput}>
+                            <TextField
+                                label="Runs"
+                                variant="outlined"
+                                fullWidth
+                                onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'runs')}
+                            />
+                        </div>
+                    </div>
+                    <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
+                        <div className={this.props.classes.formFieldInput}>
+                            <TextField
+                                label="Balls"
+                                variant="outlined"
+                                fullWidth
+                                onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'balls')}
+                            />
+                        </div>
+                    </div>
+                    <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
+                        <div className={this.props.classes.formFieldInput}>
+                            <TextField
+                                label="Fours"
+                                variant="outlined"
+                                fullWidth
+                                onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'fours')}
+                            />
+                        </div>
+                    </div>
+                    <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
+                        <div className={this.props.classes.formFieldInput}>
+                            <TextField
+                                label="Sixes"
+                                variant="outlined"
+                                fullWidth
+                                onKeyUp={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'sixes')}
+                            />
+                        </div>
+                    </div>
+                    <div className={`${this.props.classes.formField} ${this.props.classes.dismissalMode}`}>
+                        <div className={this.props.classes.formFieldInput}>
+                            <SearchDropDown
+                                items={this.props.dismissalModes}
+                                label="Dismissal Mode"
+                                placeholder="Dismissal Mode"
+                                onSelect={this.handleDismissalSelectForBattingScore(innings, scoreRowIndex)}
+                                displayValue={this.renderDisimissal(scoreObject.dismissalModeName)}
+                            />
+                        </div>
+                    </div>
+                    <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
+                        <div className={this.props.classes.formFieldInput}>
+                            <SearchDropDown
+                                onKeyUp={this.handlePlayerSearch}
+                                items={this.props.playerSuggestions}
+                                label="Bowler"
+                                placeholder="Bowler"
+                                onSelect={this.handleBowlerSelectForBattingScore(innings, scoreRowIndex)}
+                                displayValue={this.renderBowlerForBattingScore(scoreObject.bowlerName)}
+                            />
+                        </div>
+                    </div>
+                    <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
                 <div className={this.props.classes.formFieldInput}>
                     <SearchDropDown
                         onKeyUp={this.handlePlayerSearch}
@@ -332,8 +363,16 @@ class CreateCore extends Component {
                         label="Fielders"
                         placeholder="Fielders"
                         onSelect={this.handleFielderSelectForBattingScore(innings, scoreRowIndex)}
-                        displayValue={this.renderFieldersForBattingScore(scoreObject.fielderNames)}
+                        clearOnSelect
                     />
+                </div>
+            </div>
+                </div>
+
+                <div className={this.props.classes.row}>
+                    <div className={`${this.props.classes.row} ${this.props.classes.fielderContainer}`}>
+                        {this.renderFieldersMarkup(scoreObject.fielderIds, scoreObject.fielderNames, scoreRowIndex, innings)}
+                    </div>
                 </div>
             </div>
         </div>)
@@ -437,25 +476,21 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleSeriesSearch}
-                                        items={this.props.seriesSuggestions}
-                                        label="Series"
-                                        placeholder="Series"
-                                        onSelect={this.handleSeriesSelect}
-                                        displayValue={this.props.seriesName}
+                                        onKeyUp={this.handleStadiumSearch}
+                                        items={this.props.stadiumSuggestions}
+                                        label="Stadium"
+                                        placeholder="Stadium"
+                                        onSelect={this.handleStadiumSelect}
+                                        displayValue={this.props.stadiumName}
                                     />
                                 </div>
                             </div>
 
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
-                                    <SearchDropDown
-                                        onKeyUp={this.props.onStadiumSearch}
-                                        items={this.props.stadiumSuggestions}
-                                        label="Stadium"
-                                        placeholder="Stadium"
-                                        onSelect={this.handleStadiumSelect}
-                                        displayValue={this.props.stadiumName}
+                                    <DateTimePicker
+                                        value={this.props.startTime}
+                                        onChange={this.handleStartTimeChange}
                                     />
                                 </div>
                             </div>
@@ -465,6 +500,7 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
+                                        onKeyUp={this.handleTeamSearch}
                                         items={this.props.teamSuggestions}
                                         label="Team 1"
                                         placeholder="Team 1"
@@ -477,6 +513,7 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
+                                        onKeyUp={this.handleTeamSearch}
                                         items={this.props.teamSuggestions}
                                         label="Team 2"
                                         placeholder="Team 2"
@@ -541,7 +578,8 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.quarterWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
-                                        onKeyUp={this.props.onWinMarginKeyUp}
+                                        onChange={this.handleWinMarginChange}
+                                        value={this.props.winMargin}
                                         label="Win Margin"
                                         variant="outlined"
                                         fullWidth
@@ -557,19 +595,6 @@ class CreateCore extends Component {
                                         placeholder="Win Margin Type"
                                         onSelect={this.props.onWinMarginTypeSelect}
                                         displayValue={this.props.winMarginTypeName}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
-                                    <TextField
-                                        onKeyUp={this.props.onStartTimeKeyUp}
-                                        label="Start Time"
-                                        variant="outlined"
-                                        fullWidth
                                     />
                                 </div>
                             </div>

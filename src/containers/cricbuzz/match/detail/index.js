@@ -18,7 +18,7 @@ export default class Match extends Component {
 
     async componentDidMount() {
         ContextUtils.showLoader();
-        const matchResponse = await CricBuzzUtils.getMatchByApi(Utils.getUrlParam('id'));
+        const matchResponse = await CricBuzzUtils.getMatchDetails(Utils.getUrlParam('id'));
         const match = matchResponse.data;
 
         let state = match;
