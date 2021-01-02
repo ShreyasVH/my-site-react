@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
+import {Button, withStyles} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import EditIcon from '@material-ui/icons/Edit';
 
 const styles = theme => ({
     seriesName: {
@@ -19,11 +20,18 @@ const styles = theme => ({
     matchStartTime: {
         display: 'inline-block',
         float: 'right'
+    },
+    row: {
+        width: '100%',
+        marginTop: '0.5%',
+        marginBottom: '0.5%'
     }
 });
 
 class SeriesCore extends Component {
     handleMatchClick = id => event => this.props.onClickMatch && this.props.onClickMatch(id);
+
+    handleUpdateMatchClick = matchId => event => this.props.onUpdateMatchClick && this.props.onUpdateMatchClick(event, matchId);
 
     renderStartTime = match => {
         let date = new Date(match.startTime);
@@ -35,21 +43,22 @@ class SeriesCore extends Component {
     };
 
     renderTeams = match => {
-        return match.team1.name + ' v/s ' + match.team2.name;
+        return this.props.teamMap[match.team1] + ' v/s ' + this.props.teamMap[match.team2];
     };
 
     renderMatchNum = index => (index + 1 + '. ');
 
     renderStadium = match => {
-        let stadium = match.stadium.name;
+        const stadium = this.props.stadiumMap[match.stadium];
+        let stadiumText = stadium.name
 
-        if (match.stadium.city) {
-            stadium += ', ' + match.stadium.city;
+        if (stadium.city) {
+            stadiumText += ', ' + stadium.city;
         }
 
-        stadium += ', ' + match.stadium.country.name;
+        stadiumText += ', ' + this.props.countryMap[stadium.countryId];
 
-        return stadium;
+        return stadiumText;
     };
 
     getWinMargin = (winMargin, winMarginType) => {
@@ -66,7 +75,7 @@ class SeriesCore extends Component {
         let result = '';
 
         if (match.winner) {
-            result += match.winner.name + " won";
+            result += this.props.teamMap[match.winner] + " won";
 
             if (match.winMarginType) {
                 result += " by " + match.winMargin + " " + this.getWinMargin(match.winMargin, match.winMarginType);
@@ -89,7 +98,7 @@ class SeriesCore extends Component {
     };
 
     renderMatches = () => {
-        return this.props.series.matches.map((match, index) => (
+        return this.props.matches.map((match, index) => (
             <div>
                 <Card onClick={this.handleMatchClick(match.id)}>
                     <CardContent>
@@ -109,6 +118,17 @@ class SeriesCore extends Component {
                         <Typography component={"span"} color="textSecondary">
                             {this.renderWinner(match)}
                         </Typography>
+
+                        <div className={this.props.classes.row}>
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                onClick={this.handleUpdateMatchClick(match.id)}
+                            >
+                                <EditIcon />
+                                Edit
+                            </Button>
+                        </div>
                     </CardContent>
                 </Card>
 
@@ -118,11 +138,11 @@ class SeriesCore extends Component {
     };
 
     renderSeries = () => {
-        if(Object.keys(this.props.series).length > 0) {
+        if(this.props.isLoaded) {
             return (
                 <div>
                     <div className={this.props.classes.seriesName}>
-                        {this.props.series.name + ' - ' + this.props.series.gameType}
+                        {this.props.name + ' - ' + this.props.gameType}
                     </div>
 
                     {this.renderMatches()}
