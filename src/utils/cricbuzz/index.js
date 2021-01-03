@@ -234,10 +234,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.stadium).length === 0) || (id !== cricStore.stadium.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_STADIUM_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getStadiumByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setStadium(response);
                 Context.hideLoader();
@@ -248,6 +245,11 @@ export default class CricBuzzUtils {
             Context.hideLoader();
         }
     };
+
+    static getStadiumByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_STADIUM_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
+    }
 
     static setStadium = stadium => {
         store.dispatch(updateStadium(stadium));
