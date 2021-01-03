@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import SearchDropDown from "../../../../components/searchDropdown";
 
 const styles = theme => ({
     form: {
@@ -17,7 +16,10 @@ const styles = theme => ({
         padding: '2%',
         fontSize: '25px',
         color: 'white',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     row: {
         width: '100%',
@@ -26,9 +28,9 @@ const styles = theme => ({
     },
     halfWidth: {
         width: '50%',
-    },
-    quarterWidth: {
-        width: '25%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     },
     formFieldInput: {
         width: '99%',
@@ -41,7 +43,10 @@ const styles = theme => ({
         marginRight: 'auto'
     },
     container: {
-        padding: '1%'
+        padding: '1%',
+        [theme.breakpoints.down('xs')]: {
+            padding: '5%',
+        }
     },
     submit: {
         backgroundColor: '#428bca',
