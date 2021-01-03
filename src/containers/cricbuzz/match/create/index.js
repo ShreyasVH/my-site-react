@@ -120,7 +120,8 @@ class Create extends Component {
                 }
             ],
             manOfTheMatchIds: [],
-            manOfTheMatchNames: []
+            manOfTheMatchNames: [],
+            bench: {}
         }
     }
 
@@ -140,10 +141,19 @@ class Create extends Component {
             name: team.name
         }));
 
-        state.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => ({
-            id: player.id,
-            name: player.name
-        }));
+        state.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => {
+            if (player.name === 'sub') {
+                state.bench = {
+                    id: player.id,
+                    name: player.name
+                }
+            }
+
+            return {
+                id: player.id,
+                name: player.name
+            }
+        });
 
         state.isLoaded = true;
         this.setState(state);
@@ -202,6 +212,9 @@ class Create extends Component {
                     filteredPlayers.push(playerObject);
                 }
             }
+        }
+        if (updatedState.bench.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
+            filteredPlayers.push(updatedState.bench);
         }
 
         updatedState.playerSuggestions = filteredPlayers;
@@ -625,10 +638,13 @@ class Create extends Component {
                         fours: scoreObject.fours,
                         sixes: scoreObject.sixes,
                         dismissalMode: scoreObject.dismissalModeId,
-                        bowlerId: scoreObject.bowlerId,
                         innings: inningsNum,
                         teamInnings
                     };
+                    if (scoreObject.bowlerId) {
+                        score.bowler = scoreObject.bowlerId;
+                    }
+
                     if (scoreObject.fielderIds) {
                         score.fielders = scoreObject.fielderIds;
                     }
@@ -687,12 +703,15 @@ class Create extends Component {
             result: this.state.resultName,
             winner: this.state.winnerId,
             winMargin: this.state.winMargin,
-            winMarginType: this.state.winMarginTypeName,
             stadium: this.state.stadiumId,
             startTime: this.state.startTime,
             endTime: this.state.startTime,
             players
         };
+
+        if (this.state.winMarginType) {
+            payload.winMarginType = this.state.winMarginTypeName;
+        }
 
         if (battingScores.length > 0) {
             payload.battingScores = battingScores;

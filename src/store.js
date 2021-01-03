@@ -22,6 +22,6 @@ const reducers = combineReducers({
 	cric: CricReducer
 });
 
-let store = createStore(reducers, applyMiddleware(reduxLogger));
+let store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 export default store;

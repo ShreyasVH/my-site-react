@@ -144,29 +144,32 @@ class Update extends Component {
             id: stadium.id,
             name: stadium.name
         }));
-        state.stadiumMap = state.stadiums.reduce((map, stadium) => {
-            map[stadium.id] = stadium.name;
-            return map;
+        let stadiumMap = {};
+        state.stadiums.forEach(stadium => {
+            stadiumMap[stadium.id] = stadium.name;
         });
+        state.stadiumMap = stadiumMap;
 
         const teamsResponse = await CricBuzzUtils.getAllTeams();
         state.allTeams = teamsResponse.data.map(team => ({
             id: team.id,
             name: team.name
         }));
-        state.teamMap = state.allTeams.reduce((map, team) => {
-            map[team.id] = team.name;
-            return map;
+        let teamMap = {};
+        state.allTeams.forEach(team => {
+            teamMap[team.id] = team.name;
         });
+        state.teamMap = teamMap;
 
         state.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => ({
             id: player.id,
             name: player.name
         }));
-        state.playerMap = state.allPlayers.reduce((map, player) => {
-            map[player.id] = player.name;
-            return map;
+        let playerMap = {};
+        state.allPlayers.forEach(player => {
+            playerMap[player.id] = player.name;
         });
+        state.playerMap = playerMap;
 
         state.stadiumId = match.stadiumId;
         state.stadiumName = state.stadiumMap[match.stadiumId];
