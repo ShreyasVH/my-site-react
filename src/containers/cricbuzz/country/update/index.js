@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import UpdateCore from "./core";
 
@@ -7,33 +6,25 @@ import CricBuzzUtils from "../../../../utils/cricbuzz";
 import Utils from '../../../../utils';
 import Context from "../../../../utils/context";
 
-class Update extends Component {
+export default class Update extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: ''
+            name: '',
+            isLoaded: false
         };
         this.countryId = Utils.getUrlParam('id');
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         Context.showLoader();
-        CricBuzzUtils.loadCountry(this.countryId);
-    }
+        const countryResponse = await CricBuzzUtils.getCountryByApi(this.countryId);
+        let state = countryResponse.data;
+        state.isLoaded = true;
 
-    componentDidUpdate = (prevProps, prevState, snapshot) => {
-        if ((Object.keys(this.props.country).length > 0) && (Object.keys(prevProps.country).length === 0)) {
-            this.setState(this.constructStateFromDetails());
-        }
-    }
+        this.setState(state);
 
-    constructStateFromDetails = () => {
-        let state = {};
-
-        let country = this.props.country;
-        state.name = country.name;
-
-        return state;
+        Context.hideLoader();
     }
 
     handleSubmit = async event => {
@@ -66,11 +57,11 @@ class Update extends Component {
     };
 
     isFormValid = () => {
-        return this.state.name;
+        return !!this.state.name;
     };
 
     renderPage = () => {
-        if (Object.keys(this.state).length > 0) {
+        if (this.state.isLoaded) {
             return (
                 <UpdateCore
                     {...this.state}
@@ -90,11 +81,3 @@ class Update extends Component {
         );
     }
 }
-
-function mapStateToProps(store) {
-    return ({
-        country: store.cric.country
-    });
-}
-
-export default connect(mapStateToProps)(Update);

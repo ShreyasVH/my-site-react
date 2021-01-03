@@ -60,10 +60,12 @@ const styles = theme => ({
 class UpdateCore extends Component {
     handleNameChange = event => (this.props.onNameChange && this.props.onNameChange(event));
 
+    handleSubmit = event => (this.props.onSubmit && this.props.onSubmit(event));
+
     render() {
         return (
             <div>
-                <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
+                <form onSubmit={this.handleSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
                         Update Country
                     </div>

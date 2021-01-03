@@ -268,10 +268,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.country).length === 0) || (id !== cricStore.country.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_COUNTRY_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getCountryByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setCountry(response);
                 Context.hideLoader();
@@ -282,6 +279,11 @@ export default class CricBuzzUtils {
             Context.hideLoader();
         }
     };
+
+    static getCountryByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_COUNTRY_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
+    }
 
     static setCountry = country => {
         store.dispatch(updateCountry(country));
