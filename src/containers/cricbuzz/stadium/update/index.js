@@ -137,7 +137,7 @@ export default class Update extends Component {
         }
 
         return response;
-    }
+    };
 
     renderPage = () => {
         if (this.state.isLoaded) {

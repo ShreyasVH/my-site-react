@@ -17,15 +17,21 @@ const styles = theme => ({
         padding: '2%',
         fontSize: '25px',
         color: 'white',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     row: {
         width: '100%',
         marginTop: '0.5%',
         marginBottom: '0.5%'
     },
-    halfWidth: {
-        width: '50%',
+    oneThirdWidth: {
+        width: '33.33%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     },
     quarterWidth: {
         width: '25%',
@@ -35,16 +41,17 @@ const styles = theme => ({
         marginLeft: '0.5%',
         marginRight: '0.5%'
     },
-    formFieldCentered: {
-        display: 'block',
-        marginLeft: 'auto',
-        marginRight: 'auto'
-    },
     formField: {
-        display: 'inline-block'
+        display: 'inline-block',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     container: {
-        padding: '1%'
+        padding: '1%',
+        [theme.breakpoints.down('xs')]: {
+            padding: '5%',
+        }
     },
     submit: {
         backgroundColor: '#428bca',
@@ -58,6 +65,7 @@ const styles = theme => ({
 class UpdateCore extends Component {
     handleNameChange = event => (this.props.onNameChange && this.props.onNameChange(event));
 
+    handleCountrySearch = event => (this.props.onCountrySearch && this.props.onCountrySearch(event));
     handleCountrySelect = (id, name) => (this.props.onCountrySelect && this.props.onCountrySelect(id, name));
 
     handleTypeSelect = (id, name) => (this.props.onTypeSelect && this.props.onTypeSelect(id, name));
@@ -71,7 +79,7 @@ class UpdateCore extends Component {
                     </div>
                     <div className={this.props.classes.container}>
                         <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
                                         label="Name"
@@ -80,27 +88,28 @@ class UpdateCore extends Component {
                                         fullWidth
                                         value={this.props.name}
                                         onChange={this.handleNameChange}
-                                        error={!this.props.name}
-                                        helperText={((!this.props.name) ? 'Name cannot be empty' : '')}
+                                        error={!!this.props.nameError}
+                                        helperText={this.props.nameError}
                                     />
                                 </div>
                             </div>
 
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        items={this.props.countries}
+                                        onKeyUp={this.handleCountrySearch}
+                                        items={this.props.countrySuggestions}
                                         label="Country"
                                         placeholder="Country"
                                         onSelect={this.handleCountrySelect}
                                         displayValue={this.props.countryName}
+                                        error={!!this.props.countryError}
+                                        helperText={this.props.countryError}
                                     />
                                 </div>
                             </div>
-                        </div>
 
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formFieldCentered} ${this.props.classes.halfWidth} `}>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth} `}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
                                         items={this.props.types}
@@ -108,6 +117,8 @@ class UpdateCore extends Component {
                                         placeholder="Type"
                                         onSelect={this.handleTypeSelect}
                                         displayValue={this.props.type}
+                                        error={!!this.props.typeError}
+                                        helperText={this.props.typeError}
                                     />
                                 </div>
                             </div>
