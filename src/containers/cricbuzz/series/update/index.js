@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import UpdateCore from "./core";
 
@@ -7,7 +6,7 @@ import CricBuzzUtils from "../../../../utils/cricbuzz";
 import Utils from '../../../../utils';
 import Context from "../../../../utils/context";
 
-class Update extends Component {
+export default class Update extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,52 +43,59 @@ class Update extends Component {
             teamSuggestions: [],
             playerSuggestions: [],
             isLoaded: false,
-            countrySuggestions: []
+            countrySuggestions: [],
+            teams: [],
+            manOfTheSeriesList: []
         };
         this.seriesId = Utils.getUrlParam('id');
     }
 
     async componentDidMount() {
         Context.showLoader();
-        const seriesResponse = await CricBuzzUtils.getSeriesByApi(this.seriesId);
-        const series = seriesResponse.data;
-
         let state = {};
+        try {
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            const countries = countriesResponse.data;
+            state.countries = countries.map(country => ({
+                id: country.id,
+                name: country.name
+            }));
 
-        state.name = series.name;
-        state.homeCountryId = series.homeCountry.id;
-        state.homeCountryName = series.homeCountry.name;
-        state.type = series.type;
-        state.gameType = series.gameType;
-        state.startTime = series.startTime;
-        state.teams = series.teams.map(team => ({
-            id: team.id,
-            name: team.name
-        }));
-        state.manOfTheSeriesList = series.manOfTheSeriesList.map(mots => ({
-            id: mots.playerId,
-            name: mots.playerName,
-            teamId: mots.teamId
-        }));
+            const teamsResponse = await CricBuzzUtils.getAllTeams();
+            state.allTeams = teamsResponse.data.map(team => ({
+                id: team.id,
+                name: team.name
+            }));
 
-        const countriesResponse = await CricBuzzUtils.getAllCountries();
-        const countries = countriesResponse.data;
-        state.countries = countries.map(country => ({
-            id: country.id,
-            name: country.name
-        }));
+            const players = await CricBuzzUtils.getAllPlayers();
+            state.allPlayers = players.map(player => ({
+                id: player.id,
+                name: player.name
+            }));
 
-        const teamsResponse = await CricBuzzUtils.getAllTeams();
-        state.allTeams = teamsResponse.data.map(team => ({
-            id: team.id,
-            name: team.name
-        }));
+            const seriesResponse = await CricBuzzUtils.getSeriesByApi(this.seriesId);
+            const series = seriesResponse.data;
 
-        const players = await CricBuzzUtils.getAllPlayers();
-        state.allPlayers = players.map(player => ({
-            id: player.id,
-            name: player.name
-        }));
+            state.name = series.name;
+            state.homeCountryId = series.homeCountry.id;
+            state.homeCountryName = series.homeCountry.name;
+            state.type = series.type;
+            state.gameType = series.gameType;
+            state.startTime = series.startTime;
+            state.teams = series.teams.map(team => ({
+                id: team.id,
+                name: team.name
+            }));
+            state.manOfTheSeriesList = series.manOfTheSeriesList.map(mots => ({
+                id: mots.playerId,
+                name: mots.playerName,
+                teamId: mots.teamId
+            }));
+        } catch (error) {
+            console.log(error);
+            Context.showNotify('Error while loading data.', 'error');
+        }
+
         state.isLoaded = true;
         this.setState(state);
         Context.hideLoader();
@@ -97,6 +103,10 @@ class Update extends Component {
 
     isFormValid = () => {
         let isValid = this.validateName().isValid;
+        isValid = (isValid && this.validateCountry());
+        isValid = (isValid && this.validateType());
+        isValid = (isValid && this.validateGameType());
+        isValid = (isValid && this.validateStartTime());
         isValid = (isValid && this.validateTeams().isValid);
 
         return isValid;
@@ -135,7 +145,63 @@ class Update extends Component {
         }
 
         return response;
-    }
+    };
+
+    validateCountry = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.homeCountryId) {
+            response.isValid = false;
+            response.message = 'Home Country cannot be empty';
+        }
+
+        return response;
+    };
+
+    validateType = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.type) {
+            response.isValid = false;
+            response.message = 'Type cannot be empty';
+        }
+
+        return response;
+    };
+
+    validateGameType = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.gameType) {
+            response.isValid = false;
+            response.message = 'Game Type cannot be empty';
+        }
+
+        return response;
+    };
+
+    validateStartTime = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.startTime) {
+            response.isValid = false;
+            response.message = 'Start Time cannot be empty';
+        }
+
+        return response;
+    };
 
     handleSubmit = async event => {
         event.preventDefault();
@@ -150,7 +216,7 @@ class Update extends Component {
                 playerId: mots.id,
                 teamId: mots.teamId
             }))
-        }
+        };
 
         if (this.isFormValid()) {
             Context.showLoader();
@@ -343,12 +409,15 @@ class Update extends Component {
                     onPlayerSearch={this.handlePlayerSearch}
                     onManOfTheSeriesPick={this.handleManOfTheSeriesPick}
                     isFormValid={this.isFormValid()}
-                    validateName={this.validateName}
-                    validateTeams={this.validateTeams}
+                    validateName={this.validateName()}
+                    validateCountry={this.validateCountry()}
+                    validateTeams={this.validateTeams()}
+                    validateType={this.validateType()}
+                    validateGameType={this.validateGameType()}
+                    validateStartTime={this.validateStartTime()}
                     onTeamSearch={this.handleTeamSearch}
                     onCountrySearch={this.handleCountrySearch}
-                    isMobile={this.props.isMobile}
-s                />
+                />
             );
         }
     };
@@ -361,12 +430,3 @@ s                />
         );
     }
 }
-
-function mapStateToProps(store) {
-    return ({
-        series: store.cric.series,
-        isMobile: store.context.isMobile
-    });
-}
-
-export default connect(mapStateToProps)(Update);

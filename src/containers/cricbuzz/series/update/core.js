@@ -19,7 +19,10 @@ const styles = theme => ({
         padding: '2%',
         fontSize: '25px',
         color: 'white',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%'
+        }
     },
     row: {
         width: '100%',
@@ -28,12 +31,21 @@ const styles = theme => ({
     },
     halfWidth: {
         width: '50%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     },
     oneThirdWidth: {
         width: '33.33%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     },
     quarterWidth: {
         width: '25%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     },
     formFieldInput: {
         width: '99%',
@@ -41,16 +53,25 @@ const styles = theme => ({
         marginRight: '0.5%'
     },
     formField: {
-        display: 'inline-block'
+        display: 'inline-block',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%'
+        }
     },
     container: {
-        padding: '1%'
+        padding: '1%',
+        [theme.breakpoints.down('xs')]: {
+            padding: '4%'
+        }
     },
     submit: {
         backgroundColor: '#428bca',
         display: 'block',
         marginLeft: 'auto',
-        marginRight: 'auto'
+        marginRight: 'auto',
+        [theme.breakpoints.down('xs')]: {
+            marginTop: '5%'
+        }
     },
     teamsContainer: {
         margin: '0.25%',
@@ -68,7 +89,10 @@ const styles = theme => ({
         margin: '0.25%',
         width: '99.5%',
         border: '1px solid gray',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        [theme.breakpoints.down('xs')]: {
+            marginTop: '3%'
+        }
     },
     manOfTheSeriesContainer: {
         minHeight: '60px'
@@ -77,31 +101,8 @@ const styles = theme => ({
         verticalAlign: 'middle',
         display: 'inline-block',
         marginTop: '2%',
-        marginLeft: '0.5%'
-    },
-    containerTitle: {
-        marginBottom: 'initial'
-    },
-    mobile: {
-        '& $halfWidth': {
-            width: '100%'
-        },
-        '& $oneThirdWidth': {
-            width: '100%'
-        },
-        '& $quarterWidth': {
-            width: '100%'
-        },
-        '& $formTitle': {
-            marginBottom: '5%'
-        },
-        '& $formField': {
-            marginBottom: '3%'
-        },
-        '& $container': {
-            padding: '4%'
-        },
-        '& $pickMots': {
+        marginLeft: '0.5%',
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
             marginBottom: '5%',
             '& button': {
@@ -109,14 +110,11 @@ const styles = theme => ({
                 marginRight: 'auto',
                 display: 'block'
             }
-        },
-        '& $submit': {
-            marginTop: '5%'
-        },
-        '& $playersContainer': {
-            marginTop: '3%'
-        },
-        '& $containerTitle': {
+        }
+    },
+    containerTitle: {
+        marginBottom: 'initial',
+        [theme.breakpoints.down('xs')]: {
             display: 'block',
             marginBottom: '5%'
         }
@@ -154,10 +152,6 @@ class UpdateCore extends Component {
 
     handleCountrySearch = event => (this.props.onCountrySearch && this.props.onCountrySearch(event));
 
-    getDeviceClass = () => {
-        return ((this.props.isMobile) ? this.props.classes.mobile : '');
-    }
-
     renderTeamsMarkup = () => {
         let markup = [];
 
@@ -193,9 +187,7 @@ class UpdateCore extends Component {
 
     render() {
         return (
-            <div
-                className={this.getDeviceClass()}
-            >
+            <div>
                 <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
                         Update Series
@@ -211,8 +203,8 @@ class UpdateCore extends Component {
                                         fullWidth
                                         value={this.props.name}
                                         onChange={this.handleNameChange}
-                                        error={!this.props.validateName().isValid}
-                                        helperText={this.props.validateName().message}
+                                        error={!this.props.validateName.isValid}
+                                        helperText={this.props.validateName.message}
                                     />
                                 </div>
                             </div>
@@ -226,6 +218,8 @@ class UpdateCore extends Component {
                                         placeholder="Home Country"
                                         onSelect={this.handleHomeCountrySelect}
                                         displayValue={this.props.homeCountryName}
+                                        error={!this.props.validateCountry.isValid}
+                                        helperText={this.props.validateCountry.message}
                                     />
                                 </div>
                             </div>
@@ -239,6 +233,8 @@ class UpdateCore extends Component {
                                         onSelect={this.handleTypeSelect}
                                         displayValue={this.props.type}
                                         disableEdit
+                                        error={!this.props.validateType.isValid}
+                                        helperText={this.props.validateType.message}
                                     />
                                 </div>
                             </div>
@@ -254,6 +250,8 @@ class UpdateCore extends Component {
                                         onSelect={this.handleGameTypeSelect}
                                         displayValue={this.props.gameType}
                                         disableEdit
+                                        error={!this.props.validateGameType.isValid}
+                                        helperText={this.props.validateGameType.message}
                                     />
                                 </div>
                             </div>
@@ -261,8 +259,12 @@ class UpdateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <DateTimePicker
+                                        label={'Start Time'}
+                                        placeholder={'Start Time'}
                                         value={this.props.startTime}
                                         onChange={this.handleStartTimeChange}
+                                        error={!this.props.validateStartTime.isValid}
+                                        helperText={this.props.validateStartTime.message}
                                     />
                                 </div>
                             </div>
@@ -274,8 +276,8 @@ class UpdateCore extends Component {
                                         label="Teams"
                                         placeholder="Teams"
                                         onSelect={this.handleTeamSelect}
-                                        error={!this.props.validateTeams().isValid}
-                                        helperText={this.props.validateTeams().message}
+                                        error={!this.props.validateTeams.isValid}
+                                        helperText={this.props.validateTeams.message}
                                         onKeyUp={this.handleTeamSearch}
                                         clearOnSelect
                                     />
