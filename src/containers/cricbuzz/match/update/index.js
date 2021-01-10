@@ -19,9 +19,6 @@ class Update extends Component {
         Context.showLoader();
 
         const id = Utils.getUrlParam('id');
-        const matchDetailsResponse = await CricBuzzUtils.getMatchDetails(id);
-        const match = matchDetailsResponse.data;
-
         let state = {
             stadiumSuggestions: [],
             teamSuggestions: [],
@@ -134,230 +131,237 @@ class Update extends Component {
             manOfTheMatchNames: []
         };
 
-        let dismissalModeMap = {};
-        state.dismissalModes.forEach(dismissalMode => {
-            dismissalModeMap[dismissalMode.id] = dismissalMode.name;
-        });
-
-        const stadiumsResponse = await CricBuzzUtils.getAllStadiums();
-        state.stadiums = stadiumsResponse.data.map(stadium => ({
-            id: stadium.id,
-            name: stadium.name
-        }));
-        let stadiumMap = {};
-        state.stadiums.forEach(stadium => {
-            stadiumMap[stadium.id] = stadium.name;
-        });
-        state.stadiumMap = stadiumMap;
-
-        const teamsResponse = await CricBuzzUtils.getAllTeams();
-        state.allTeams = teamsResponse.data.map(team => ({
-            id: team.id,
-            name: team.name
-        }));
-        let teamMap = {};
-        state.allTeams.forEach(team => {
-            teamMap[team.id] = team.name;
-        });
-        state.teamMap = teamMap;
-
-        state.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => ({
-            id: player.id,
-            name: player.name
-        }));
-        let playerMap = {};
-        state.allPlayers.forEach(player => {
-            playerMap[player.id] = player.name;
-        });
-        state.playerMap = playerMap;
-
-        state.stadiumId = match.stadiumId;
-        state.stadiumName = state.stadiumMap[match.stadiumId];
-
-        state.team1Id = match.team1;
-        state.team1Name = state.teamMap[match.team1];
-        state.teams.push({
-            id: state.team1Id,
-            name: state.team1Name
-        });
-
-        state.team2Id = match.team2;
-        state.team2Name = state.teamMap[match.team2];
-        state.teams.push({
-            id: state.team2Id,
-            name: state.team2Name
-        });
-
-        if (match.tossWinner) {
-            state.tossWinnerId = match.tossWinner;
-            state.tossWinnerName = state.teamMap[match.tossWinner];
-
-            state.battingFirstId = match.batFirst;
-            state.battingFirstName = state.teamMap[match.batFirst];
-
-            state.resultName = match.result;
-
-            if (match.winner) {
-                state.winnerId = match.winner;
-                state.winnerName = state.teamMap[match.winner];
-                state.winMargin = parseInt(match.winMargin, 10);
-                state.winMarginTypeId = (('RUN' === match.winMarginType) ? 0 : 1);
-                state.winMarginTypeName = match.winMarginType;
-            }
-        }
-
-        for (const motm of match.manOfTheMatchList) {
-            state.manOfTheMatchIds.push(motm.playerId);
-            state.manOfTheMatchNames.push(state.playerMap[motm.playerId]);
-        }
-
-        state.startTime = match.startTime;
-
-        for (const playerObject of match.players) {
-            const index = ((match.team1 === playerObject.teamId) ? 1 : 2);
-            state.players[index].push({
-                id: playerObject.playerId,
-                name: state.playerMap[playerObject.playerId]
+        try {
+            const stadiumsResponse = await CricBuzzUtils.getAllStadiums();
+            state.stadiums = stadiumsResponse.data.map(stadium => ({
+                id: stadium.id,
+                name: stadium.name
+            }));
+            let stadiumMap = {};
+            state.stadiums.forEach(stadium => {
+                stadiumMap[stadium.id] = stadium.name;
             });
-        }
+            state.stadiumMap = stadiumMap;
 
-        let scorecards = [];
-        let battingScores = {};
+            const teamsResponse = await CricBuzzUtils.getAllTeams();
+            state.allTeams = teamsResponse.data.map(team => ({
+                id: team.id,
+                name: team.name
+            }));
+            let teamMap = {};
+            state.allTeams.forEach(team => {
+                teamMap[team.id] = team.name;
+            });
+            state.teamMap = teamMap;
 
-        for (const battingScore of match.battingScores) {
-            const innings = battingScore.innings;
+            state.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => ({
+                id: player.id,
+                name: player.name
+            }));
+            let playerMap = {};
+            state.allPlayers.forEach(player => {
+                playerMap[player.id] = player.name;
+            });
+            state.playerMap = playerMap;
+            const matchDetailsResponse = await CricBuzzUtils.getMatchDetails(id);
+            const match = matchDetailsResponse.data;
 
-            if (battingScores.hasOwnProperty(innings)) {
-                battingScores[innings].push(battingScore);
-            } else {
-                battingScores[innings] = [
-                    battingScore
-                ];
-            }
-        }
+            let dismissalModeMap = {};
+            state.dismissalModes.forEach(dismissalMode => {
+                dismissalModeMap[dismissalMode.id] = dismissalMode.name;
+            });
 
-        let bowlingFigures = [];
-        for (const bowlingFigure of match.bowlingFigures) {
-            const innings = bowlingFigure.innings;
+            state.stadiumId = match.stadiumId;
+            state.stadiumName = state.stadiumMap[match.stadiumId];
 
-            if (bowlingFigures.hasOwnProperty(innings)) {
-                bowlingFigures[innings].push(bowlingFigure);
-            } else {
-                bowlingFigures[innings] = [
-                    bowlingFigure
-                ];
-            }
-        }
+            state.team1Id = match.team1;
+            state.team1Name = state.teamMap[match.team1];
+            state.teams.push({
+                id: state.team1Id,
+                name: state.team1Name
+            });
 
-        let extras = {};
-        for (const extra of match.extras) {
-            const innings = extra.innings;
+            state.team2Id = match.team2;
+            state.team2Name = state.teamMap[match.team2];
+            state.teams.push({
+                id: state.team2Id,
+                name: state.team2Name
+            });
 
-            if (extras.hasOwnProperty(innings)) {
-                extras[innings][extra.type] = extra.runs;
-            } else {
-                extras[innings] = {
-                    [extra.type]: extra.runs
-                };
-            }
-        }
+            if (match.tossWinner) {
+                state.tossWinnerId = match.tossWinner;
+                state.tossWinnerName = state.teamMap[match.tossWinner];
 
-        for (const [innings, battingScoreList] of Object.entries(battingScores)) {
-            let batScores = [];
+                state.battingFirstId = match.batFirst;
+                state.battingFirstName = state.teamMap[match.batFirst];
 
-            for (const score of battingScoreList) {
-                let scoreObject = {
-                    batsmanId: score.playerId,
-                    batsmanName: state.playerMap[score.playerId],
-                    runs: score.runs,
-                    balls: score.balls,
-                    fours: score.fours,
-                    sixes: score.sixes,
-                    dismissalModeId: ((score.dismissalMode) ? score.dismissalMode : ''),
-                    dismissalModeName: ((score.dismissalMode) ? dismissalModeMap[score.dismissalMode] : ''),
-                    bowlerId: ((score.bowler) ? score.bowler.playerId : ''),
-                    bowlerName: ((score.bowler) ? state.playerMap[score.bowler.playerId] : '')
-                };
+                state.resultName = match.result;
 
-                let fielderIds = [];
-                let fielderNames = [];
-
-                for (const fielder of score.fielders) {
-                    fielderIds.push(fielder.playerId);
-                    fielderNames.push(state.playerMap[fielder.playerId]);
+                if (match.winner) {
+                    state.winnerId = match.winner;
+                    state.winnerName = state.teamMap[match.winner];
+                    state.winMargin = parseInt(match.winMargin, 10);
+                    state.winMarginTypeId = (('RUN' === match.winMarginType) ? 0 : 1);
+                    state.winMarginTypeName = match.winMarginType;
                 }
-
-                scoreObject.fielderIds = fielderIds.join(', ');
-                scoreObject.fielderNames = fielderNames.join(', ');
-
-                batScores.push(scoreObject);
             }
 
-
-            scorecards.push({
-                battingTeamId: battingScoreList[0].teamId,
-                battingTeamName: state.teamMap[battingScoreList[0].teamId],
-                battingScores: batScores,
-                bowlingFigures: [],
-                extras: []
-            })
-        }
-
-        for (let innings = 1; innings <= 4; innings++) {
-            let bowlFigures = [];
-            if (bowlingFigures.hasOwnProperty(innings)) {
-                let bowlingFigureList = bowlingFigures[innings];
-
-                for (const figure of bowlingFigureList) {
-                    let figureObject = {
-                        bowlerId: figure.playerId,
-                        bowlerName: state.playerMap[figure.playerId],
-                        balls: figure.balls,
-                        maidens: figure.maidens,
-                        runs: figure.runs,
-                        wickets: figure.wickets
-                    };
-
-                    bowlFigures.push(figureObject);
-                }
-            } else {
-                bowlFigures = [
-                    this.getDefaultBowlingFigureRow()
-                ];
+            for (const motm of match.manOfTheMatchList) {
+                state.manOfTheMatchIds.push(motm.playerId);
+                state.manOfTheMatchNames.push(state.playerMap[motm.playerId]);
             }
 
-            if (scorecards.hasOwnProperty(innings - 1)) {
-                scorecards[innings - 1].bowlingFigures = bowlFigures;
-            }
-        }
+            state.startTime = match.startTime;
 
-        for (let inning = 1; inning <= 4; inning++) {
-            let extrasItems = [];
-            let e = {
-                'BYE': 0,
-                'LEG_BYE': 0,
-                'WIDE': 0,
-                'NO_BALL': 0,
-                'PENALTY': 0
-            };
-
-            if (extras.hasOwnProperty(inning)) {
-                e = Object.assign(e, extras[inning]);
-            }
-
-            for (const [type, runs] of Object.entries(e)) {
-                extrasItems.push({
-                    type,
-                    runs
+            for (const playerObject of match.players) {
+                const index = ((match.team1 === playerObject.teamId) ? 1 : 2);
+                state.players[index].push({
+                    id: playerObject.playerId,
+                    name: state.playerMap[playerObject.playerId]
                 });
             }
 
-            if (scorecards.hasOwnProperty(inning - 1)) {
-                scorecards[inning - 1].extras = extrasItems;
-            }
-        }
+            let scorecards = [];
+            let battingScores = {};
 
-        state.scoreCards = scorecards;
+            for (const battingScore of match.battingScores) {
+                const innings = battingScore.innings;
+
+                if (battingScores.hasOwnProperty(innings)) {
+                    battingScores[innings].push(battingScore);
+                } else {
+                    battingScores[innings] = [
+                        battingScore
+                    ];
+                }
+            }
+
+            let bowlingFigures = [];
+            for (const bowlingFigure of match.bowlingFigures) {
+                const innings = bowlingFigure.innings;
+
+                if (bowlingFigures.hasOwnProperty(innings)) {
+                    bowlingFigures[innings].push(bowlingFigure);
+                } else {
+                    bowlingFigures[innings] = [
+                        bowlingFigure
+                    ];
+                }
+            }
+
+            let extras = {};
+            for (const extra of match.extras) {
+                const innings = extra.innings;
+
+                if (extras.hasOwnProperty(innings)) {
+                    extras[innings][extra.type] = extra.runs;
+                } else {
+                    extras[innings] = {
+                        [extra.type]: extra.runs
+                    };
+                }
+            }
+
+            for (const [innings, battingScoreList] of Object.entries(battingScores)) {
+                let batScores = [];
+
+                for (const score of battingScoreList) {
+                    let scoreObject = {
+                        batsmanId: score.playerId,
+                        batsmanName: state.playerMap[score.playerId],
+                        runs: score.runs,
+                        balls: score.balls,
+                        fours: score.fours,
+                        sixes: score.sixes,
+                        dismissalModeId: ((score.dismissalMode) ? score.dismissalMode : ''),
+                        dismissalModeName: ((score.dismissalMode) ? dismissalModeMap[score.dismissalMode] : ''),
+                        bowlerId: ((score.bowler) ? score.bowler.playerId : ''),
+                        bowlerName: ((score.bowler) ? state.playerMap[score.bowler.playerId] : '')
+                    };
+
+                    let fielderIds = [];
+                    let fielderNames = [];
+
+                    for (const fielder of score.fielders) {
+                        fielderIds.push(fielder.playerId);
+                        fielderNames.push(state.playerMap[fielder.playerId]);
+                    }
+
+                    scoreObject.fielderIds = fielderIds.join(', ');
+                    scoreObject.fielderNames = fielderNames.join(', ');
+
+                    batScores.push(scoreObject);
+                }
+
+
+                scorecards.push({
+                    battingTeamId: battingScoreList[0].teamId,
+                    battingTeamName: state.teamMap[battingScoreList[0].teamId],
+                    battingScores: batScores,
+                    bowlingFigures: [],
+                    extras: []
+                })
+            }
+
+            for (let innings = 1; innings <= 4; innings++) {
+                let bowlFigures = [];
+                if (bowlingFigures.hasOwnProperty(innings)) {
+                    let bowlingFigureList = bowlingFigures[innings];
+
+                    for (const figure of bowlingFigureList) {
+                        let figureObject = {
+                            bowlerId: figure.playerId,
+                            bowlerName: state.playerMap[figure.playerId],
+                            balls: figure.balls,
+                            maidens: figure.maidens,
+                            runs: figure.runs,
+                            wickets: figure.wickets
+                        };
+
+                        bowlFigures.push(figureObject);
+                    }
+                } else {
+                    bowlFigures = [
+                        this.getDefaultBowlingFigureRow()
+                    ];
+                }
+
+                if (scorecards.hasOwnProperty(innings - 1)) {
+                    scorecards[innings - 1].bowlingFigures = bowlFigures;
+                }
+            }
+
+            for (let inning = 1; inning <= 4; inning++) {
+                let extrasItems = [];
+                let e = {
+                    'BYE': 0,
+                    'LEG_BYE': 0,
+                    'WIDE': 0,
+                    'NO_BALL': 0,
+                    'PENALTY': 0
+                };
+
+                if (extras.hasOwnProperty(inning)) {
+                    e = Object.assign(e, extras[inning]);
+                }
+
+                for (const [type, runs] of Object.entries(e)) {
+                    extrasItems.push({
+                        type,
+                        runs
+                    });
+                }
+
+                if (scorecards.hasOwnProperty(inning - 1)) {
+                    scorecards[inning - 1].extras = extrasItems;
+                }
+            }
+
+            state.scoreCards = scorecards;
+        } catch (error) {
+            console.log(error);
+            Context.showNotify('Error while loading data.', 'error');
+        }
 
         state.isLoaded = true;
 

@@ -38,6 +38,9 @@ class Update extends Component {
         Context.showLoader();
         let state = {};
         try {
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            state.countries = countriesResponse.data;
+
             const teamResponse = await CricBuzzUtils.getTeamByApi(this.teamId);
             const team = teamResponse.data;
             state = {
@@ -47,8 +50,6 @@ class Update extends Component {
                 countryName: team.country.name,
                 type: team.teamType
             };
-            const countriesResponse = await CricBuzzUtils.getAllCountries();
-            state.countries = countriesResponse.data;
         } catch (error) {
             console.log(error);
             Context.showNotify('Error while loading data.', 'error');

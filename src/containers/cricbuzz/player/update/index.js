@@ -27,6 +27,9 @@ export default class Update extends Component {
         Context.showLoader();
         let state = {};
         try {
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            state.countries = countriesResponse.data;
+
             const playerResponse = await CricBuzzUtils.getPlayerByApi(this.playerId);
 
             let player = playerResponse.data;
@@ -40,9 +43,6 @@ export default class Update extends Component {
 
             let playerImageParts = player.image.split('/');
             state.imageName = playerImageParts[playerImageParts.length - 1];
-
-            const countriesResponse = await CricBuzzUtils.getAllCountries();
-            state.countries = countriesResponse.data;
         } catch (error) {
             console.log(error);
             Context.showNotify('Error while loading data.', 'error');
