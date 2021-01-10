@@ -66,21 +66,23 @@ class Update extends Component {
             name: this.state.name,
             countryId: this.state.countryId,
             teamType: this.state.type
-        }
+        };
 
-        Context.showLoader();
-        const updatePromise = CricBuzzUtils.updateTeam(this.teamId, payload);
-        updatePromise.then(apiResponse => {
-            Context.hideLoader();
-            Context.showNotify('Updated Successfully', 'success');
-        }).catch(apiResponse => {
-            Context.hideLoader();
-            if (apiResponse.response) {
-                console.log(apiResponse.response.status);
-                console.log(apiResponse.response.data);
-            }
-            Context.showNotify('Failed to update. Please try again', 'error');
-        });
+        if (this.isFormValid()) {
+            Context.showLoader();
+            const updatePromise = CricBuzzUtils.updateTeam(this.teamId, payload);
+            updatePromise.then(apiResponse => {
+                Context.hideLoader();
+                Context.showNotify('Updated Successfully', 'success');
+            }).catch(apiResponse => {
+                Context.hideLoader();
+                if (apiResponse.response) {
+                    console.log(apiResponse.response.status);
+                    console.log(apiResponse.response.data);
+                }
+                Context.showNotify('Failed to update. Please try again', 'error');
+            });
+        }
     };
 
     handleNameChange = event => {
