@@ -18,8 +18,14 @@ export default class Update extends Component {
 
     async componentDidMount() {
         Context.showLoader();
-        const countryResponse = await CricBuzzUtils.getCountryByApi(this.countryId);
-        let state = countryResponse.data;
+        let state = {};
+        try {
+            const countryResponse = await CricBuzzUtils.getCountryByApi(this.countryId);
+            state = countryResponse.data;
+        } catch (error) {
+            console.log(error);
+            Context.showNotify('Error while loading data.', 'error');
+        }
         state.isLoaded = true;
 
         this.setState(state);

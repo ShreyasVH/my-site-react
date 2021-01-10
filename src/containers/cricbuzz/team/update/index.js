@@ -36,17 +36,23 @@ class Update extends Component {
 
     async componentDidMount() {
         Context.showLoader();
-        const teamResponse = await CricBuzzUtils.getTeamByApi(this.teamId);
-        const team = teamResponse.data;
-        let state = {
-            id: team.id,
-            name: team.name,
-            countryId: team.country.id,
-            countryName: team.country.name,
-            type: team.teamType
-        };
-        const countriesResponse = await CricBuzzUtils.getAllCountries();
-        state.countries = countriesResponse.data;
+        let state = {};
+        try {
+            const teamResponse = await CricBuzzUtils.getTeamByApi(this.teamId);
+            const team = teamResponse.data;
+            state = {
+                id: team.id,
+                name: team.name,
+                countryId: team.country.id,
+                countryName: team.country.name,
+                type: team.teamType
+            };
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            state.countries = countriesResponse.data;
+        } catch (error) {
+            console.log(error);
+            Context.showNotify('Error while loading data.', 'error');
+        }
 
         state.isLoaded =  true;
 

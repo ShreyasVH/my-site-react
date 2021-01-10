@@ -22,19 +22,25 @@ export default class Update extends Component {
 
     async componentDidMount() {
         Context.showLoader();
-        const stadiumResponse = await CricBuzzUtils.getStadiumByApi(this.stadiumId);
-        const stadium = stadiumResponse.data;
-        let state = {
-            id: stadium.id,
-            name: stadium.name,
-            countryId: stadium.country.id,
-            countryName: stadium.country.name,
-            state: stadium.state,
-            city: stadium.city
-        };
+        let state = {};
+        try {
+            const stadiumResponse = await CricBuzzUtils.getStadiumByApi(this.stadiumId);
+            const stadium = stadiumResponse.data;
+            state = {
+                id: stadium.id,
+                name: stadium.name,
+                countryId: stadium.country.id,
+                countryName: stadium.country.name,
+                state: stadium.state,
+                city: stadium.city
+            };
 
-        const countriesResponse = await CricBuzzUtils.getAllCountries();
-        state.countries = countriesResponse.data;
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            state.countries = countriesResponse.data;
+        } catch (error) {
+            console.log(error);
+            Context.showNotify('Error while loading data.', 'error');
+        }
 
         state.isLoaded = true;
 
