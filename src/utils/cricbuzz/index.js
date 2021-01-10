@@ -72,10 +72,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.tour).length === 0) || (id !== cricStore.tour.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_TOUR_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getTourByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setTour(response);
                 Context.hideLoader();
@@ -85,6 +82,11 @@ export default class CricBuzzUtils {
         } else {
             Context.hideLoader();
         }
+    };
+
+    static getTourByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_TOUR_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
     };
 
     static setTour = tour => {
