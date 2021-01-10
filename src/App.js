@@ -36,7 +36,7 @@ class App extends Component {
 						<Header />
 						<div className="container">
 							<Switch>
-								{RouteMappings.map(details => {
+								{RouteMappings.map((details, index) => {
 									const LoadableComponent = Loadable({
 										loader: () => import(`${details.filePath}`),
 										loading() {
@@ -48,6 +48,7 @@ class App extends Component {
 											exact={details.exact}
 											path={details.route}
 											component={LoadableComponent}
+											key={'route_' + index}
 										/>
 									);
 								})}
