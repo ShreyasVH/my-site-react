@@ -489,6 +489,8 @@ class CreateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <DateTimePicker
+                                        label={'Start Time'}
+                                        placeholder={'Start Time'}
                                         value={this.props.startTime}
                                         onChange={this.handleStartTimeChange}
                                     />

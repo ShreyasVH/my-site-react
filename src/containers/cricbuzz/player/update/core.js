@@ -19,7 +19,10 @@ const styles = theme => ({
         padding: '2%',
         fontSize: '25px',
         color: 'white',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     row: {
         width: '100%',
@@ -38,10 +41,16 @@ const styles = theme => ({
         marginRight: '0.5%'
     },
     formField: {
-        display: 'inline-block'
+        display: 'inline-block',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     container: {
-        padding: '1%'
+        padding: '1%',
+        [theme.breakpoints.down('xs')]: {
+            padding: '4%',
+        }
     },
     submit: {
         backgroundColor: '#428bca',
@@ -52,22 +61,10 @@ const styles = theme => ({
     },
     oneThirdWidth: {
         width: '33.33%',
-    },
-    mobile: {
-        '& $oneThirdWidth': {
-            width: '100%'
-        },
-        '& $formTitle': {
-        	marginBottom: '5%'
-        },
-        '& $formField': {
-        	marginBottom: '5%'
-        },
-        '& $container': {
-        	padding: '4%'
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
         }
     }
-
 });
 
 class UpdateCore extends Component {
@@ -75,19 +72,14 @@ class UpdateCore extends Component {
 
     handleDateOfBirthChange = event => (this.props.onDateOfBirthChange && this.props.onDateOfBirthChange(event));
 
+    handleCountrySearch = event => (this.props.onCountrySearch && this.props.onCountrySearch(event));
     handleCountrySelect = (id, name) => (this.props.onCountrySelect && this.props.onCountrySelect(id, name));
 
     handleFileUpload = event => files => (this.props.onImageSelect && this.props.onImageSelect(files[0]));
 
-    getDeviceClass = () => {
-        return ((this.props.isMobile) ? this.props.classes.mobile : '');
-    }
-
     render() {
         return (
-            <div
-                className={this.getDeviceClass()}
-            >
+            <div>
                 <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
                         Update Player
@@ -103,8 +95,8 @@ class UpdateCore extends Component {
                                         fullWidth
                                         value={this.props.name}
                                         onChange={this.handleNameChange}
-                                        error={!this.props.name}
-                                        helperText={((!this.props.name) ? 'Name cannot be empty' : '')}
+                                        error={!this.props.validateName.isValid}
+                                        helperText={this.props.validateName.message}
                                     />
                                 </div>
                             </div>
@@ -112,11 +104,14 @@ class UpdateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        items={this.props.countries}
+                                        onKeyUp={this.handleCountrySearch}
+                                        items={this.props.countrySuggestions}
                                         label="Country"
                                         placeholder="Country"
                                         onSelect={this.handleCountrySelect}
                                         displayValue={this.props.countryName}
+                                        error={!this.props.validateCountry.isValid}
+                                        helperText={this.props.validateCountry.message}
                                     />
                                 </div>
                             </div>
@@ -124,8 +119,12 @@ class UpdateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <DateTimePicker
+                                        label={'Date of Birth'}
+                                        placeholder={'Date of Birth'}
                                         value={this.props.dateOfBirth}
                                         onChange={this.handleDateOfBirthChange}
+                                        error={!this.props.validateDateOfBirth.isValid}
+                                        helperText={this.props.validateDateOfBirth.message}
                                     />
                                 </div>
                             </div>

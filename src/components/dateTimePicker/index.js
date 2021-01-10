@@ -16,12 +16,16 @@ export default class DateTimePicker extends Component {
     render () {
         return (
             <TextField
-                label="Start Time"
+                label={this.props.label}
                 variant="outlined"
+                placeholder={this.props.placeHolder}
                 fullWidth
                 value={this.formatInput()}
                 onChange={this.handleChange}
                 type="datetime-local"
+                error={this.props.error}
+                helperText={this.props.helperText}
+                InputLabelProps={{ shrink: true }}
             />
         );
     }

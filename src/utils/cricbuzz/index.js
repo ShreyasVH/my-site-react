@@ -332,10 +332,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.player).length === 0) || (id !== cricStore.player.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_PLAYER_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getPlayerByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setPlayer(response);
                 Context.hideLoader();
@@ -345,6 +342,11 @@ export default class CricBuzzUtils {
         } else {
             Context.hideLoader();
         }
+    };
+
+    static getPlayerByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_PLAYER_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
     };
 
     static setPlayer = team => {
