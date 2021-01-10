@@ -99,7 +99,9 @@ class SeriesCore extends Component {
 
     renderMatches = () => {
         return this.props.matches.map((match, index) => (
-            <div>
+            <div
+                key={'match_' + match.id}
+            >
                 <Card onClick={this.handleMatchClick(match.id)}>
                     <CardContent>
                         <Typography component={"span"} color="textSecondary" className={this.props.classes.matchTeams}>

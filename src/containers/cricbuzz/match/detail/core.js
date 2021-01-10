@@ -50,7 +50,7 @@ const styles = theme => ({
 class MatchCore extends Component {
     renderPlayers = () => {
         let markup = [(
-            <Typography component={'h3'} className={this.props.classes.playingSquadsHeader}>
+            <Typography component={'h3'} className={this.props.classes.playingSquadsHeader} key={'squads'}>
                 {'Playing Squads'}
             </Typography>
         )];
@@ -69,7 +69,9 @@ class MatchCore extends Component {
 
         for (let teamName in teams) {
             markup.push(
-                <Typography>
+                <Typography
+                    key={'team_' + teamName}
+                >
                     {teamName}
                 </Typography>
             );
@@ -78,7 +80,12 @@ class MatchCore extends Component {
             for (let index in playerObjects) {
                 let playerObject = playerObjects[index];
                 markup.push(
-                    <Chip label={this.props.playerMap[playerObject.playerId]} className={this.props.classes.chip} variant="outlined" />
+                    <Chip
+                        label={this.props.playerMap[playerObject.playerId]}
+                        className={this.props.classes.chip}
+                        variant="outlined"
+                        key={'player_' + playerObject.playerId}
+                    />
                 );
             }
         }
@@ -110,7 +117,10 @@ class MatchCore extends Component {
 
         if (innings <= totalInningsCount) {
             return (
-                <div className={`${this.props.classes.innings} ${this.props.classes.borderedContainer}`}>
+                <div
+                    className={`${this.props.classes.innings} ${this.props.classes.borderedContainer}`}
+                    key={'innings_' + innings}
+                >
                     <div className={this.props.classes.container}>
                         {this.renderBattingScores(innings)}
                         {this.renderBowlingFigures(innings)}
@@ -265,7 +275,9 @@ class MatchCore extends Component {
             if (score.innings === innings) {
                 inningsName = this.props.teamMap[score.teamId] + ' Innings';
                 scores.push(
-                    <TableRow>
+                    <TableRow
+                        key={'score_' + score.id}
+                    >
                         <TableCell>
                             {this.props.playerMap[score.playerId]}
                         </TableCell>
@@ -328,7 +340,9 @@ class MatchCore extends Component {
 
             if (score.innings === innings) {
                 scores.push(
-                    <TableRow>
+                    <TableRow
+                        key={'figure_' + score.id}
+                    >
                         <TableCell>
                             {this.props.playerMap[score.playerId]}
                         </TableCell>
@@ -428,7 +442,12 @@ class MatchCore extends Component {
         teams.push(this.props.teamMap[this.props.team2]);
 
         return teams.map(team => (
-            <Chip label={team} className={this.props.classes.chip} variant="outlined" />
+            <Chip
+                label={team}
+                className={this.props.classes.chip}
+                variant="outlined"
+                key={'team_' + team}
+            />
         ));
     };
 
@@ -448,7 +467,12 @@ class MatchCore extends Component {
 
     renderManOfTheMatch = () => {
         return this.props.manOfTheMatchList.map(motm => (
-            <Chip label={this.props.playerMap[motm.playerId]} className={this.props.classes.chip} variant="outlined" />
+            <Chip
+                label={this.props.playerMap[motm.playerId]}
+                className={this.props.classes.chip}
+                variant="outlined"
+                key={'motm_' + motm.playerId}
+            />
         ));
     };
 

@@ -41,7 +41,9 @@ class TourCore extends Component {
 
     renderSeries = () => {
         return this.props.tour.seriesList.map(series => (
-            <div>
+            <div
+                key={'series_' + series.id}
+            >
                 <Card onClick={this.handleSeriesClick(series.id)}>
                     <CardContent>
                         <Typography component={"span"} color="textSecondary" className={this.props.classes.gameType}>
