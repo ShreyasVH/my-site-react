@@ -13,6 +13,14 @@ class Update extends Component {
         this.state = {
             isLoaded: false
         };
+        this.allStadiums = [];
+        this.stadiumMap = {};
+        
+        this.allTeams = [];
+        this.teamMap = {};
+        
+        this.allPlayers = [];
+        this.playerMap = {};
     }
 
     async componentDidMount() {
@@ -133,36 +141,31 @@ class Update extends Component {
 
         try {
             const stadiumsResponse = await CricBuzzUtils.getAllStadiums();
-            state.stadiums = stadiumsResponse.data.map(stadium => ({
+            this.allStadiums = stadiumsResponse.data.map(stadium => ({
                 id: stadium.id,
                 name: stadium.name
             }));
-            let stadiumMap = {};
-            state.stadiums.forEach(stadium => {
-                stadiumMap[stadium.id] = stadium.name;
+            this.allStadiums.forEach(stadium => {
+                this.stadiumMap[stadium.id] = stadium.name;
             });
-            state.stadiumMap = stadiumMap;
 
             const teamsResponse = await CricBuzzUtils.getAllTeams();
-            state.allTeams = teamsResponse.data.map(team => ({
+            this.allTeams = teamsResponse.data.map(team => ({
                 id: team.id,
                 name: team.name
             }));
-            let teamMap = {};
-            state.allTeams.forEach(team => {
-                teamMap[team.id] = team.name;
+            this.allTeams.forEach(team => {
+                this.teamMap[team.id] = team.name;
             });
-            state.teamMap = teamMap;
 
-            state.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => ({
+            this.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => ({
                 id: player.id,
                 name: player.name
             }));
-            let playerMap = {};
-            state.allPlayers.forEach(player => {
-                playerMap[player.id] = player.name;
+            this.allPlayers.forEach(player => {
+                this.playerMap[player.id] = player.name;
             });
-            state.playerMap = playerMap;
+            
             const matchDetailsResponse = await CricBuzzUtils.getMatchDetails(id);
             const match = matchDetailsResponse.data;
 
@@ -172,17 +175,17 @@ class Update extends Component {
             });
 
             state.stadiumId = match.stadiumId;
-            state.stadiumName = state.stadiumMap[match.stadiumId];
+            state.stadiumName = this.stadiumMap[match.stadiumId];
 
             state.team1Id = match.team1;
-            state.team1Name = state.teamMap[match.team1];
+            state.team1Name = this.teamMap[match.team1];
             state.teams.push({
                 id: state.team1Id,
                 name: state.team1Name
             });
 
             state.team2Id = match.team2;
-            state.team2Name = state.teamMap[match.team2];
+            state.team2Name = this.teamMap[match.team2];
             state.teams.push({
                 id: state.team2Id,
                 name: state.team2Name
@@ -190,16 +193,16 @@ class Update extends Component {
 
             if (match.tossWinner) {
                 state.tossWinnerId = match.tossWinner;
-                state.tossWinnerName = state.teamMap[match.tossWinner];
+                state.tossWinnerName = this.teamMap[match.tossWinner];
 
                 state.battingFirstId = match.batFirst;
-                state.battingFirstName = state.teamMap[match.batFirst];
+                state.battingFirstName = this.teamMap[match.batFirst];
 
                 state.resultName = match.result;
 
                 if (match.winner) {
                     state.winnerId = match.winner;
-                    state.winnerName = state.teamMap[match.winner];
+                    state.winnerName = this.teamMap[match.winner];
                     state.winMargin = parseInt(match.winMargin, 10);
                     state.winMarginTypeId = (('RUN' === match.winMarginType) ? 0 : 1);
                     state.winMarginTypeName = match.winMarginType;
@@ -208,7 +211,7 @@ class Update extends Component {
 
             for (const motm of match.manOfTheMatchList) {
                 state.manOfTheMatchIds.push(motm.playerId);
-                state.manOfTheMatchNames.push(state.playerMap[motm.playerId]);
+                state.manOfTheMatchNames.push(this.playerMap[motm.playerId]);
             }
 
             state.startTime = match.startTime;
@@ -217,7 +220,7 @@ class Update extends Component {
                 const index = ((match.team1 === playerObject.teamId) ? 1 : 2);
                 state.players[index].push({
                     id: playerObject.playerId,
-                    name: state.playerMap[playerObject.playerId]
+                    name: this.playerMap[playerObject.playerId]
                 });
             }
 
@@ -268,7 +271,7 @@ class Update extends Component {
                 for (const score of battingScoreList) {
                     let scoreObject = {
                         batsmanId: score.playerId,
-                        batsmanName: state.playerMap[score.playerId],
+                        batsmanName: this.playerMap[score.playerId],
                         runs: score.runs,
                         balls: score.balls,
                         fours: score.fours,
@@ -276,7 +279,7 @@ class Update extends Component {
                         dismissalModeId: ((score.dismissalMode) ? score.dismissalMode : ''),
                         dismissalModeName: ((score.dismissalMode) ? dismissalModeMap[score.dismissalMode] : ''),
                         bowlerId: ((score.bowler) ? score.bowler.playerId : ''),
-                        bowlerName: ((score.bowler) ? state.playerMap[score.bowler.playerId] : '')
+                        bowlerName: ((score.bowler) ? this.playerMap[score.bowler.playerId] : '')
                     };
 
                     let fielderIds = [];
@@ -284,7 +287,7 @@ class Update extends Component {
 
                     for (const fielder of score.fielders) {
                         fielderIds.push(fielder.playerId);
-                        fielderNames.push(state.playerMap[fielder.playerId]);
+                        fielderNames.push(this.playerMap[fielder.playerId]);
                     }
 
                     scoreObject.fielderIds = fielderIds.join(', ');
@@ -296,7 +299,7 @@ class Update extends Component {
 
                 scorecards.push({
                     battingTeamId: battingScoreList[0].teamId,
-                    battingTeamName: state.teamMap[battingScoreList[0].teamId],
+                    battingTeamName: this.teamMap[battingScoreList[0].teamId],
                     battingScores: batScores,
                     bowlingFigures: [],
                     extras: []
@@ -311,7 +314,7 @@ class Update extends Component {
                     for (const figure of bowlingFigureList) {
                         let figureObject = {
                             bowlerId: figure.playerId,
-                            bowlerName: state.playerMap[figure.playerId],
+                            bowlerName: this.playerMap[figure.playerId],
                             balls: figure.balls,
                             maidens: figure.maidens,
                             runs: figure.runs,
@@ -364,7 +367,6 @@ class Update extends Component {
         }
 
         state.isLoaded = true;
-
         this.setState(state);
 
         Context.hideLoader();
@@ -374,7 +376,7 @@ class Update extends Component {
         let keyword = event.target.value;
         let playerSuggestions = [];
         if (keyword.length > 2) {
-            playerSuggestions = this.state.allPlayers.filter(player => (player.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+            playerSuggestions = this.allPlayers.filter(player => (player.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
 
         this.setState({
@@ -386,7 +388,7 @@ class Update extends Component {
         let keyword = event.target.value;
         let stadiumSuggestions = [];
         if (keyword.length > 2) {
-            stadiumSuggestions = this.state.stadiums.filter(stadium => (stadium.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+            stadiumSuggestions = this.allStadiums.filter(stadium => (stadium.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
 
         this.setState({
@@ -398,7 +400,7 @@ class Update extends Component {
         let keyword = event.target.value;
         let teamSuggestions = [];
         if (keyword.length > 2) {
-            teamSuggestions = this.state.allTeams.filter(team => (team.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+            teamSuggestions = this.allTeams.filter(team => (team.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
 
         this.setState({
@@ -784,7 +786,6 @@ class Update extends Component {
     };
 
     handleStartTimeKeyUp = event => {
-        // console.log(event);
         this.setState({
             startTime: event.target.value
         })
@@ -829,7 +830,7 @@ class Update extends Component {
             updatedState.scoreCards[inning].battingScores.push(this.getDefaultBattingScoreRow());
         }
         this.setState(updatedState);
-    }
+    };
 
     handleSubmit = event => {
         event.preventDefault();

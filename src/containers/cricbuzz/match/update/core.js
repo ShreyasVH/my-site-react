@@ -234,10 +234,6 @@ class UpdateCore extends Component {
         });
     };
 
-    renderInning = (number) => {
-
-    };
-
     renderDisimissal = dismissalModeName => {
         if(dismissalModeName) {
             return dismissalModeName;
@@ -247,18 +243,6 @@ class UpdateCore extends Component {
     renderBowlerForBattingScore = bowlerName => {
         if (bowlerName) {
             return bowlerName;
-        }
-    };
-
-    renderFieldersForBattingScore = fielderNames => {
-        if (fielderNames) {
-            let parts = fielderNames.split(', ');
-            let fielders = parts.map(fielder => {
-                let nameParts = fielder.split(' ');
-                return nameParts[nameParts.length - 1];
-            });
-
-            return fielders.join('/');
         }
     };
 
@@ -506,10 +490,6 @@ class UpdateCore extends Component {
                 </div>
             );
         }
-    };
-
-    renderManOfTheMatchMarkup = () => {
-
     };
 
     renderFieldersMarkup = (fielderIdsString, fielderNamesString, scoreNum, inning) => {
