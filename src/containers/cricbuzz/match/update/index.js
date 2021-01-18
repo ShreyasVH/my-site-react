@@ -270,6 +270,7 @@ class Update extends Component {
 
                 for (const score of battingScoreList) {
                     let scoreObject = {
+                        id: score.id,
                         batsmanId: score.playerId,
                         batsmanName: this.playerMap[score.playerId],
                         runs: score.runs,
@@ -313,6 +314,7 @@ class Update extends Component {
 
                     for (const figure of bowlingFigureList) {
                         let figureObject = {
+                            id: figure.id,
                             bowlerId: figure.playerId,
                             bowlerName: this.playerMap[figure.playerId],
                             balls: figure.balls,

@@ -198,7 +198,10 @@ class UpdateCore extends Component {
     renderScoreCards = () => {
         return this.props.scoreCards.map((inning, inningNum) => {
             return (
-                <div className={`${this.props.classes.row}`}>
+                <div
+                    className={`${this.props.classes.row}`}
+                    key={'innings_' + inningNum}
+                >
                     <div className={this.props.classes.innings}>
                         <div className={this.props.classes.container}>
                             <div className={this.props.classes.row}>
@@ -247,7 +250,10 @@ class UpdateCore extends Component {
     };
 
     renderBattingScores = (scores, innings) => (scores.map((scoreObject, scoreRowIndex) => (
-            <div className={this.props.classes.row}>
+            <div
+                className={this.props.classes.row}
+                key={'score_' + scoreObject.id}
+            >
                 <div className={this.props.classes.playersContainer}>
                     <div className={this.props.classes.row}>
                         <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
@@ -369,7 +375,10 @@ class UpdateCore extends Component {
     renderExtras = (extras, innings) => {
         if (extras && extras.length > 0) {
             let extrasMarkup = extras.map((extraObject, index) => (
-                <div className={`${this.props.classes.formField} ${this.props.classes.extrasField}`}>
+                <div
+                    className={`${this.props.classes.formField} ${this.props.classes.extrasField}`}
+                    key={'extras_' + innings + '_' + index}
+                >
                     <div className={this.props.classes.formFieldInput}>
                         <TextField
                             label={extraObject.type}
@@ -397,7 +406,10 @@ class UpdateCore extends Component {
     renderBowlingFigures = (bowlingFigures, innings) => {
         if (bowlingFigures && bowlingFigures.length > 0) {
             let figureMarkup = (bowlingFigures.map((bowlingFigure, index) => (
-                <div className={this.props.classes.row}>
+                <div
+                    className={this.props.classes.row}
+                    key={'figure_' + bowlingFigure.id}
+                >
                     <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
                         <div className={this.props.classes.formFieldInput}>
                             <SearchDropDown
@@ -510,6 +522,7 @@ class UpdateCore extends Component {
                         label={fielderName}
                         onDelete={this.handleFielderRemove(scoreNum, inning, fielderId)}
                         color={color}
+                        key={'fielders_' + inning + '_' + scoreNum + '_' + fielderId}
                     />
                 );
             }
