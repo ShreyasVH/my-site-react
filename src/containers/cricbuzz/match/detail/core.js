@@ -486,7 +486,7 @@ class MatchCore extends Component {
                     </strong>
 
                     <span>
-                            {this.props.series.name + ' - ' + this.props.series.gameType}
+                            {this.props.seriesName + ' - ' + this.props.gameType}
                         </span>
                 </div>
             );

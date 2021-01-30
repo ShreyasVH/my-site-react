@@ -62,6 +62,11 @@ export default class Match extends Component {
         });
         state.playerMap = playerMap;
 
+        const seriesResponse = await CricBuzzUtils.getSeriesByApi(match.series);
+        const series = seriesResponse.data;
+        state.seriesName = series.name;
+        state.gameType = series.gameType;
+
         state.dismissalMap = {
             1: 'Bowled',
             2: 'Caught',
@@ -77,7 +82,6 @@ export default class Match extends Component {
         };
 
         state.isLoaded = true;
-        console.log(state);
         this.setState(state);
         ContextUtils.hideLoader();
     }
@@ -88,8 +92,5 @@ export default class Match extends Component {
                 {...this.state}
             />
         );
-        // return (<div>
-        //     Hello
-        // </div>);
     }
 }
