@@ -95,7 +95,7 @@ class MovieDetailCore extends Component {
 	};
 
 	renderLanguageDetails = () => {
-		return (this.renderField('Language', this.props.movie.language.name));
+		return (this.renderField('Language', this.props.movie.languageName));
 	};
 
 	renderYearDetails = () => {
@@ -118,7 +118,7 @@ class MovieDetailCore extends Component {
 	};
 
 	renderFormatDetails = () => {
-		return (this.renderField('Format', this.props.movie.format.name));
+		return (this.renderField('Format', this.props.movie.formatName));
 	};
 
 	renderQualityDetails = () => {
@@ -140,11 +140,11 @@ class MovieDetailCore extends Component {
 	};
 
 	renderDirectors = () => {
-		let artistMarkup = this.props.movie.directors.map(director => (
+		let artistMarkup = this.props.movie.directors.map((directorId, index) => (
 			<Grid
 				item
 				xs={3}
-				key={director.id}
+				key={directorId}
 			>
 				<Paper
 					className={this.props.classes.paper}
@@ -152,8 +152,8 @@ class MovieDetailCore extends Component {
 					<div>
 						<img
 							className={this.props.classes.artistImage}
-							src={director.imageUrl}
-							alt={director.name}
+							src={this.props.movie.directorImageUrls[index]}
+							alt={this.props.movie.directorNames[index]}
 						/>
 					</div>
 				</Paper>
@@ -161,10 +161,10 @@ class MovieDetailCore extends Component {
 					className={this.props.classes.artistLink}
 				>
 					<Link
-						to={'/movies/browseMovies?directors[]=' + director.id}
+						to={'/movies/browseMovies?directors[]=' + directorId}
 					>
 						<span className={this.props.classes.link}>
-							{director.name}
+							{this.props.movie.directorNames[index]}
 						</span>
 					</Link>
 				</div>
@@ -185,11 +185,11 @@ class MovieDetailCore extends Component {
 	};
 
 	renderActors = () => {
-		let artistMarkup = this.props.movie.actors.map(actor => (
+		let artistMarkup = this.props.movie.actors.map((actorId, index) => (
 			<Grid
 				item
 				xs={4}
-				key={actor.id}
+				key={actorId}
 			>
 				<Paper
 					className={this.props.classes.paper}
@@ -197,8 +197,8 @@ class MovieDetailCore extends Component {
 					<div>
 						<img
 							className={this.props.classes.artistImage}
-							src={actor.imageUrl}
-							alt={actor.name}
+							src={this.props.movie.actorImageUrls[index]}
+							alt={this.props.movie.actorNames[index]}
 						/>
 					</div>
 				</Paper>
@@ -206,10 +206,10 @@ class MovieDetailCore extends Component {
 					className={this.props.classes.artistLink}
 				>
 					<Link
-						to={'/movies/browseMovies?actors[]=' + actor.id}
+						to={'/movies/browseMovies?actors[]=' + actorId}
 					>
 						<span className={this.props.classes.link}>
-							{actor.name}
+							{this.props.movie.actorNames[index]}
 						</span>
 					</Link>
 				</div>
