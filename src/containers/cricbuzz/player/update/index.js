@@ -27,9 +27,6 @@ export default class Update extends Component {
         Context.showLoader();
         let state = {};
         try {
-            const countriesResponse = await CricBuzzUtils.getAllCountries();
-            state.countries = countriesResponse.data;
-
             const playerResponse = await CricBuzzUtils.getPlayerByApi(this.playerId);
 
             let player = playerResponse.data;
@@ -40,6 +37,9 @@ export default class Update extends Component {
                 countryName: player.country.name,
                 imageUrl: player.image
             };
+
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            state.countries = countriesResponse.data;
 
             let playerImageParts = player.image.split('/');
             state.imageName = playerImageParts[playerImageParts.length - 1];
@@ -84,6 +84,11 @@ export default class Update extends Component {
                 }
                 Context.showNotify('Failed to update. Please try again', 'error');
             });
+
+            this.allCountries = (await CricBuzzUtils.getAllCountries()).map(country => ({
+                id: country.id,
+                name: country.name
+            }));
         }
     };
 
@@ -105,6 +110,7 @@ export default class Update extends Component {
         let keyword = event.target.value;
         let countrySuggestions = [];
         if (keyword.length > 2) {
+            console.log(this.state);
             countrySuggestions = this.state.countries.filter(country => (country.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
 
