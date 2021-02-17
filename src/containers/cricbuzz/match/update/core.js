@@ -21,7 +21,10 @@ const styles = theme => ({
         padding: '2%',
         fontSize: '25px',
         color: 'white',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        [theme.breakpoints.down('md')]: {
+            marginBottom: '5%'
+        }
     },
     row: {
         width: '100%',
@@ -30,9 +33,15 @@ const styles = theme => ({
     },
     halfWidth: {
         width: '50%',
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        }
     },
     quarterWidth: {
         width: '25%',
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        }
     },
     formFieldInput: {
         width: '99%',
@@ -40,24 +49,38 @@ const styles = theme => ({
         marginRight: '0.5%'
     },
     formField: {
-        display: 'inline-block'
+        display: 'inline-block',
+        [theme.breakpoints.down('md')]: {
+            marginBottom: '5%'
+        }
     },
     container: {
-        padding: '1%'
+        padding: '1%',
+        [theme.breakpoints.down('md')]: {
+            padding: '4%'
+        }
     },
     playersContainer: {
         margin: '0.25%',
         width: '99.5%',
         border: '1px solid gray',
         // minHeight: '100px',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        [theme.breakpoints.down('md')]: {
+            marginTop: '3%'
+        }
     },
     manOfTheMatchContainer: {
         minHeight: '60px'
     },
     submit: {
         backgroundColor: '#428bca',
-        marginLeft: '48%'
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        [theme.breakpoints.down('md')]: {
+            marginTop: '5%'
+        }
     },
     addInnings: {
         backgroundColor: '#428bca'
@@ -72,31 +95,61 @@ const styles = theme => ({
     innings: {
         border: '1px solid gray',
         minHeight: '100px',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        [theme.breakpoints.down('md')]: {
+            marginTop: '5%',
+            marginBottom: '5%'
+        }
     },
     battingScoreField: {
-        width: '6%'
+        width: '6%',
+        [theme.breakpoints.down('md')]: {
+            width: '50%',
+        }
     },
     bowlingScoreField: {
-        width: '8%'
+        width: '8%',
+        [theme.breakpoints.down('md')]: {
+            width: '50%',
+        }
     },
     battingScorePlayer: {
-        width: '26%'
+        width: '26%',
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        }
     },
     battingScoreBowler: {
-        width: '18%'
+        width: '18%',
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        }
     },
     battingScoreFielder: {
-        width: '18%'
+        width: '18%',
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        }
     },
     dismissalMode: {
-        width: '10%'
+        width: '10%',
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        }
     },
     extrasField: {
-        width: '20%'
+        width: '20%',
+        [theme.breakpoints.down('md')]: {
+            width: '50%',
+        }
     },
     playerChip: {
-        margin: '0.25%'
+        margin: '0.25%',
+        [theme.breakpoints.down('md')]: {
+            width: '99%',
+            marginLeft: '0.5%',
+            marginRight: '0.5%'
+        }
     },
     fielderContainer: {
         minHeight: '3%'
@@ -108,8 +161,29 @@ const styles = theme => ({
         marginLeft: '0.5%',
         '& button': {
             padding: 'initial'
+        },
+        [theme.breakpoints.down('md')]: {
+            display: 'block',
+            textAlign: 'center'
         }
     },
+    battingScoreRow: {
+        [theme.breakpoints.down('md')]: {
+            padding: '5%'
+        }
+    },
+    inningsField: {
+        width: '5%',
+        [theme.breakpoints.down('md')]: {
+            width: '20%'
+        }
+    },
+    battingTeamField: {
+        width: '25%',
+        [theme.breakpoints.down('md')]: {
+            width: '80%'
+        }
+    }
 });
 
 class UpdateCore extends Component {
@@ -205,7 +279,7 @@ class UpdateCore extends Component {
                     <div className={this.props.classes.innings}>
                         <div className={this.props.classes.container}>
                             <div className={this.props.classes.row}>
-                                <div className={` ${this.props.classes.formField} ${this.props.classes.quarterWidth}`}>
+                                <div className={` ${this.props.classes.formField} ${this.props.classes.battingTeamField}`}>
                                     <div className={this.props.classes.formFieldInput}>
                                         <SearchDropDown
                                             items={this.props.teams}
@@ -213,6 +287,18 @@ class UpdateCore extends Component {
                                             placeHolder="Batting Team"
                                             onSelect={this.handleTeamSelectForInnings(inningNum)}
                                             displayValue={inning.battingTeamName}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className={` ${this.props.classes.formField} ${this.props.classes.inningsField}`}>
+                                    <div className={this.props.classes.formFieldInput}>
+                                        <SearchDropDown
+                                            items={this.props.teams}
+                                            label="Innings"
+                                            placeHolder="Innings"
+                                            onSelect={this.handleTeamSelectForInnings(inningNum)}
+                                            displayValue={inningNum + 1}
                                         />
                                     </div>
                                 </div>
@@ -255,117 +341,119 @@ class UpdateCore extends Component {
                 key={'score_' + scoreObject.id}
             >
                 <div className={this.props.classes.playersContainer}>
-                    <div className={this.props.classes.row}>
-                        <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
-                            <div className={this.props.classes.formFieldInput}>
-                                <SearchDropDown
-                                    onKeyUp={this.handlePlayerSearch}
-                                    items={this.props.playerSuggestions}
-                                    label="Batsman"
-                                    placeHolder="Batsman"
-                                    onSelect={this.handlePlayerSelectForBattingScore(innings, scoreRowIndex)}
-                                    displayValue={scoreObject.batsmanName}
-                                />
+                    <div className={this.props.classes.battingScoreRow}>
+                        <div className={this.props.classes.row}>
+                            <div className={`${this.props.classes.formField} ${this.props.classes.battingScorePlayer}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <SearchDropDown
+                                        onKeyUp={this.handlePlayerSearch}
+                                        items={this.props.playerSuggestions}
+                                        label="Batsman"
+                                        placeHolder="Batsman"
+                                        onSelect={this.handlePlayerSelectForBattingScore(innings, scoreRowIndex)}
+                                        displayValue={scoreObject.batsmanName}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
-                            <div className={this.props.classes.formFieldInput}>
-                                <TextField
-                                    label="Runs"
-                                    variant="outlined"
-                                    fullWidth
-                                    onChange={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'runs')}
-                                    value={scoreObject.runs}
-                                />
+                            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <TextField
+                                        label="Runs"
+                                        variant="outlined"
+                                        fullWidth
+                                        onChange={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'runs')}
+                                        value={scoreObject.runs}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
-                            <div className={this.props.classes.formFieldInput}>
-                                <TextField
-                                    label="Balls"
-                                    variant="outlined"
-                                    fullWidth
-                                    onChange={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'balls')}
-                                    value={scoreObject.balls}
-                                />
+                            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <TextField
+                                        label="Balls"
+                                        variant="outlined"
+                                        fullWidth
+                                        onChange={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'balls')}
+                                        value={scoreObject.balls}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
-                            <div className={this.props.classes.formFieldInput}>
-                                <TextField
-                                    label="Fours"
-                                    variant="outlined"
-                                    fullWidth
-                                    onChange={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'fours')}
-                                    value={scoreObject.fours}
-                                />
+                            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <TextField
+                                        label="Fours"
+                                        variant="outlined"
+                                        fullWidth
+                                        onChange={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'fours')}
+                                        value={scoreObject.fours}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
-                            <div className={this.props.classes.formFieldInput}>
-                                <TextField
-                                    label="Sixes"
-                                    variant="outlined"
-                                    fullWidth
-                                    onChange={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'sixes')}
-                                    value={scoreObject.sixes}
-                                />
+                            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreField}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <TextField
+                                        label="Sixes"
+                                        variant="outlined"
+                                        fullWidth
+                                        onChange={this.handleBattingScoreFieldKeyUp(innings, scoreRowIndex, 'sixes')}
+                                        value={scoreObject.sixes}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={`${this.props.classes.formField} ${this.props.classes.dismissalMode}`}>
-                            <div className={this.props.classes.formFieldInput}>
-                                <SearchDropDown
-                                    items={this.props.dismissalModes}
-                                    label="Dismissal Mode"
-                                    placeHolder="Dismissal Mode"
-                                    onSelect={this.handleDismissalSelectForBattingScore(innings, scoreRowIndex)}
-                                    displayValue={this.renderDisimissal(scoreObject.dismissalModeName)}
-                                />
+                            <div className={`${this.props.classes.formField} ${this.props.classes.dismissalMode}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <SearchDropDown
+                                        items={this.props.dismissalModes}
+                                        label="Dismissal Mode"
+                                        placeHolder="Dismissal Mode"
+                                        onSelect={this.handleDismissalSelectForBattingScore(innings, scoreRowIndex)}
+                                        displayValue={this.renderDisimissal(scoreObject.dismissalModeName)}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreBowler}`}>
-                            <div className={this.props.classes.formFieldInput}>
-                                <SearchDropDown
-                                    onKeyUp={this.handlePlayerSearch}
-                                    items={this.props.playerSuggestions}
-                                    label="Bowler"
-                                    placeHolder="Bowler"
-                                    onSelect={this.handleBowlerSelectForBattingScore(innings, scoreRowIndex)}
-                                    displayValue={this.renderBowlerForBattingScore(scoreObject.bowlerName)}
-                                />
+                            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreBowler}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <SearchDropDown
+                                        onKeyUp={this.handlePlayerSearch}
+                                        items={this.props.playerSuggestions}
+                                        label="Bowler"
+                                        placeHolder="Bowler"
+                                        onSelect={this.handleBowlerSelectForBattingScore(innings, scoreRowIndex)}
+                                        displayValue={this.renderBowlerForBattingScore(scoreObject.bowlerName)}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreFielder}`}>
-                            <div className={this.props.classes.formFieldInput}>
-                                <SearchDropDown
-                                    onKeyUp={this.handlePlayerSearch}
-                                    items={this.props.playerSuggestions}
-                                    label="Fielders"
-                                    placeHolder="Fielders"
-                                    onSelect={this.handleFielderSelectForBattingScore(innings, scoreRowIndex)}
-                                    clearOnSelect={true}
-                                />
+                            <div className={`${this.props.classes.formField} ${this.props.classes.battingScoreFielder}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <SearchDropDown
+                                        onKeyUp={this.handlePlayerSearch}
+                                        items={this.props.playerSuggestions}
+                                        label="Fielders"
+                                        placeHolder="Fielders"
+                                        onSelect={this.handleFielderSelectForBattingScore(innings, scoreRowIndex)}
+                                        clearOnSelect={true}
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        <div
-                            className={this.props.classes.removeRow}
-                        >
-                            <IconButton
-                                color="secondary"
-                                variant="contained"
-                                onClick={this.handleRemoveScore(innings, scoreRowIndex)}
+                            <div
+                                className={this.props.classes.removeRow}
                             >
-                                <CloseIcon />
-                            </IconButton>
+                                <IconButton
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={this.handleRemoveScore(innings, scoreRowIndex)}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </div>
                         </div>
-                    </div>
-                    <div className={this.props.classes.row}>
-                        {/*<div className={this.props.classes.container}>*/}
+                        <div className={this.props.classes.row}>
+                            {/*<div className={this.props.classes.container}>*/}
                             <div className={`${this.props.classes.row} ${this.props.classes.fielderContainer}`}>
                                 {this.renderFieldersMarkup(scoreObject.fielderIds, scoreObject.fielderNames, scoreRowIndex, innings)}
                             </div>
-                        {/*</div>*/}
+                            {/*</div>*/}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -736,12 +736,12 @@ class Update extends Component {
     };
 
     handleBattingScoreFieldKeyUp = (scoreNum, inning, fieldName, event) => {
-        let value = parseInt(event.target.value, 10);
+        const value = parseInt(event.target.value, 10);
         let updatedState = Utils.copyObject(this.state);
 
         let inningObject = updatedState.scoreCards[inning];
         let scoreObject = inningObject.battingScores[scoreNum];
-        scoreObject[fieldName] = value;
+        scoreObject[fieldName] = ((!isNaN(value)) ? value : 0);
 
         if (scoreNum === (inningObject.battingScores.length - 1)) {
             inningObject.battingScores.push(this.getDefaultBattingScoreRow());
@@ -799,6 +799,7 @@ class Update extends Component {
         if (-1 === updatedState.manOfTheMatchIds.indexOf(id)) {
             updatedState.manOfTheMatchIds.push(id);
             updatedState.manOfTheMatchNames.push(name);
+            updatedState.playerSuggestions = [];
         }
 
         this.setState(updatedState);
