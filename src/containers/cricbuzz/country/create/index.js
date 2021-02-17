@@ -5,6 +5,7 @@ import CreateCore from "./core";
 import CricBuzzUtils from "../../../../utils/cricbuzz";
 import Utils from '../../../../utils';
 import Context from "../../../../utils/context";
+import Helmet from "react-helmet";
 
 export default class Create extends Component {
     constructor(props) {
@@ -55,12 +56,18 @@ export default class Create extends Component {
 
     renderPage = () => {
         return (
-            <CreateCore
-                {...this.state}
-                isFormValid={this.isFormValid()}
-                onNameChange={this.handleNameChange}
-                onSubmit={this.handleSubmit}
-            />
+            <div>
+                <Helmet
+                    title="Create Country - Howzzat"
+                />
+
+                <CreateCore
+                    {...this.state}
+                    isFormValid={this.isFormValid()}
+                    onNameChange={this.handleNameChange}
+                    onSubmit={this.handleSubmit}
+                />
+            </div>
         );
     }
 
