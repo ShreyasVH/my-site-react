@@ -67,7 +67,7 @@ class CreateCore extends Component {
             <div>
                 <form onSubmit={this.handleSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
-                        Update Country
+                        Create Country
                     </div>
                     <div className={this.props.classes.container}>
                         <div className={this.props.classes.row}>
