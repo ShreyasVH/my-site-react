@@ -81,6 +81,7 @@ class NotifyCore extends Component {
                     message={
                         <span id="client-snackbar" className={this.props.classes.message}>
                             {this.renderIcon()}
+                            &nbsp;
                             {this.props.message}
                         </span>
                     }

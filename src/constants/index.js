@@ -38,6 +38,7 @@ export const GET_ALL_STADIUMS = 'cricbuzz/stadiums';
 export const UPDATE_STADIUM = 'cricbuzz/stadiums/{id}';
 export const GET_COUNTRY_BY_ID = 'cricbuzz/countries/{id}';
 export const UPDATE_COUNTRY = 'cricbuzz/countries/{id}';
+export const CREATE_COUNTRY = 'cricbuzz/countries';
 export const GET_TEAM_BY_ID = 'cricbuzz/teams/{id}';
 export const UPDATE_TEAM = 'cricbuzz/teams/{id}';
 export const GET_PLAYER_BY_ID = 'cricbuzz/players/{id}';

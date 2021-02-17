@@ -10,6 +10,7 @@ import {
     UPDATE_STADIUM,
     GET_COUNTRY_BY_ID,
     UPDATE_COUNTRY,
+    CREATE_COUNTRY,
     GET_TEAM_BY_ID,
     UPDATE_TEAM,
     GET_PLAYER_BY_ID,
@@ -296,6 +297,11 @@ export default class CricBuzzUtils {
     static updateCountry = (id, payload) => {
         let url = BASE_URL_CRICBUZZ + UPDATE_COUNTRY.replace('{id}', id);
         return ApiHelper.put(url, payload);
+    };
+
+    static createCountry = (id, payload) => {
+        let url = BASE_URL_CRICBUZZ + CREATE_COUNTRY;
+        return ApiHelper.post(url, payload);
     };
 
     static loadTeam = (id) => {
