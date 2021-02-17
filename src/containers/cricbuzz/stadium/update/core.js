@@ -17,7 +17,10 @@ const styles = theme => ({
         padding: '2%',
         fontSize: '25px',
         color: 'white',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     row: {
         width: '100%',
@@ -26,9 +29,9 @@ const styles = theme => ({
     },
     halfWidth: {
         width: '50%',
-    },
-    quarterWidth: {
-        width: '25%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     },
     formFieldInput: {
         width: '99%',
@@ -36,10 +39,16 @@ const styles = theme => ({
         marginRight: '0.5%'
     },
     formField: {
-        display: 'inline-block'
+        display: 'inline-block',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     container: {
-        padding: '1%'
+        padding: '1%',
+        [theme.breakpoints.down('xs')]: {
+            padding: '5%',
+        }
     },
     submit: {
         backgroundColor: '#428bca',
@@ -57,12 +66,15 @@ class UpdateCore extends Component {
 
     handleCityChange = event => (this.props.onCityChange && this.props.onCityChange(event));
 
+    handleCountrySearch = event => (this.props.onCountrySearch && this.props.onCountrySearch(event));
     handleCountrySelect = (id, name) => (this.props.onCountrySelect && this.props.onCountrySelect(id, name));
+
+    handleSubmit = event => (this.props.onSubmit && this.props.onSubmit(event));
 
     render() {
         return (
             <div>
-                <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
+                <form onSubmit={this.handleSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
                         Update Stadium
                     </div>
@@ -77,6 +89,8 @@ class UpdateCore extends Component {
                                         fullWidth
                                         value={this.props.name}
                                         onChange={this.handleNameChange}
+                                        error={!this.props.validateName().isValid}
+                                        helperText={this.props.validateName().message}
                                     />
                                 </div>
                             </div>
@@ -84,11 +98,14 @@ class UpdateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        items={this.props.countries}
+                                        onKeyUp={this.handleCountrySearch}
+                                        items={this.props.countrySuggestions}
                                         label="Country"
                                         placeholder="Country"
                                         onSelect={this.handleCountrySelect}
                                         displayValue={this.props.countryName}
+                                        error={!this.props.validateCountry().isValid}
+                                        helperText={this.props.validateCountry().message}
                                     />
                                 </div>
                             </div>
@@ -128,6 +145,7 @@ class UpdateCore extends Component {
                                 variant="contained"
                                 className={this.props.classes.submit}
                                 type="submit"
+                                disabled={!this.props.isFormValid}
                             >
                                 Submit
                             </Button>

@@ -7,10 +7,49 @@ import CricUtils from '../../../../utils/cricbuzz';
 import ContextUtils from '../../../../utils/context';
 import Utils from '../../../../utils';
 
-class Series extends Component {
-    componentDidMount = () => {
+export default class Series extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoaded: false
+        };
+    }
+
+    componentDidMount = async () => {
         ContextUtils.showLoader();
-        CricUtils.loadSeries(Utils.getUrlParam('id'));
+        const seriesResponse = await CricUtils.getSeriesByApi(Utils.getUrlParam('id'));
+        let state = seriesResponse.data;
+
+        const stadiumsResponse = await CricUtils.getAllStadiums();
+        const allStadiums = stadiumsResponse.data;
+        let stadiumMap = {};
+        allStadiums.forEach(stadium => {
+            stadiumMap[stadium.id] = stadium;
+        });
+        state.stadiumMap = stadiumMap;
+
+        const teamsResponse = await CricUtils.getAllTeams();
+        const allTeams = teamsResponse.data.map(team => ({
+            id: team.id,
+            name: team.name
+        }));
+        let teamMap = {};
+        allTeams.forEach(team => {
+            teamMap[team.id] = team.name;
+        });
+        state.teamMap = teamMap;
+
+        const countriesResponse = await CricUtils.getAllCountries();
+        const allCountries = countriesResponse.data;
+        let countryMap = {};
+        allCountries.forEach(country => {
+            countryMap[country.id] = country.name;
+        });
+        state.countryMap = countryMap;
+        state.isLoaded = true;
+
+        this.setState(state);
+        ContextUtils.hideLoader();
     };
 
     handleMatchClick = id => {
@@ -20,20 +59,18 @@ class Series extends Component {
         this.props.history.push('/cricbuzz/matches/detail?id=' + id);
     };
 
+    handleUpdateMatchClick = (event, matchId) => {
+        event.stopPropagation();
+        this.props.history.push('/cricbuzz/matches/update?id=' + matchId);
+    }
+
     render() {
         return (
             <SeriesCore
-                {...this.props}
+                {...this.state}
                 onClickMatch={this.handleMatchClick}
+                onUpdateMatchClick={this.handleUpdateMatchClick}
             />
         );
     }
 }
-
-function mapStateToProps(state) {
-    return ({
-        series: state.cric.series
-    });
-}
-
-export default connect(mapStateToProps)(Series);

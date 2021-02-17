@@ -17,7 +17,10 @@ const styles = theme => ({
         padding: '2%',
         fontSize: '25px',
         color: 'white',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     row: {
         width: '100%',
@@ -26,9 +29,9 @@ const styles = theme => ({
     },
     halfWidth: {
         width: '50%',
-    },
-    quarterWidth: {
-        width: '25%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     },
     formFieldInput: {
         width: '99%',
@@ -36,14 +39,22 @@ const styles = theme => ({
         marginRight: '0.5%'
     },
     formField: {
-        display: 'inline-block'
+        display: 'inline-block',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%',
+        }
     },
     container: {
-        padding: '1%'
+        padding: '1%',
+        [theme.breakpoints.down('xs')]: {
+            padding: '5%',
+        }
     },
     submit: {
         backgroundColor: '#428bca',
-        marginLeft: '48%'
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto'
     }
 });
 
@@ -72,8 +83,8 @@ class UpdateCore extends Component {
                                         fullWidth
                                         value={this.props.name}
                                         onChange={this.handleNameChange}
-                                        error={!this.props.name}
-                                        helperText={((!this.props.name) ? 'Name cannot be empty' : '')}
+                                        error={!this.props.validateName.isValid}
+                                        helperText={this.props.validateName.message}
                                     />
                                 </div>
                             </div>
@@ -81,8 +92,12 @@ class UpdateCore extends Component {
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <DateTimePicker
+                                        label={'Start Time'}
+                                        placeholder={'Start Time'}
                                         value={this.props.startTime}
                                         onChange={this.handleStartTimeChange}
+                                        error={!this.props.validateStartTime.isValid}
+                                        helperText={this.props.validateStartTime.message}
                                     />
                                 </div>
                             </div>

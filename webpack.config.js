@@ -57,7 +57,7 @@ module.exports = {
 			chunkFilename: "[id].css"
 		}),
 		new HtmlWebpackPlugin({
-			template: 'src/template.html'
+			template: 'public/index.html'
 		}),
 		// new BundleAnalyzerPlugin({
 		// 	analyzerHost: "0.0.0.0"

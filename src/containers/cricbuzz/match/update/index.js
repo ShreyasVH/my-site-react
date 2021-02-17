@@ -1,17 +1,33 @@
-import React, { Component } from 'react';
-// import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
-import CreateCore from "./core";
+import UpdateCore from "./core";
 
 import CricBuzzUtils from "../../../../utils/cricbuzz";
 import Utils from '../../../../utils';
 import Context from "../../../../utils/context";
 
-class Create extends Component {
+class Update extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false,
+            isLoaded: false
+        };
+        this.allStadiums = [];
+        this.stadiumMap = {};
+        
+        this.allTeams = [];
+        this.teamMap = {};
+        
+        this.allPlayers = [];
+        this.playerMap = {};
+    }
+
+    async componentDidMount() {
+        Context.showLoader();
+
+        const id = Utils.getUrlParam('id');
+        let state = {
             stadiumSuggestions: [],
             teamSuggestions: [],
             playerSuggestions: [],
@@ -120,40 +136,237 @@ class Create extends Component {
                 }
             ],
             manOfTheMatchIds: [],
-            manOfTheMatchNames: [],
-            bench: {}
-        }
-    }
+            manOfTheMatchNames: []
+        };
 
-    async componentDidMount() {
-        Context.showLoader();
+        try {
+            const stadiumsResponse = await CricBuzzUtils.getAllStadiums();
+            this.allStadiums = stadiumsResponse.data.map(stadium => ({
+                id: stadium.id,
+                name: stadium.name
+            }));
+            this.allStadiums.forEach(stadium => {
+                this.stadiumMap[stadium.id] = stadium.name;
+            });
 
-        const state = {};
-        const stadiumsResponse = await CricBuzzUtils.getAllStadiums();
-        state.stadiums = stadiumsResponse.data.map(stadium => ({
-            id: stadium.id,
-            name: stadium.name
-        }));
+            const teamsResponse = await CricBuzzUtils.getAllTeams();
+            this.allTeams = teamsResponse.data.map(team => ({
+                id: team.id,
+                name: team.name
+            }));
+            this.allTeams.forEach(team => {
+                this.teamMap[team.id] = team.name;
+            });
 
-        const teamsResponse = await CricBuzzUtils.getAllTeams();
-        state.allTeams = teamsResponse.data.map(team => ({
-            id: team.id,
-            name: team.name
-        }));
+            this.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => ({
+                id: player.id,
+                name: player.name
+            }));
+            this.allPlayers.forEach(player => {
+                this.playerMap[player.id] = player.name;
+            });
+            
+            const matchDetailsResponse = await CricBuzzUtils.getMatchDetails(id);
+            const match = matchDetailsResponse.data;
 
-        state.allPlayers = (await CricBuzzUtils.getAllPlayers()).map(player => {
-            if (player.name === 'sub') {
-                state.bench = {
-                    id: player.id,
-                    name: player.name
+            let dismissalModeMap = {};
+            state.dismissalModes.forEach(dismissalMode => {
+                dismissalModeMap[dismissalMode.id] = dismissalMode.name;
+            });
+
+            state.stadiumId = match.stadiumId;
+            state.stadiumName = this.stadiumMap[match.stadiumId];
+
+            state.team1Id = match.team1;
+            state.team1Name = this.teamMap[match.team1];
+            state.teams.push({
+                id: state.team1Id,
+                name: state.team1Name
+            });
+
+            state.team2Id = match.team2;
+            state.team2Name = this.teamMap[match.team2];
+            state.teams.push({
+                id: state.team2Id,
+                name: state.team2Name
+            });
+
+            if (match.tossWinner) {
+                state.tossWinnerId = match.tossWinner;
+                state.tossWinnerName = this.teamMap[match.tossWinner];
+
+                state.battingFirstId = match.batFirst;
+                state.battingFirstName = this.teamMap[match.batFirst];
+
+                state.resultName = match.result;
+
+                if (match.winner) {
+                    state.winnerId = match.winner;
+                    state.winnerName = this.teamMap[match.winner];
+                    state.winMargin = parseInt(match.winMargin, 10);
+                    state.winMarginTypeId = (('RUN' === match.winMarginType) ? 0 : 1);
+                    state.winMarginTypeName = match.winMarginType;
                 }
             }
 
-            return {
-                id: player.id,
-                name: player.name
+            for (const motm of match.manOfTheMatchList) {
+                state.manOfTheMatchIds.push(motm.playerId);
+                state.manOfTheMatchNames.push(this.playerMap[motm.playerId]);
             }
-        });
+
+            state.startTime = match.startTime;
+
+            for (const playerObject of match.players) {
+                const index = ((match.team1 === playerObject.teamId) ? 1 : 2);
+                state.players[index].push({
+                    id: playerObject.playerId,
+                    name: this.playerMap[playerObject.playerId]
+                });
+            }
+
+            let scorecards = [];
+            let battingScores = {};
+
+            for (const battingScore of match.battingScores) {
+                const innings = battingScore.innings;
+
+                if (battingScores.hasOwnProperty(innings)) {
+                    battingScores[innings].push(battingScore);
+                } else {
+                    battingScores[innings] = [
+                        battingScore
+                    ];
+                }
+            }
+
+            let bowlingFigures = [];
+            for (const bowlingFigure of match.bowlingFigures) {
+                const innings = bowlingFigure.innings;
+
+                if (bowlingFigures.hasOwnProperty(innings)) {
+                    bowlingFigures[innings].push(bowlingFigure);
+                } else {
+                    bowlingFigures[innings] = [
+                        bowlingFigure
+                    ];
+                }
+            }
+
+            let extras = {};
+            for (const extra of match.extras) {
+                const innings = extra.innings;
+
+                if (extras.hasOwnProperty(innings)) {
+                    extras[innings][extra.type] = extra.runs;
+                } else {
+                    extras[innings] = {
+                        [extra.type]: extra.runs
+                    };
+                }
+            }
+
+            for (const [innings, battingScoreList] of Object.entries(battingScores)) {
+                let batScores = [];
+
+                for (const score of battingScoreList) {
+                    let scoreObject = {
+                        id: score.id,
+                        batsmanId: score.playerId,
+                        batsmanName: this.playerMap[score.playerId],
+                        runs: score.runs,
+                        balls: score.balls,
+                        fours: score.fours,
+                        sixes: score.sixes,
+                        dismissalModeId: ((score.dismissalMode) ? score.dismissalMode : ''),
+                        dismissalModeName: ((score.dismissalMode) ? dismissalModeMap[score.dismissalMode] : ''),
+                        bowlerId: ((score.bowler) ? score.bowler.playerId : ''),
+                        bowlerName: ((score.bowler) ? this.playerMap[score.bowler.playerId] : '')
+                    };
+
+                    let fielderIds = [];
+                    let fielderNames = [];
+
+                    for (const fielder of score.fielders) {
+                        fielderIds.push(fielder.playerId);
+                        fielderNames.push(this.playerMap[fielder.playerId]);
+                    }
+
+                    scoreObject.fielderIds = fielderIds.join(', ');
+                    scoreObject.fielderNames = fielderNames.join(', ');
+
+                    batScores.push(scoreObject);
+                }
+
+
+                scorecards.push({
+                    battingTeamId: battingScoreList[0].teamId,
+                    battingTeamName: this.teamMap[battingScoreList[0].teamId],
+                    battingScores: batScores,
+                    bowlingFigures: [],
+                    extras: []
+                })
+            }
+
+            for (let innings = 1; innings <= 4; innings++) {
+                let bowlFigures = [];
+                if (bowlingFigures.hasOwnProperty(innings)) {
+                    let bowlingFigureList = bowlingFigures[innings];
+
+                    for (const figure of bowlingFigureList) {
+                        let figureObject = {
+                            id: figure.id,
+                            bowlerId: figure.playerId,
+                            bowlerName: this.playerMap[figure.playerId],
+                            balls: figure.balls,
+                            maidens: figure.maidens,
+                            runs: figure.runs,
+                            wickets: figure.wickets
+                        };
+
+                        bowlFigures.push(figureObject);
+                    }
+                } else {
+                    bowlFigures = [
+                        this.getDefaultBowlingFigureRow()
+                    ];
+                }
+
+                if (scorecards.hasOwnProperty(innings - 1)) {
+                    scorecards[innings - 1].bowlingFigures = bowlFigures;
+                }
+            }
+
+            for (let inning = 1; inning <= 4; inning++) {
+                let extrasItems = [];
+                let e = {
+                    'BYE': 0,
+                    'LEG_BYE': 0,
+                    'WIDE': 0,
+                    'NO_BALL': 0,
+                    'PENALTY': 0
+                };
+
+                if (extras.hasOwnProperty(inning)) {
+                    e = Object.assign(e, extras[inning]);
+                }
+
+                for (const [type, runs] of Object.entries(e)) {
+                    extrasItems.push({
+                        type,
+                        runs
+                    });
+                }
+
+                if (scorecards.hasOwnProperty(inning - 1)) {
+                    scorecards[inning - 1].extras = extrasItems;
+                }
+            }
+
+            state.scoreCards = scorecards;
+        } catch (error) {
+            console.log(error);
+            Context.showNotify('Error while loading data.', 'error');
+        }
 
         state.isLoaded = true;
         this.setState(state);
@@ -165,7 +378,7 @@ class Create extends Component {
         let keyword = event.target.value;
         let playerSuggestions = [];
         if (keyword.length > 2) {
-            playerSuggestions = this.state.allPlayers.filter(player => (player.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+            playerSuggestions = this.allPlayers.filter(player => (player.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
 
         this.setState({
@@ -177,7 +390,7 @@ class Create extends Component {
         let keyword = event.target.value;
         let stadiumSuggestions = [];
         if (keyword.length > 2) {
-            stadiumSuggestions = this.state.stadiums.filter(stadium => (stadium.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+            stadiumSuggestions = this.allStadiums.filter(stadium => (stadium.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
 
         this.setState({
@@ -189,7 +402,7 @@ class Create extends Component {
         let keyword = event.target.value;
         let teamSuggestions = [];
         if (keyword.length > 2) {
-            teamSuggestions = this.state.allTeams.filter(team => (team.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+            teamSuggestions = this.allTeams.filter(team => (team.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
 
         this.setState({
@@ -212,9 +425,6 @@ class Create extends Component {
                     filteredPlayers.push(playerObject);
                 }
             }
-        }
-        if (updatedState.bench.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
-            filteredPlayers.push(updatedState.bench);
         }
 
         updatedState.playerSuggestions = filteredPlayers;
@@ -258,6 +468,14 @@ class Create extends Component {
             }
             updatedState.teams = teams;
             updatedState.teamSuggestions = [];
+            updatedState.tossWinnerId = '';
+            updatedState.tossWinnerName = '';
+            updatedState.battingFirstId = '';
+            updatedState.battingFirstName = '';
+            updatedState.winnerId = '';
+            updatedState.winnerName = '';
+            updatedState.scoreCards = [];
+            updatedState.manOfTheMatchList = [];
 
             this.setState(updatedState);
         }
@@ -305,7 +523,7 @@ class Create extends Component {
         })
     };
 
-    handleWinMarginChange = event => {
+    handleWinMarginKeyUp = event => {
         this.setState({
             winMargin: parseInt(event.target.value, 10)
         });
@@ -362,6 +580,29 @@ class Create extends Component {
         this.setState(updatedState);
     };
 
+    handleFielderRemove = (scoreNum, inning, playerId) => {
+        let updatedState = Utils.copyObject(this.state);
+
+        let scoresForInning = updatedState.scoreCards[inning].battingScores;
+
+        for (let i in scoresForInning) {
+            let score = scoresForInning[i];
+            if (scoreNum === (parseInt(i, 10))) {
+                let fielderIds = score.fielderIds.split(', ');
+                let fielderNames = score.fielderNames.split(', ');
+                let index = fielderIds.indexOf(playerId);
+                if (index !== -1) {
+                    fielderIds.splice(index, 1);
+                    fielderNames.splice(index, 1);
+                    updatedState.scoreCards[inning].battingScores[scoreNum].fielderIds = fielderIds.join(', ');
+                    updatedState.scoreCards[inning].battingScores[scoreNum].fielderNames = fielderNames.join(', ');
+                    break;
+                }
+            }
+        }
+        this.setState(updatedState);
+    };
+
     handleManOfTheMatchRemove = (playerId) => {
         let updatedState = Utils.copyObject(this.state);
 
@@ -372,14 +613,6 @@ class Create extends Component {
 
             this.setState(updatedState);
         }
-    };
-
-    handleStartTimeChange = (event) => {
-        const startTime = (new Date(event.target.value)).getTime();
-
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.startTime = startTime;
-        this.setState(updatedState);
     };
 
     getDefaultBattingScoreRow = () => ({
@@ -452,6 +685,7 @@ class Create extends Component {
         scoreObject.batsmanId = id;
         scoreObject.batsmanName = name;
         // inningObject[scoreNum] = scoreObject;
+        updatedState.playerSuggestions = [];
         this.setState(updatedState);
     };
 
@@ -463,6 +697,7 @@ class Create extends Component {
         scoreObject.bowlerId = id;
         scoreObject.bowlerName = name;
         // inningObject[scoreNum] = scoreObject;
+        updatedState.playerSuggestions = [];
         this.setState(updatedState);
     };
 
@@ -501,12 +736,12 @@ class Create extends Component {
     };
 
     handleBattingScoreFieldKeyUp = (scoreNum, inning, fieldName, event) => {
-        let value = parseInt(event.target.value, 10);
+        const value = parseInt(event.target.value, 10);
         let updatedState = Utils.copyObject(this.state);
 
         let inningObject = updatedState.scoreCards[inning];
         let scoreObject = inningObject.battingScores[scoreNum];
-        scoreObject[fieldName] = value;
+        scoreObject[fieldName] = ((!isNaN(value)) ? value : 0);
 
         if (scoreNum === (inningObject.battingScores.length - 1)) {
             inningObject.battingScores.push(this.getDefaultBattingScoreRow());
@@ -521,7 +756,7 @@ class Create extends Component {
 
         let inningObject = updatedState.scoreCards[inning];
         let bowlingFigure = inningObject.bowlingFigures[index];
-        bowlingFigure[fieldName] = value;
+        bowlingFigure[fieldName] = ((isNaN(value)) ? '' : value);
 
         if (index === (inningObject.bowlingFigures.length - 1)) {
             inningObject.bowlingFigures.push(this.getDefaultBowlingFigureRow());
@@ -536,7 +771,7 @@ class Create extends Component {
 
         let inningObject = updatedState.scoreCards[inning];
         let extrasObject = inningObject.extras[index];
-        extrasObject.runs = value;
+        extrasObject.runs = ((isNaN(value)) ? '' : value);
         extrasObject.type = type;
         this.setState(updatedState);
     };
@@ -548,7 +783,14 @@ class Create extends Component {
         let bowlingFigure = inningObject.bowlingFigures[index];
         bowlingFigure.bowlerId = id;
         bowlingFigure.bowlerName = name;
+        updatedState.playerSuggestions = [];
         this.setState(updatedState);
+    };
+
+    handleStartTimeKeyUp = event => {
+        this.setState({
+            startTime: event.target.value
+        })
     };
 
     handleSelectManOfTheMatch = (id, name) => {
@@ -557,6 +799,7 @@ class Create extends Component {
         if (-1 === updatedState.manOfTheMatchIds.indexOf(id)) {
             updatedState.manOfTheMatchIds.push(id);
             updatedState.manOfTheMatchNames.push(name);
+            updatedState.playerSuggestions = [];
         }
 
         this.setState(updatedState);
@@ -566,26 +809,28 @@ class Create extends Component {
 
     };
 
-    handleFielderRemove = (scoreNum, inning, playerId) => {
+    handleStartTimeChange = (event) => {
+        const startTime = (new Date(event.target.value)).getTime();
+
         let updatedState = Utils.copyObject(this.state);
+        updatedState.startTime = startTime;
+        this.setState(updatedState);
+    };
 
-        let scoresForInning = updatedState.scoreCards[inning].battingScores;
+    handleRemoveFigure = (inning, index) => {
+        let updatedState = Utils.copyObject(this.state);
+        updatedState.scoreCards[inning].bowlingFigures.splice(index, 1);
+        if (updatedState.scoreCards[inning].bowlingFigures.length === 0) {
+            updatedState.scoreCards[inning].bowlingFigures.push(this.getDefaultBowlingFigureRow());
+        }
+        this.setState(updatedState);
+    }
 
-        for (let i in scoresForInning) {
-            let index = parseInt(i, 10);
-            let score = scoresForInning[index];
-            if (scoreNum === index) {
-                let fielderIds = score.fielderIds.split(', ');
-                let fielderNames = score.fielderNames.split(', ');
-                let pos = fielderIds.indexOf(playerId);
-                if (pos !== -1) {
-                    fielderIds.splice(pos, 1);
-                    fielderNames.splice(pos, 1);
-                    updatedState.scoreCards[inning].battingScores[scoreNum].fielderIds = fielderIds.join(', ');
-                    updatedState.scoreCards[inning].battingScores[scoreNum].fielderNames = fielderNames.join(', ');
-                    break;
-                }
-            }
+    handleRemoveScore = (inning, index) => {
+        let updatedState = Utils.copyObject(this.state);
+        updatedState.scoreCards[inning].battingScores.splice(index, 1);
+        if (updatedState.scoreCards[inning].battingScores.length === 0) {
+            updatedState.scoreCards[inning].battingScores.push(this.getDefaultBattingScoreRow());
         }
         this.setState(updatedState);
     };
@@ -631,24 +876,28 @@ class Create extends Component {
                 let runs = parseInt(scoreObject.runs, 10);
 
                 if (!isNaN(runs)) {
-                    let score = {
+                    let battingScore = {
                         playerId: scoreObject.batsmanId,
                         runs: scoreObject.runs,
                         balls: scoreObject.balls,
                         fours: scoreObject.fours,
                         sixes: scoreObject.sixes,
-                        dismissalMode: scoreObject.dismissalModeId,
                         innings: inningsNum,
                         teamInnings
                     };
+
+                    if (scoreObject.dismissalModeId) {
+                        battingScore.dismissalMode = scoreObject.dismissalModeId;
+                    }
+
                     if (scoreObject.bowlerId) {
-                        score.bowler = scoreObject.bowlerId;
+                        battingScore.bowlerId = scoreObject.bowlerId;
                     }
 
                     if (scoreObject.fielderIds) {
-                        score.fielders = scoreObject.fielderIds;
+                        battingScore.fielders = scoreObject.fielderIds;
                     }
-                    battingScores.push(score);
+                    battingScores.push(battingScore);
                 }
             }
 
@@ -695,7 +944,6 @@ class Create extends Component {
         }
 
         let payload = {
-            seriesId: Utils.getUrlParam('seriesId'),
             team1: this.state.team1Id,
             team2: this.state.team2Id,
             tossWinner: this.state.tossWinnerId,
@@ -703,89 +951,93 @@ class Create extends Component {
             result: this.state.resultName,
             winner: this.state.winnerId,
             winMargin: this.state.winMargin,
+            winMarginType: this.state.winMarginTypeName,
             stadium: this.state.stadiumId,
-            startTime: this.state.startTime,
-            endTime: this.state.startTime,
+            startTime: (new Date(this.state.startTime)).getTime(),
             players
         };
 
-        if (this.state.winMarginType) {
-            payload.winMarginType = this.state.winMarginTypeName;
-        }
+        payload.battingScores = battingScores;
 
-        if (battingScores.length > 0) {
-            payload.battingScores = battingScores;
-        }
+        payload.extras = extras;
 
-        if (extras.length > 0) {
-            payload.extras = extras;
-        }
+        payload.bowlingFigures = bowlingFigures;
 
-        if (bowlingFigures.length > 0) {
-            payload.bowlingFigures = bowlingFigures;
-        }
-
-        if (this.state.manOfTheMatchIds.length > 0) {
-            payload.manOfTheMatchList = this.state.manOfTheMatchIds;
-        }
+        payload.manOfTheMatchList = this.state.manOfTheMatchIds;
 
         Context.showLoader();
-        const createMatchPromise = CricBuzzUtils.createMatch(payload);
-        createMatchPromise.then(apiResponse => {
-            Context.showNotify('Created successfully', 'success');
+        const updatePromise = CricBuzzUtils.updateMatch(payload, Utils.getUrlParam('id'));
+        updatePromise.then(response => {
+            console.log(response);
+            Context.showNotify('Updated Successfully', 'success');
             Context.hideLoader();
-        }).catch(apiResponse => {
-            console.log(apiResponse.data);
-            Context.showNotify('Failed to create match', 'error');
+        });
+
+        updatePromise.catch(response => {
+            Context.showNotify('Failed to update match', 'error');
+            console.log(response.data);
             Context.hideLoader();
         });
     };
 
+    renderPage = () => {
+        if (this.state.isLoaded) {
+            return (
+                <UpdateCore
+                    {...this.state}
+                    onSearch={this.handleSearch}
+                    onStadiumSearch={this.handleStadiumSearch}
+                    onStadiumSelect={this.handleStadiumSelect}
+                    onTeamSearch={this.handleTeamSearch}
+                    onTeamSelect={this.handleTeamSelect}
+                    onTossWinnerSelect={this.handleTossWinnerSelect}
+                    onBattingFirstSelect={this.handleBattingFirstSelect}
+                    onWinnerSelect={this.handleWinnerSelect}
+                    onPlayerSelect={this.handlePlayerSelect}
+                    onPlayerSelectForBattingScore={this.handlePlayerSelectForBattingScore}
+                    onBowlerSelectForBattingScore={this.handleBowlerSelectForBattingScore}
+                    onFielderSelectForBattingScore={this.handleFielderSelectForBattingScore}
+                    onFilderRemoveForBattingScore={this.handleFielderRemove}
+                    onDismissalModeSelect={this.handleDismissalSelectForBattingScore}
+                    onBattingScoreFieldKeyUp={this.handleBattingScoreFieldKeyUp}
+                    onBowlerSelectForBowlingFigure={this.handleBowlerSelectForBowlingFigure}
+                    onBowlingFigureFieldKeyUp={this.handleBowlingFigureFieldKeyUp}
+                    onExtrasKeyUp={this.handleExtrasKeyUp}
+                    onPlayerSearch={this.handlePlayerSearch}
+                    onInningsAdd={this.handleInningAdd}
+                    onResultSelect={this.handleResultSelect}
+                    onWinMarginKeyUp={this.handleWinMarginKeyUp}
+                    onWinMarginTypeSelect={this.handleWinMarginTypeSelect}
+                    onPlayerSearchAll={this.handlePlayerSearchAll}
+                    onPlayerRemove={this.handlePlayerRemove}
+                    onManOfTheMatchRemove={this.handleManOfTheMatchRemove}
+                    onSubmit={this.handleSubmit}
+                    onStartTimeKeyUp={this.handleStartTimeKeyUp}
+                    onTeamSelectForInnings={this.handleTeamSelectForInnings}
+                    onSelectManOfTheMatch={this.handleSelectManOfTheMatch}
+                    onSelectManOfTheSeries={this.handleSelectManOfTheSeries}
+                    onStartTimeChange={this.handleStartTimeChange}
+                    onRemoveFigure={this.handleRemoveFigure}
+                    onRemoveScore={this.handleRemoveScore}
+                />
+            );
+        }
+    }
+
     render () {
         return (
-            <CreateCore
-                {...this.state}
-                onStadiumSearch={this.handleStadiumSearch}
-                onStadiumSelect={this.handleStadiumSelect}
-                onTeamSearch={this.handleTeamSearch}
-                onTeamSelect={this.handleTeamSelect}
-                onTossWinnerSelect={this.handleTossWinnerSelect}
-                onBattingFirstSelect={this.handleBattingFirstSelect}
-                onWinnerSelect={this.handleWinnerSelect}
-                onPlayerSelect={this.handlePlayerSelect}
-                onPlayerSelectForBattingScore={this.handlePlayerSelectForBattingScore}
-                onBowlerSelectForBattingScore={this.handleBowlerSelectForBattingScore}
-                onFielderSelectForBattingScore={this.handleFielderSelectForBattingScore}
-                onFilderRemoveForBattingScore={this.handleFielderRemove}
-                onDismissalModeSelect={this.handleDismissalSelectForBattingScore}
-                onBattingScoreFieldKeyUp={this.handleBattingScoreFieldKeyUp}
-                onBowlerSelectForBowlingFigure={this.handleBowlerSelectForBowlingFigure}
-                onBowlingFigureFieldKeyUp={this.handleBowlingFigureFieldKeyUp}
-                onExtrasKeyUp={this.handleExtrasKeyUp}
-                onPlayerSearch={this.handlePlayerSearch}
-                onInningsAdd={this.handleInningAdd}
-                onResultSelect={this.handleResultSelect}
-                onWinMarginChange={this.handleWinMarginChange}
-                onWinMarginTypeSelect={this.handleWinMarginTypeSelect}
-                onPlayerSearchAll={this.handlePlayerSearchAll}
-                onPlayerRemove={this.handlePlayerRemove}
-                onManOfTheMatchRemove={this.handleManOfTheMatchRemove}
-                onSubmit={this.handleSubmit}
-                onTeamSelectForInnings={this.handleTeamSelectForInnings}
-                onSelectManOfTheMatch={this.handleSelectManOfTheMatch}
-                onSelectManOfTheSeries={this.handleSelectManOfTheSeries}
-                onStartTimeChange={this.handleStartTimeChange}
-            />
+            <div>
+                {this.renderPage()}
+            </div>
         );
     }
 }
 
-// function mapStateToProps(store) {
-//     return ({
-//         cric: store.cric
-//     });
-// }
-//
-// export default connect(mapStateToProps)(Create);
+function mapStateToProps(store) {
+    return ({
+        match: store.cric.match,
+        series: store.cric.series
+    });
+}
 
-export default Create;
+export default connect(mapStateToProps)(Update);

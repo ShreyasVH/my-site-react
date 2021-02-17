@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import UpdateCore from "./core";
 
@@ -7,78 +6,72 @@ import CricBuzzUtils from "../../../../utils/cricbuzz";
 import Utils from '../../../../utils';
 import Context from "../../../../utils/context";
 
-class Update extends Component {
+export default class Update extends Component {
     constructor(props) {
         super(props);
         this.state = {
             name: '',
             countries: [],
             state: '',
-            city: ''
+            city: '',
+            isLoaded: false,
+            countrySuggestions: []
         };
         this.stadiumId = Utils.getUrlParam('id');
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         Context.showLoader();
-        CricBuzzUtils.loadStadium(this.stadiumId);
-        const countriesResponse = CricBuzzUtils.getAllCountries();
-        countriesResponse.then(apiResponse => {
-            const countries = apiResponse.data;
-            this.setState({
-                countries
-            })
-        }).catch(apiResponse => {
-            console.log(apiResponse.data);
-        });
-    }
-
-    componentDidUpdate = (prevProps, prevState, snapshot) => {
-        if ((Object.keys(this.props.stadium).length > 0) && (Object.keys(prevProps.stadium).length === 0)) {
-            this.setState(this.constructStateFromDetails());
-        }
-    }
-
-    constructStateFromDetails = () => {
         let state = {};
+        try {
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            state.countries = countriesResponse.data;
 
-        let stadium = this.props.stadium;
-        state.name = stadium.name;
-        state.city = stadium.city;
-        state.state = stadium.state;
-        state.countryId = stadium.country.id;
-        state.countryName = stadium.country.name;
+            const stadiumResponse = await CricBuzzUtils.getStadiumByApi(this.stadiumId);
+            const stadium = stadiumResponse.data;
+            state = {
+                id: stadium.id,
+                name: stadium.name,
+                countryId: stadium.country.id,
+                countryName: stadium.country.name,
+                state: stadium.state,
+                city: stadium.city
+            };
+        } catch (error) {
+            console.log(error);
+            Context.showNotify('Error while loading data.', 'error');
+        }
 
-        return state;
+        state.isLoaded = true;
+
+        this.setState(state);
+        Context.hideLoader();
     }
 
     handleSubmit = async event => {
         event.preventDefault();
         let payload = {
             name: this.state.name,
-            countryId: this.state.countryId
-        }
-        if (this.state.city) {
-            payload.city = this.state.city;
-        }
+            countryId: this.state.countryId,
+            state: this.state.state,
+            city: this.state.city
+        };
 
-        if (this.state.state) {
-            payload.state = this.state.state;
+        if (this.isFormValid()) {
+            Context.showLoader();
+            const updatePromise = CricBuzzUtils.updateStadium(this.stadiumId, payload);
+            updatePromise.then(apiResponse => {
+                Context.hideLoader();
+                Context.showNotify('Updated Successfully', 'success');
+            }).catch(apiResponse => {
+                Context.hideLoader();
+                if (apiResponse.response) {
+                    console.log(apiResponse.response.status);
+                    console.log(apiResponse.response.data);
+                }
+                Context.showNotify('Failed to update. Please try again', 'error');
+            });
         }
-
-        Context.showLoader();
-        const updatePromise = CricBuzzUtils.updateStadium(this.stadiumId, payload);
-        updatePromise.then(apiResponse => {
-            Context.hideLoader();
-            Context.showNotify('Updated Successfully', 'success');
-        }).catch(apiResponse => {
-            Context.hideLoader();
-            if (apiResponse.response) {
-                console.log(apiResponse.response.status);
-                console.log(apiResponse.response.data);
-            }
-            Context.showNotify('Failed to update. Please try again', 'error');
-        });
     };
 
     handleNameChange = event => {
@@ -102,12 +95,60 @@ class Update extends Component {
     handleCountrySelect = (id, name) => {
         this.setState({
             countryId: id,
-            countryName: name
+            countryName: name,
+            countrySuggestions: []
         });
-    }
+    };
+
+    handleCountrySearch = event => {
+        let keyword = event.target.value;
+        let countrySuggestions = [];
+        if (keyword.length > 2) {
+            countrySuggestions = this.state.countries.filter(country => (country.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+        }
+
+        this.setState({
+            countrySuggestions
+        })
+    };
+
+    isFormValid = () => {
+        let isValid = this.validateName().isValid;
+        isValid = (isValid && this.validateCountry().isValid);
+
+        return isValid;
+    };
+
+    validateName = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.name) {
+            response.isValid = false;
+            response.message = 'Name cannot be empty';
+        }
+
+        return response;
+    };
+
+    validateCountry = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.countryId) {
+            response.isValid = false;
+            response.message = 'Country cannot be empty';
+        }
+
+        return response;
+    };
 
     renderPage = () => {
-        if (Object.keys(this.state).length > 0) {
+        if (this.state.isLoaded) {
             return (
                 <UpdateCore
                     {...this.state}
@@ -116,6 +157,10 @@ class Update extends Component {
                     onStateChange={this.handleStateChange}
                     onCountrySelect={this.handleCountrySelect}
                     onSubmit={this.handleSubmit}
+                    isFormValid={this.isFormValid()}
+                    validateName={this.validateName}
+                    validateCountry={this.validateCountry}
+                    onCountrySearch={this.handleCountrySearch}
                 />
             );
         }
@@ -129,11 +174,3 @@ class Update extends Component {
         );
     }
 }
-
-function mapStateToProps(store) {
-    return ({
-        stadium: store.cric.stadium
-    });
-}
-
-export default connect(mapStateToProps)(Update);

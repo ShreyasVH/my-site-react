@@ -50,14 +50,14 @@ const styles = theme => ({
 class MatchCore extends Component {
     renderPlayers = () => {
         let markup = [(
-            <Typography component={'h3'} className={this.props.classes.playingSquadsHeader}>
+            <Typography component={'h3'} className={this.props.classes.playingSquadsHeader} key={'squads'}>
                 {'Playing Squads'}
             </Typography>
         )];
         let teams = {};
-        for (let index in this.props.match.players) {
-            let playerObject = this.props.match.players[index];
-            let teamName = playerObject.team.name;
+        for (let index in this.props.players) {
+            let playerObject = this.props.players[index];
+            let teamName = this.props.teamMap[playerObject.teamId];
             if (teams.hasOwnProperty(teamName)) {
                 teams[teamName].push(playerObject);
             } else {
@@ -69,7 +69,9 @@ class MatchCore extends Component {
 
         for (let teamName in teams) {
             markup.push(
-                <Typography>
+                <Typography
+                    key={'team_' + teamName}
+                >
                     {teamName}
                 </Typography>
             );
@@ -78,7 +80,12 @@ class MatchCore extends Component {
             for (let index in playerObjects) {
                 let playerObject = playerObjects[index];
                 markup.push(
-                    <Chip label={playerObject.player.name} className={this.props.classes.chip} variant="outlined" />
+                    <Chip
+                        label={this.props.playerMap[playerObject.playerId]}
+                        className={this.props.classes.chip}
+                        variant="outlined"
+                        key={'player_' + playerObject.playerId}
+                    />
                 );
             }
         }
@@ -88,7 +95,7 @@ class MatchCore extends Component {
     renderScorecards = () => {
         let markup = [];
 
-        if (Object.keys(this.props.match).length > 0) {
+        if (Object.keys(this.props).length > 0) {
             for (let innings = 1; innings <= 4; innings++) {
                 markup.push(this.renderInnings(innings));
             }
@@ -100,8 +107,8 @@ class MatchCore extends Component {
     renderInnings = innings => {
         let totalInningsCount = 0;
 
-        for (let index in this.props.match.battingScores) {
-            let score = this.props.match.battingScores[index];
+        for (let index in this.props.battingScores) {
+            let score = this.props.battingScores[index];
             if (score.innings > totalInningsCount) {
                 totalInningsCount = score.innings;
             }
@@ -110,7 +117,10 @@ class MatchCore extends Component {
 
         if (innings <= totalInningsCount) {
             return (
-                <div className={`${this.props.classes.innings} ${this.props.classes.borderedContainer}`}>
+                <div
+                    className={`${this.props.classes.innings} ${this.props.classes.borderedContainer}`}
+                    key={'innings_' + innings}
+                >
                     <div className={this.props.classes.container}>
                         {this.renderBattingScores(innings)}
                         {this.renderBowlingFigures(innings)}
@@ -122,31 +132,31 @@ class MatchCore extends Component {
 
     renderDismissal = score => {
         if (score.dismissalMode) {
-            switch (score.dismissalMode.name) {
+            switch (this.props.dismissalMap[score.dismissalMode]) {
                 case 'Bowled':
-                    return 'b ' + score.bowler.player.name;
+                    return 'b ' + this.props.playerMap[score.bowler.playerId];
                 case 'Run Out':
                     let text = 'run out';
                     let fielders = [];
                     for (let index in score.fielders) {
                         let fielder = score.fielders[index];
-                        fielders.push(fielder.player.name);
+                        fielders.push(this.props.playerMap[fielder.playerId]);
                     }
 
                     text += ' ' + fielders.join(' / ');
                     return text;
                 case 'Caught':
-                    return 'c ' + score.fielders[0].player.name + ' b ' + score.bowler.player.name;
+                    return 'c ' + this.props.playerMap[score.fielders[0].playerId] + ' b ' + this.props.playerMap[score.bowler.playerId];
                 case 'Stumped':
-                    return 'st ' + score.fielders[0].player.name + ' b ' + score.bowler.player.name;
+                    return 'st ' + this.props.playerMap[score.fielders[0].playerId] + ' b ' + this.props.playerMap[score.bowler.playerId];
                 case 'LBW':
-                    return 'lbw b ' + score.bowler.player.name;
+                    return 'lbw b ' + this.props.playerMap[score.bowler.playerId];
                 case 'Retired Hurt':
                     return 'Retired Hurt';
                 case 'Hit Twice':
                     return 'Hit Twice';
                 case 'Hit Wicket':
-                    return 'Hit Wicket b ' + score.bowler.player.name;
+                    return 'Hit Wicket b ' + this.props.playerMap[score.bowler.playerId];
                 case 'Obstructing the Field':
                     return 'Obstructing the field';
                 case 'Timed Out':
@@ -164,8 +174,8 @@ class MatchCore extends Component {
         let wickets = 0;
         let balls = 0;
 
-        for (let index in this.props.match.battingScores) {
-            let battingScore = this.props.match.battingScores[index];
+        for (let index in this.props.battingScores) {
+            let battingScore = this.props.battingScores[index];
             if (innings === battingScore.innings) {
                 runs += battingScore.runs;
 
@@ -175,15 +185,15 @@ class MatchCore extends Component {
             }
         }
 
-        for (let index in this.props.match.extras) {
-            let extra = this.props.match.extras[index];
+        for (let index in this.props.extras) {
+            let extra = this.props.extras[index];
             if (innings === extra.innings) {
                 runs += extra.runs;
             }
         }
 
-        for (let index in this.props.match.bowlingFigures) {
-            let bowlingFigure = this.props.match.bowlingFigures[index];
+        for (let index in this.props.bowlingFigures) {
+            let bowlingFigure = this.props.bowlingFigures[index];
             if (innings === bowlingFigure.innings) {
                 balls += bowlingFigure.balls;
             }
@@ -213,8 +223,8 @@ class MatchCore extends Component {
             p: 0
         };
 
-        for (let index in this.props.match.extras) {
-            let extra = this.props.match.extras[index];
+        for (let index in this.props.extras) {
+            let extra = this.props.extras[index];
             if (innings === extra.innings) {
                 let typeString = '';
                 let type = extra.type;
@@ -254,8 +264,8 @@ class MatchCore extends Component {
         let inningsName = '';
         let total = 0;
         let wickets = 0;
-        for (let index in this.props.match.battingScores) {
-            let score = this.props.match.battingScores[index];
+        for (let index in this.props.battingScores) {
+            let score = this.props.battingScores[index];
             total += score.runs;
 
             if (score.dismissalMode) {
@@ -263,11 +273,13 @@ class MatchCore extends Component {
             }
 
             if (score.innings === innings) {
-                inningsName = score.team.name + ' Innings';
+                inningsName = this.props.teamMap[score.teamId] + ' Innings';
                 scores.push(
-                    <TableRow>
+                    <TableRow
+                        key={'score_' + score.id}
+                    >
                         <TableCell>
-                            {score.player.name}
+                            {this.props.playerMap[score.playerId]}
                         </TableCell>
                         <TableCell>
                             {this.renderDismissal(score)}
@@ -323,14 +335,16 @@ class MatchCore extends Component {
 
     renderBowlingFigures = innings => {
         let scores = [];
-        for (let index in this.props.match.bowlingFigures) {
-            let score = this.props.match.bowlingFigures[index];
+        for (let index in this.props.bowlingFigures) {
+            let score = this.props.bowlingFigures[index];
 
             if (score.innings === innings) {
                 scores.push(
-                    <TableRow>
+                    <TableRow
+                        key={'figure_' + score.id}
+                    >
                         <TableCell>
-                            {score.player.name}
+                            {this.props.playerMap[score.playerId]}
                         </TableCell>
                         <TableCell>
                             {this.renderOverDetails(score.balls)}
@@ -376,8 +390,8 @@ class MatchCore extends Component {
     renderTossMarkup = () => {
         let markup = 'NA';
 
-        if (this.props.match.tossWinner) {
-            markup = this.props.match.tossWinner.name + ' won the toss and chose to ' + ((this.props.match.tossWinner.id === this.props.match.battingFirst.id) ? 'bat' : 'bowl');
+        if (this.props.tossWinner) {
+            markup = this.props.teamMap[this.props.tossWinner] + ' won the toss and chose to ' + ((this.props.tossWinner === this.props.batFirst) ? 'bat' : 'bowl');
         }
 
         return markup;
@@ -396,10 +410,10 @@ class MatchCore extends Component {
     renderResultMarkup = () => {
         let result = '';
 
-        let match = this.props.match;
+        let match = this.props;
 
         if (match.winner) {
-            result += match.winner.name + " won";
+            result += this.props.teamMap[match.winner] + " won";
 
             if (match.winMarginType) {
                 result += " by " + match.winMargin + " " + this.getWinMargin(match.winMargin, match.winMarginType);
@@ -424,35 +438,46 @@ class MatchCore extends Component {
     renderTeams = () => {
         let teams = [];
 
-        teams.push(this.props.match.team1);
-        teams.push(this.props.match.team2);
+        teams.push(this.props.teamMap[this.props.team1]);
+        teams.push(this.props.teamMap[this.props.team2]);
 
         return teams.map(team => (
-            <Chip label={team.name} className={this.props.classes.chip} variant="outlined" />
+            <Chip
+                label={team}
+                className={this.props.classes.chip}
+                variant="outlined"
+                key={'team_' + team}
+            />
         ));
     };
 
     renderStadium = () => {
-        let match = this.props.match;
-        let stadium = match.stadium.name;
+        let match = this.props;
+        const stadium = this.props.stadiumMap[match.stadiumId];
+        let stadiumText = stadium.name;
 
-        if (match.stadium.city) {
-            stadium += ', ' + match.stadium.city;
+        if (stadium.city) {
+            stadiumText += ', ' + stadium.city;
         }
 
-        stadium += ', ' + match.stadium.country.name;
+        stadiumText += ', ' + this.props.countryMap[stadium.countryId];
 
-        return stadium;
+        return stadiumText;
     };
 
     renderManOfTheMatch = () => {
-        return this.props.match.manOfTheMatchList.map(motm => (
-            <Chip label={motm.player.name} className={this.props.classes.chip} variant="outlined" />
+        return this.props.manOfTheMatchList.map(motm => (
+            <Chip
+                label={this.props.playerMap[motm.playerId]}
+                className={this.props.classes.chip}
+                variant="outlined"
+                key={'motm_' + motm.playerId}
+            />
         ));
     };
 
     renderSeriesName = () => {
-        if (this.props.match.series) {
+        if (this.props.series) {
             return (
                 <div className={this.props.classes.row}>
                     <strong>
@@ -461,7 +486,7 @@ class MatchCore extends Component {
                     </strong>
 
                     <span>
-                            {this.props.match.series.name + ' - ' + this.props.match.series.gameType}
+                            {this.props.seriesName + ' - ' + this.props.gameType}
                         </span>
                 </div>
             );
@@ -469,7 +494,7 @@ class MatchCore extends Component {
     }
 
     renderMatchDetails = () => {
-        if (Object.keys(this.props.match).length > 0) {
+        if (this.props.isLoaded) {
             return (
                 <div className={this.props.classes.row}>
                     {this.renderSeriesName()}

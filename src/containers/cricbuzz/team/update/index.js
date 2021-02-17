@@ -27,41 +27,38 @@ class Update extends Component {
                     name: 'FRANCHISE'
                 }
             ],
-            type: ''
+            type: '',
+            countrySuggestions: [],
+            isLoaded: false
         };
         this.teamId = Utils.getUrlParam('id');
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         Context.showLoader();
-        CricBuzzUtils.loadTeam(this.teamId);
-        const countriesResponse = CricBuzzUtils.getAllCountries();
-        countriesResponse.then(apiResponse => {
-            const countries = apiResponse.data;
-            this.setState({
-                countries
-            })
-        }).catch(apiResponse => {
-            console.log(apiResponse.data);
-        });
-    }
-
-    componentDidUpdate = (prevProps, prevState, snapshot) => {
-        if ((Object.keys(this.props.team).length > 0) && (Object.keys(prevProps.team).length === 0)) {
-            this.setState(this.constructStateFromDetails());
-        }
-    }
-
-    constructStateFromDetails = () => {
         let state = {};
+        try {
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            state.countries = countriesResponse.data;
 
-        let team = this.props.team;
-        state.name = team.name;
-        state.countryId = team.country.id;
-        state.countryName = team.country.name;
-        state.type = team.teamType
+            const teamResponse = await CricBuzzUtils.getTeamByApi(this.teamId);
+            const team = teamResponse.data;
+            state = {
+                id: team.id,
+                name: team.name,
+                countryId: team.country.id,
+                countryName: team.country.name,
+                type: team.teamType
+            };
+        } catch (error) {
+            console.log(error);
+            Context.showNotify('Error while loading data.', 'error');
+        }
 
-        return state;
+        state.isLoaded =  true;
+
+        this.setState(state);
+        Context.hideLoader();
     }
 
     handleSubmit = async event => {
@@ -69,22 +66,24 @@ class Update extends Component {
         let payload = {
             name: this.state.name,
             countryId: this.state.countryId,
-            type: this.state.type
-        }
+            teamType: this.state.type
+        };
 
-        Context.showLoader();
-        const updatePromise = CricBuzzUtils.updateTeam(this.teamId, payload);
-        updatePromise.then(apiResponse => {
-            Context.hideLoader();
-            Context.showNotify('Updated Successfully', 'success');
-        }).catch(apiResponse => {
-            Context.hideLoader();
-            if (apiResponse.response) {
-                console.log(apiResponse.response.status);
-                console.log(apiResponse.response.data);
-            }
-            Context.showNotify('Failed to update. Please try again', 'error');
-        });
+        if (this.isFormValid()) {
+            Context.showLoader();
+            const updatePromise = CricBuzzUtils.updateTeam(this.teamId, payload);
+            updatePromise.then(apiResponse => {
+                Context.hideLoader();
+                Context.showNotify('Updated Successfully', 'success');
+            }).catch(apiResponse => {
+                Context.hideLoader();
+                if (apiResponse.response) {
+                    console.log(apiResponse.response.status);
+                    console.log(apiResponse.response.data);
+                }
+                Context.showNotify('Failed to update. Please try again', 'error');
+            });
+        }
     };
 
     handleNameChange = event => {
@@ -96,18 +95,77 @@ class Update extends Component {
     handleCountrySelect = (id, name) => {
         this.setState({
             countryId: id,
-            countryName: name
+            countryName: name,
+            countrySuggestions: []
         });
-    }
+    };
+
+    handleCountrySearch = event => {
+        let keyword = event.target.value;
+        let countrySuggestions = [];
+        if (keyword.length > 2) {
+            countrySuggestions = this.state.countries.filter(country => (country.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+        }
+
+        this.setState({
+            countrySuggestions
+        })
+    };
 
     handleTypeSelect = (id, name) => {
         this.setState({
             type: name
         });
-    }
+    };
 
     isFormValid = () => {
-        return this.state.name;
+        let isValid = this.validateName().isValid;
+        isValid = (isValid && this.validateCountry().isValid);
+        isValid = (isValid && this.validateType().isValid);
+
+        return isValid;
+    };
+
+    validateName = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.name) {
+            response.isValid = false;
+            response.message = 'Name cannot be empty';
+        }
+
+        return response;
+    };
+
+    validateCountry = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.countryId) {
+            response.isValid = false;
+            response.message = 'Country cannot be empty';
+        }
+
+        return response;
+    };
+
+    validateType = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.type) {
+            response.isValid = false;
+            response.message = 'Type cannot be empty';
+        }
+
+        return response;
     };
 
     renderPage = () => {
@@ -116,10 +174,14 @@ class Update extends Component {
                 <UpdateCore
                     {...this.state}
                     onNameChange={this.handleNameChange}
+                    onCountrySearch={this.handleCountrySearch}
                     onCountrySelect={this.handleCountrySelect}
                     onTypeSelect={this.handleTypeSelect}
                     isFormValid={this.isFormValid()}
                     onSubmit={this.handleSubmit}
+                    nameError={this.validateName().message}
+                    countryError={this.validateCountry().message}
+                    typeError={this.validateType().message}
                 />
             );
         }

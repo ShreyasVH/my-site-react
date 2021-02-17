@@ -16,7 +16,9 @@ import {
     UPDATE_PLAYER,
     GET_ALL_TEAMS,
     GET_ALL_PLAYERS,
-    UPDATE_SERIES
+    UPDATE_SERIES,
+    GET_ALL_STADIUMS,
+    CREATE_MATCH
 } from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
@@ -70,10 +72,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.tour).length === 0) || (id !== cricStore.tour.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_TOUR_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getTourByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setTour(response);
                 Context.hideLoader();
@@ -83,6 +82,11 @@ export default class CricBuzzUtils {
         } else {
             Context.hideLoader();
         }
+    };
+
+    static getTourByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_TOUR_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
     };
 
     static setTour = tour => {
@@ -154,10 +158,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.match).length === 0) || (id !== cricStore.match.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_MATCH_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getMatchDetails(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setMatch(response);
                 Context.hideLoader();
@@ -168,6 +169,11 @@ export default class CricBuzzUtils {
             Context.hideLoader();
         }
     };
+
+    static getMatchDetails = (id) => {
+        let url = BASE_URL_CRICBUZZ + GET_MATCH_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
+    }
 
     static setMatch = match => {
         store.dispatch(updateMatch(match));
@@ -230,10 +236,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.stadium).length === 0) || (id !== cricStore.stadium.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_STADIUM_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getStadiumByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setStadium(response);
                 Context.hideLoader();
@@ -244,6 +247,11 @@ export default class CricBuzzUtils {
             Context.hideLoader();
         }
     };
+
+    static getStadiumByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_STADIUM_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
+    }
 
     static setStadium = stadium => {
         store.dispatch(updateStadium(stadium));
@@ -264,10 +272,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.country).length === 0) || (id !== cricStore.country.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_COUNTRY_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getCountryByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setCountry(response);
                 Context.hideLoader();
@@ -278,6 +283,11 @@ export default class CricBuzzUtils {
             Context.hideLoader();
         }
     };
+
+    static getCountryByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_COUNTRY_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
+    }
 
     static setCountry = country => {
         store.dispatch(updateCountry(country));
@@ -293,10 +303,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.team).length === 0) || (id !== cricStore.team.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_TEAM_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getTeamByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setTeam(response);
                 Context.hideLoader();
@@ -307,6 +314,11 @@ export default class CricBuzzUtils {
             Context.hideLoader();
         }
     };
+
+    static getTeamByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_TEAM_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
+    }
 
     static setTeam = team => {
         store.dispatch(updateTeam(team));
@@ -322,10 +334,7 @@ export default class CricBuzzUtils {
         let cricStore = Utils.copyObject(store.getState().cric);
 
         if((Object.keys(cricStore.player).length === 0) || (id !== cricStore.player.id)) {
-            let url = BASE_URL_CRICBUZZ + GET_PLAYER_BY_ID.replace('{id}', id);
-            let promise = ApiHelper.get(url);
-
-            promise.then(apiResponse => {
+            CricBuzzUtils.getPlayerByApi(id).then(apiResponse => {
                 let response = apiResponse.data;
                 CricBuzzUtils.setPlayer(response);
                 Context.hideLoader();
@@ -335,6 +344,11 @@ export default class CricBuzzUtils {
         } else {
             Context.hideLoader();
         }
+    };
+
+    static getPlayerByApi = id => {
+        let url = BASE_URL_CRICBUZZ + GET_PLAYER_BY_ID.replace('{id}', id);
+        return ApiHelper.get(url);
     };
 
     static setPlayer = team => {
@@ -374,5 +388,20 @@ export default class CricBuzzUtils {
         }
 
         return players;
+    }
+
+    static updateMatch = (payload, matchId) => {
+        let url = BASE_URL_CRICBUZZ + 'cricbuzz/matches/' + matchId;
+        return ApiHelper.put(url, payload);
+    }
+
+    static getAllStadiums = () => {
+        let url = BASE_URL_CRICBUZZ + GET_ALL_STADIUMS;
+        return ApiHelper.get(url);
+    };
+
+    static createMatch = (payload) => {
+        let url = BASE_URL_CRICBUZZ + CREATE_MATCH;
+        return ApiHelper.post(url, payload);
     }
 }
