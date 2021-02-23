@@ -18,7 +18,9 @@ class BrowseCore extends Component {
 
     renderTours = () => {
         let toursMarkup = this.props.tours.map(tour => (
-            <div>
+            <div
+                key={tour.id}
+            >
                 <Card onClick={this.handleTourClick(tour.id)}>
                     <CardContent>
                         <Typography color="textSecondary" gutterBottom>
@@ -38,23 +40,20 @@ class BrowseCore extends Component {
         );
     };
 
-    renderWaypoint = () => {
-        if (!this.props.hasReachedEnd && (this.props.tours.length > 0)) {
-            return (
-                <Waypoint
-                    onEnter={this.props.onScroll}
-                />
-            );
-        }
-    };
-
     render () {
-        return (
-            <div>
+        let markup = [];
+
+        if (this.props.isLoaded) {
+            markup = (
                 <GridList cols={6} cellHeight={'auto'}>
                     {this.renderTours()}
                 </GridList>
-                {this.renderWaypoint()}
+            );
+        }
+
+        return (
+            <div>
+                {markup}
             </div>
         );
     }

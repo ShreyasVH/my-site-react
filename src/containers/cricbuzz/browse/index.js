@@ -7,15 +7,36 @@ import ContextUtils from '../../../utils/context';
 import CricUtils from '../../../utils/cricbuzz';
 
 class Browse extends Component {
-    componentDidMount() {
-        ContextUtils.showLoader();
-        CricUtils.loadTours();
+    constructor(props) {
+        super(props);
+        this.state = {
+            tours: [],
+            isLoaded: false
+        };
     }
 
-    handleScroll = () => {
+    async componentDidMount() {
         ContextUtils.showLoader();
-        CricUtils.loadTours();
-    };
+        const year = CricUtils.getYearForBrowse();
+
+        let tours = [];
+        let loadingEnded = false;
+        const count = 20;
+        let offset = 0;
+
+        while (!loadingEnded) {
+            const batchTours = await CricUtils.getTours(year, offset, count);
+            tours = tours.concat(batchTours);
+            loadingEnded = batchTours.length < count;
+            offset += count;
+        }
+
+        this.setState({
+            tours,
+            isLoaded: true
+        });
+        ContextUtils.hideLoader();
+    }
 
     setTour = id => {
         ContextUtils.showLoader();
@@ -25,8 +46,7 @@ class Browse extends Component {
     render() {
         return (
             <BrowseCore
-                {...this.props}
-                onScroll={this.handleScroll}
+                {...this.state}
                 onClickTour={this.setTour}
             />
         );

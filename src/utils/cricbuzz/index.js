@@ -15,8 +15,6 @@ import {
     UPDATE_TEAM,
     GET_PLAYER_BY_ID,
     UPDATE_PLAYER,
-    GET_ALL_TEAMS,
-    GET_ALL_PLAYERS,
     UPDATE_SERIES,
     GET_ALL_STADIUMS,
     CREATE_MATCH
@@ -24,48 +22,33 @@ import {
 import ApiHelper from "../apiHelper";
 import store from "../../store";
 import {
-    updateTours,
-    updateTour,
-    updateSeries,
-    updateMatch,
-    updateSuggestions,
-    updateContext,
-    updateStadium,
     updateCountry,
+    updateMatch,
+    updatePlayer,
+    updateSeries,
+    updateStadium,
     updateTeam,
-    updatePlayer
+    updateTour
 } from "../../actions/cricActions";
 import Context from "../context";
 import Utils from '../';
 
 export default class CricBuzzUtils {
-    static loadTours = () => {
-        let cricStore = Utils.copyObject(store.getState().cric);
+    static getTours = async (year, offset, count) => {
+        let tours = [];
 
-        let url = BASE_URL_CRICBUZZ + GET_TOURS;
-        const count = 20;
+        try {
+            const response = await ApiHelper.post(BASE_URL_CRICBUZZ + GET_TOURS, {
+                offset,
+                count,
+                year
+            });
+            tours = response.data;
+        } catch (e) {
+            console.log(e);
+        }
 
-        let offset = cricStore.offset;
-        let year = cricStore.year;
-
-        let promise = ApiHelper.post(url, {
-            offset,
-            count,
-            year
-        });
-        promise.then(apiResponse => {
-            let response = apiResponse.data;
-
-            cricStore.offset = (cricStore.offset + count);
-            cricStore.hasReachedEnd = (response.length < count);
-            cricStore.tours = cricStore.tours.concat(response);
-
-            store.dispatch(updateTours(cricStore));
-            Context.hideLoader();
-
-        }).catch(apiResponse => {
-            Context.hideLoader();
-        });
+        return tours;
     };
 
     static loadTour = (id) => {
