@@ -10,27 +10,15 @@ import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 
 const styles = (theme) => ({
-    tours: {
-        display: 'inline-block',
-        width: '60%'
-    },
     years: {
         paddingLeft: '5%',
         paddingRight: '5%'
-    },
-    row: {
-        width: '100%',
-        marginTop: '0.5%',
-        marginBottom: '0.5%'
     },
     year: {
         color: '#2600ff'
     },
     activeYear: {
         color: 'red'
-    },
-    root: {
-        flexGrow: 1
     }
 });
 
@@ -84,7 +72,7 @@ class BrowseCore extends Component {
 
         if (this.props.isLoaded) {
             markup = (
-                <div className={this.props.classes.row}>
+                <div>
                     <Grid container>
                         <Grid item xs={8}>
                             {this.renderTours()}

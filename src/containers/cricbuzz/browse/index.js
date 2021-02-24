@@ -31,7 +31,6 @@ class Browse extends Component {
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
         const year = CricUtils.getYearForBrowse();
-        console.log('#################', year);
         if (year !== this.state.year) {
             ContextUtils.showLoader();
             await this.loadTours(year);
