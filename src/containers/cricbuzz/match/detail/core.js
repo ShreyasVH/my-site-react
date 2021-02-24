@@ -9,6 +9,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
+import Utils from "../../../../utils";
 const styles = theme => ({
     innings: {
         marginBottom: '1%'
@@ -491,7 +492,11 @@ class MatchCore extends Component {
                 </div>
             );
         }
-    }
+    };
+
+    renderStartTime = () => {
+        return Utils.formatDateToString(this.props.startTime) + " " + Utils.formatTimeToString(this.props.startTime);
+    };
 
     renderMatchDetails = () => {
         if (this.props.isLoaded) {
@@ -533,6 +538,15 @@ class MatchCore extends Component {
                         </strong>
 
                         {this.renderStadium()}
+                    </div>
+
+                    <div className={this.props.classes.row}>
+                        <strong>
+                            Start Time:
+                            &nbsp;
+                        </strong>
+
+                        {this.renderStartTime()}
                     </div>
 
                     <div className={this.props.classes.row}>
