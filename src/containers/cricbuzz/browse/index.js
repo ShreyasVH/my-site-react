@@ -7,14 +7,54 @@ import ContextUtils from '../../../utils/context';
 import CricUtils from '../../../utils/cricbuzz';
 
 class Browse extends Component {
-    componentDidMount() {
-        ContextUtils.showLoader();
-        CricUtils.loadTours();
+    constructor(props) {
+        super(props);
+        this.state = {
+            tours: [],
+            isLoaded: false
+        };
     }
 
-    handleScroll = () => {
+    async componentDidMount() {
         ContextUtils.showLoader();
-        CricUtils.loadTours();
+
+        const years = await CricUtils.getYears();
+
+        await this.loadTours(CricUtils.getYearForBrowse());
+
+        this.setState({
+            years,
+            isLoaded: true
+        });
+        ContextUtils.hideLoader();
+    }
+
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        const year = CricUtils.getYearForBrowse();
+        if (year !== this.state.year) {
+            ContextUtils.showLoader();
+            await this.loadTours(year);
+            ContextUtils.hideLoader();
+        }
+    }
+
+    loadTours = async year => {
+        let tours = [];
+        let loadingEnded = false;
+        const count = 20;
+        let offset = 0;
+
+        while (!loadingEnded) {
+            const batchTours = await CricUtils.getTours(year, offset, count);
+            tours = tours.concat(batchTours);
+            loadingEnded = batchTours.length < count;
+            offset += count;
+        }
+
+        this.setState({
+            tours,
+            year
+        });
     };
 
     setTour = id => {
@@ -25,8 +65,7 @@ class Browse extends Component {
     render() {
         return (
             <BrowseCore
-                {...this.props}
-                onScroll={this.handleScroll}
+                {...this.state}
                 onClickTour={this.setTour}
             />
         );

@@ -6,10 +6,19 @@ import PropTypes from "prop-types";
 import {GridListTile, withStyles} from "@material-ui/core";
 import GridList from "@material-ui/core/GridList";
 import Waypoint from "react-waypoint";
+import { Link } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
 
 const styles = (theme) => ({
-    tours: {
-        flexBasis: '60%'
+    years: {
+        paddingLeft: '5%',
+        paddingRight: '5%'
+    },
+    year: {
+        color: '#2600ff'
+    },
+    activeYear: {
+        color: 'red'
     }
 });
 
@@ -17,44 +26,73 @@ class BrowseCore extends Component {
     handleTourClick = id => event => this.props.onClickTour && this.props.onClickTour(id);
 
     renderTours = () => {
-        let toursMarkup = this.props.tours.map(tour => (
+        let toursMarkup = (
             <div>
-                <Card onClick={this.handleTourClick(tour.id)}>
-                    <CardContent>
-                        <Typography color="textSecondary" gutterBottom>
-                            {tour.name}
-                        </Typography>
-                    </CardContent>
-                </Card>
-
-                <br />
+                No tours present
             </div>
-        ));
-
-        return (
-            <GridListTile cols={4}>
-                {toursMarkup}
-            </GridListTile>
         );
+
+        if (this.props.tours.length > 0) {
+            toursMarkup = this.props.tours.map(tour => (
+                <div
+                    key={tour.id}
+                >
+                    <Card onClick={this.handleTourClick(tour.id)}>
+                        <CardContent>
+                            <Typography color="textSecondary" gutterBottom>
+                                {tour.name}
+                            </Typography>
+                        </CardContent>
+                    </Card>
+
+                    <br />
+                </div>
+            ));
+        }
+
+        return toursMarkup;
     };
 
-    renderWaypoint = () => {
-        if (!this.props.hasReachedEnd && (this.props.tours.length > 0)) {
+    renderYears = () => {
+        return this.props.years.map(year => {
+            const linkClass = this.props.classes.year + ((year === this.props.year) ? ' ' + this.props.classes.activeYear : '');
+
             return (
-                <Waypoint
-                    onEnter={this.props.onScroll}
-                />
+                <Grid item xs={6} sm={3} lg={2}  key={year}>
+                    <Link className={linkClass} to={'/cricbuzz/browse?year=' + year}>
+                        {year}
+                    </Link>
+                </Grid>
             );
-        }
-    };
+        });
+    }
 
     render () {
+        let markup = [];
+
+        if (this.props.isLoaded) {
+            markup = (
+                <div>
+                    <Grid container>
+                        <Grid item xs={8}>
+                            {this.renderTours()}
+                        </Grid>
+
+                        <Grid item xs={4}>
+                            <div className={this.props.classes.years}>
+                                <Grid container>
+                                    {this.renderYears()}
+                                </Grid>
+                            </div>
+                        </Grid>
+                    </Grid>
+                </div>
+            );
+        }
+
         return (
             <div>
-                <GridList cols={6} cellHeight={'auto'}>
-                    {this.renderTours()}
-                </GridList>
-                {this.renderWaypoint()}
+                {markup}
             </div>
         );
     }
