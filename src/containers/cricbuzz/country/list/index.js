@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import ContextUtils from '../../../../utils/context';
-import Utils from '../../../../utils';
 import CricBuzzUtils from "../../../../utils/cricbuzz";
 import ListCore from "./core";
 import {Helmet} from "react-helmet/es/Helmet";
