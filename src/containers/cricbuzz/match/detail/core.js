@@ -10,6 +10,7 @@ import TableBody from "@material-ui/core/TableBody";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
 import Utils from "../../../../utils";
+import {Link} from "react-router-dom";
 const styles = theme => ({
     innings: {
         marginBottom: '1%'
@@ -46,6 +47,9 @@ const styles = theme => ({
         border: '1px solid gray',
         borderRadius: '5px'
     },
+    series: {
+        color: '#2600ff'
+    }
 });
 
 class MatchCore extends Component {
@@ -486,9 +490,9 @@ class MatchCore extends Component {
                         &nbsp;
                     </strong>
 
-                    <span>
-                            {this.props.seriesName + ' - ' + this.props.gameType}
-                        </span>
+                    <Link className={this.props.classes.series} to={'/cricbuzz/series/detail?id=' + this.props.series}>
+                        {this.props.seriesName + ' - ' + this.props.gameType}
+                    </Link>
                 </div>
             );
         }
