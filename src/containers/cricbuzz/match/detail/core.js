@@ -282,23 +282,24 @@ class MatchCore extends Component {
                 scores.push(
                     <TableRow
                         key={'score_' + score.id}
+                        hover
                     >
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {this.props.playerMap[score.playerId]}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {this.renderDismissal(score)}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {score.runs}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {score.balls}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {score.fours}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {score.sixes}
                         </TableCell>
                     </TableRow>
@@ -314,12 +315,12 @@ class MatchCore extends Component {
                         <Table className={this.props.classes.table}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Batsman</TableCell>
-                                    <TableCell align="right">Dismissal</TableCell>
-                                    <TableCell align="right">Runs</TableCell>
-                                    <TableCell align="right">Balls</TableCell>
-                                    <TableCell align="right">4s</TableCell>
-                                    <TableCell align="right">6s</TableCell>
+                                    <TableCell align="center">Batsman</TableCell>
+                                    <TableCell align="center">Dismissal</TableCell>
+                                    <TableCell align="center">Runs</TableCell>
+                                    <TableCell align="center">Balls</TableCell>
+                                    <TableCell align="center">4s</TableCell>
+                                    <TableCell align="center">6s</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -347,20 +348,21 @@ class MatchCore extends Component {
                 scores.push(
                     <TableRow
                         key={'figure_' + score.id}
+                        hover
                     >
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {this.props.playerMap[score.playerId]}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {this.renderOverDetails(score.balls)}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {score.maidens}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {score.runs}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align={'center'}>
                             {score.wickets}
                         </TableCell>
                     </TableRow>
@@ -375,11 +377,11 @@ class MatchCore extends Component {
                         <Table className={this.props.classes.table}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Bowler</TableCell>
-                                    <TableCell align="right">Overs</TableCell>
-                                    <TableCell align="right">Maidens</TableCell>
-                                    <TableCell align="right">Runs</TableCell>
-                                    <TableCell align="right">Wickets</TableCell>
+                                    <TableCell align="center">Bowler</TableCell>
+                                    <TableCell align="center">Overs</TableCell>
+                                    <TableCell align="center">Maidens</TableCell>
+                                    <TableCell align="center">Runs</TableCell>
+                                    <TableCell align="center">Wickets</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
