@@ -19,11 +19,31 @@ const styles = (theme) => ({
     },
     activeYear: {
         color: 'red'
+    },
+    startTime: {
+        display: 'inline-block',
+        float: 'right'
+    },
+    tourName: {
+        display: 'inline-block'
     }
 });
 
 class BrowseCore extends Component {
     handleTourClick = id => event => this.props.onClickTour && this.props.onClickTour(id);
+
+    renderStartTime = (startTime) => {
+        let date = new Date(startTime);
+        let options = {
+            day: 'numeric',
+            month: 'short'
+        };
+        return (
+            <div>
+                {date.toLocaleDateString('en-GB', options)}
+            </div>
+        );
+    };
 
     renderTours = () => {
         let toursMarkup = (
@@ -39,8 +59,12 @@ class BrowseCore extends Component {
                 >
                     <Card onClick={this.handleTourClick(tour.id)}>
                         <CardContent>
-                            <Typography color="textSecondary" gutterBottom>
+                            <Typography component={'span'} color="textSecondary" className={this.props.classes.tourName}>
                                 {tour.name}
+                            </Typography>
+
+                            <Typography component={"span"} color="textSecondary" className={this.props.classes.startTime}>
+                                {this.renderStartTime(tour.startTime)}
                             </Typography>
                         </CardContent>
                     </Card>
