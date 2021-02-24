@@ -17,8 +17,29 @@ class Browse extends Component {
 
     async componentDidMount() {
         ContextUtils.showLoader();
-        const year = CricUtils.getYearForBrowse();
 
+        const years = await CricUtils.getYears();
+
+        await this.loadTours(CricUtils.getYearForBrowse());
+
+        this.setState({
+            years,
+            isLoaded: true
+        });
+        ContextUtils.hideLoader();
+    }
+
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        const year = CricUtils.getYearForBrowse();
+        console.log('#################', year);
+        if (year !== this.state.year) {
+            ContextUtils.showLoader();
+            await this.loadTours(year);
+            ContextUtils.hideLoader();
+        }
+    }
+
+    loadTours = async year => {
         let tours = [];
         let loadingEnded = false;
         const count = 20;
@@ -33,10 +54,9 @@ class Browse extends Component {
 
         this.setState({
             tours,
-            isLoaded: true
+            year
         });
-        ContextUtils.hideLoader();
-    }
+    };
 
     setTour = id => {
         ContextUtils.showLoader();

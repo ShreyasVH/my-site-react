@@ -11,13 +11,16 @@ import {
     GET_COUNTRY_BY_ID,
     UPDATE_COUNTRY,
     CREATE_COUNTRY,
+    GET_ALL_TEAMS,
     GET_TEAM_BY_ID,
     UPDATE_TEAM,
+    GET_ALL_PLAYERS,
     GET_PLAYER_BY_ID,
     UPDATE_PLAYER,
     UPDATE_SERIES,
     GET_ALL_STADIUMS,
-    CREATE_MATCH
+    CREATE_MATCH,
+    GET_YEARS
 } from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
@@ -49,6 +52,19 @@ export default class CricBuzzUtils {
         }
 
         return tours;
+    };
+
+    static getYears = async () => {
+        let years = [];
+
+        try {
+            const response = await ApiHelper.get(BASE_URL_CRICBUZZ + GET_YEARS);
+            years = response.data;
+        } catch (e) {
+            console.log(e);
+        }
+
+        return years;
     };
 
     static loadTour = (id) => {
@@ -203,8 +219,8 @@ export default class CricBuzzUtils {
         let year = (new Date()).getFullYear();
 
         let yearFromURL = Utils.getUrlParam('year');
-        if (yearFromURL) {
-            year = yearFromURL;
+        if (yearFromURL && !isNaN(parseInt(yearFromURL, 10))) {
+            year = parseInt(yearFromURL, 10);
         }
 
         return year;
