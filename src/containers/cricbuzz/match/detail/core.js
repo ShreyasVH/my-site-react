@@ -499,7 +499,15 @@ class MatchCore extends Component {
     };
 
     renderStartTime = () => {
-        return Utils.formatDateToString(this.props.startTime) + " " + Utils.formatTimeToString(this.props.startTime);
+        let date = new Date(this.props.startTime);
+        let options = {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        return date.toLocaleDateString('en-GB', options);
     };
 
     renderMatchDetails = () => {
