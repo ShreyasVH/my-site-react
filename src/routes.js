@@ -93,6 +93,10 @@ export const RouteMappings = [
         filePath: './containers/cricbuzz/player/update'
     },
     {
+        route: '/cricbuzz/players/list',
+        filePath: './containers/cricbuzz/player/list'
+    },
+    {
         filePath: './containers/notFound'
     }
 ];
