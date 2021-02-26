@@ -48,7 +48,7 @@ class ListCore extends Component {
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.title}>
                         <strong>
-                            Countries
+                            Countries ({this.props.countries.length})
                         </strong>
                     </div>
                     <Grid container spacing={16}>
