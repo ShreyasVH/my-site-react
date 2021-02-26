@@ -62,11 +62,18 @@ class Browse extends Component {
         this.props.history.push('/cricbuzz/tours/detail?id=' + id);
     };
 
+    setYear = year => {
+        if (this.state.year !== year) {
+            this.props.history.push('/cricbuzz/browse?year=' + year);
+        }
+    };
+
     render() {
         return (
             <BrowseCore
                 {...this.state}
                 onClickTour={this.setTour}
+                onYearClick={this.setYear}
             />
         );
     }
