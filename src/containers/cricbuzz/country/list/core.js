@@ -51,7 +51,7 @@ class ListCore extends Component {
                             Countries ({this.props.countries.length})
                         </strong>
                     </div>
-                    <Grid container spacing={16}>
+                    <Grid container spacing={16} alignItems="center">
                         {this.renderCountries()}
                     </Grid>
                 </div>
