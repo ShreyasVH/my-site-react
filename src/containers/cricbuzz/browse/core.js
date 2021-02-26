@@ -8,17 +8,31 @@ import GridList from "@material-ui/core/GridList";
 import Waypoint from "react-waypoint";
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import EditIcon from "@material-ui/icons/Edit";
 
 const styles = (theme) => ({
     years: {
-        paddingLeft: '5%',
-        paddingRight: '5%'
+        paddingLeft: '10%',
+        [theme.breakpoints.down('xs')]: {
+            paddingLeft: '30%'
+        },
+        [theme.breakpoints.up('lg')]: {
+            paddingLeft: '5%'
+        }
+    },
+    title: {
+        textAlign: 'center',
+        marginBottom: '2%',
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '5%'
+        }
     },
     year: {
-        color: '#2600ff'
+        cursor: 'pointer'
     },
     activeYear: {
-        color: 'red'
+        backgroundColor: '#60FF87',
+        color: 'white'
     },
     startTime: {
         display: 'inline-block',
@@ -31,6 +45,8 @@ const styles = (theme) => ({
 
 class BrowseCore extends Component {
     handleTourClick = id => event => this.props.onClickTour && this.props.onClickTour(id);
+
+    handleYearClick = year => event => this.props.onYearClick && this.props.onYearClick(year);
 
     renderStartTime = (startTime) => {
         let date = new Date(startTime);
@@ -54,9 +70,7 @@ class BrowseCore extends Component {
 
         if (this.props.tours.length > 0) {
             toursMarkup = this.props.tours.map(tour => (
-                <div
-                    key={tour.id}
-                >
+                <Grid item key={tour.id}>
                     <Card onClick={this.handleTourClick(tour.id)}>
                         <CardContent>
                             <Typography component={'span'} color="textSecondary" className={this.props.classes.tourName}>
@@ -68,9 +82,7 @@ class BrowseCore extends Component {
                             </Typography>
                         </CardContent>
                     </Card>
-
-                    <br />
-                </div>
+                </Grid>
             ));
         }
 
@@ -82,10 +94,14 @@ class BrowseCore extends Component {
             const linkClass = this.props.classes.year + ((year === this.props.year) ? ' ' + this.props.classes.activeYear : '');
 
             return (
-                <Grid item xs={6} sm={3} lg={2}  key={year}>
-                    <Link className={linkClass} to={'/cricbuzz/browse?year=' + year}>
-                        {year}
-                    </Link>
+                <Grid item xs={12} sm={3} md={2} lg={1} key={year} onClick={this.handleYearClick(year)}>
+                    <Card className={linkClass}>
+                        <CardContent style={{textAlign: 'center', padding: '5%'}}>
+                            <span>
+                                {year}
+                            </span>
+                        </CardContent>
+                    </Card>
                 </Grid>
             );
         });
@@ -98,13 +114,26 @@ class BrowseCore extends Component {
             markup = (
                 <div>
                     <Grid container>
-                        <Grid item xs={8}>
-                            {this.renderTours()}
+                        <Grid item xs={8} lg={6}>
+                            <div className={this.props.classes.title}>
+                                <strong>
+                                    Tours for {this.props.year}:
+                                </strong>
+                            </div>
+
+                            <Grid container spacing={8} direction="column">
+                                {this.renderTours()}
+                            </Grid>
                         </Grid>
 
-                        <Grid item xs={4}>
+                        <Grid item xs={4} lg={6}>
+                            <div className={this.props.classes.title}>
+                                <strong>
+                                    Years:
+                                </strong>
+                            </div>
                             <div className={this.props.classes.years}>
-                                <Grid container>
+                                <Grid container justify="space-evenly" spacing={8} alignContent="center" alignItems="center">
                                     {this.renderYears()}
                                 </Grid>
                             </div>

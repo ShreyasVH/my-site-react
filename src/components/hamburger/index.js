@@ -281,6 +281,30 @@ export default class Hamburger extends Component {
 							/>
 						</ListItem>
 					</Link>
+
+					<Link
+						to="/cricbuzz/countries/list"
+						onClick={this.closeHamburger}
+					>
+						<ListItem>
+							<ListItemText
+								inset
+								primary="Countries"
+							/>
+						</ListItem>
+					</Link>
+
+					<Link
+						to="/cricbuzz/stadiums/list"
+						onClick={this.closeHamburger}
+					>
+						<ListItem>
+							<ListItemText
+								inset
+								primary="Stadiums"
+							/>
+						</ListItem>
+					</Link>
 				</List>
 
 				<List component="nav">
