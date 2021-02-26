@@ -24,9 +24,6 @@ export default class Update extends Component {
         Context.showLoader();
         let state = {};
         try {
-            const countriesResponse = await CricBuzzUtils.getAllCountries();
-            state.countries = countriesResponse.data;
-
             const stadiumResponse = await CricBuzzUtils.getStadiumByApi(this.stadiumId);
             const stadium = stadiumResponse.data;
             state = {
@@ -37,6 +34,9 @@ export default class Update extends Component {
                 state: stadium.state,
                 city: stadium.city
             };
+
+            const countriesResponse = await CricBuzzUtils.getAllCountries();
+            state.countries = countriesResponse.data;
         } catch (error) {
             console.log(error);
             Context.showNotify('Error while loading data.', 'error');
