@@ -25,9 +25,14 @@ export default class List extends Component {
         ContextUtils.hideLoader();
     }
 
-    handleEditClick = (id) => {
+    handleEditClick = (id, event) => {
+        event.stopPropagation();
         this.props.history.push('/cricbuzz/players/update?id=' + id);
     };
+
+    handlePlayerClick = id => {
+        this.props.history.push('/cricbuzz/players/detail?id=' + id);
+    }
 
     render() {
         return (
@@ -36,6 +41,7 @@ export default class List extends Component {
                 <ListCore
                     {...this.state}
                     onEditClick={this.handleEditClick}
+                    onPlayerClick={this.handlePlayerClick}
                 />
             </div>
         );

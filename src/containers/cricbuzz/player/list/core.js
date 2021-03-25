@@ -20,11 +20,13 @@ const styles = theme => ({
 });
 
 class ListCore extends Component {
-    handleEditClick = id => event => this.props.onEditClick && this.props.onEditClick(id);
+    handleEditClick = id => event => this.props.onEditClick && this.props.onEditClick(id, event);
+
+    handlePlayerClick = id => event => this.props.onPlayerClick && this.props.onPlayerClick(id);
 
     renderPlayers = () => {
         return this.props.players.map(player => (
-            <Grid key={player.id} item xs={6} sm={4} md={3} lg={2}>
+            <Grid key={player.id} item xs={6} sm={4} md={3} lg={2} onClick={this.handlePlayerClick(player.id)}>
                 <Card>
                     <CardContent>
                         <Typography component={"span"} color="textSecondary">
