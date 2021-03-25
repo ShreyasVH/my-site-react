@@ -86,10 +86,15 @@ export default class Match extends Component {
         ContextUtils.hideLoader();
     }
 
+    handlePlayerClick = playerId => {
+        this.props.history.push('/cricbuzz/players/detail?id=' + playerId);
+    }
+
     render() {
         return (
             <MatchCore
                 {...this.state}
+                onPlayerClick={this.handlePlayerClick}
             />
         );
     }

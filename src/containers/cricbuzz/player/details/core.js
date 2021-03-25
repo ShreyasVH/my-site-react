@@ -33,7 +33,8 @@ const styles = theme => ({
         marginTop: '3%'
     },
     dismissalStats: {
-        marginBottom: '5%'
+        marginBottom: '5%',
+        textAlign: 'center'
     }
 });
 
@@ -316,7 +317,7 @@ class DetailsCore extends Component {
                         </TableHead>
 
                         <TableBody>
-                            {Object.keys(this.props.player.bowlingStats).map(gameType => (
+                            {Object.keys(this.props.player.fieldingStats).map(gameType => (
                                 <TableRow key={'battingStat' + gameType}>
                                     <TableCell align="center" padding="none">
                                         {gameType}
