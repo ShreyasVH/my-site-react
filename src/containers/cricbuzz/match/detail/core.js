@@ -18,6 +18,9 @@ const styles = theme => ({
     root: {
         width: '100%',
         overflowX: 'auto',
+        '& a': {
+            color: '#42a5f5'
+        }
     },
     table: {
         minWidth: 700,
@@ -53,6 +56,8 @@ const styles = theme => ({
 });
 
 class MatchCore extends Component {
+    handlePlayerClick = playerId => (event) => (this.props.onPlayerClick && this.props.onPlayerClick(playerId));
+
     renderPlayers = () => {
         let markup = [(
             <Typography component={'h3'} className={this.props.classes.playingSquadsHeader} key={'squads'}>
@@ -90,6 +95,7 @@ class MatchCore extends Component {
                         className={this.props.classes.chip}
                         variant="outlined"
                         key={'player_' + playerObject.playerId}
+                        onClick={this.handlePlayerClick(playerObject.playerId)}
                     />
                 );
             }
@@ -139,29 +145,90 @@ class MatchCore extends Component {
         if (score.dismissalMode) {
             switch (this.props.dismissalMap[score.dismissalMode]) {
                 case 'Bowled':
-                    return 'b ' + this.props.playerMap[score.bowler.playerId];
+                    return (
+                        <span>
+                            b&nbsp;
+                            <Link to={'/cricbuzz/players/detail?id=' + score.bowler.playerId}>
+                                {this.props.playerMap[score.bowler.playerId]}
+                            </Link>
+                        </span>
+                    );
                 case 'Run Out':
-                    let text = 'run out';
+                    let text = [
+                        <span>run out&nbsp;</span>
+                    ];
                     let fielders = [];
                     for (let index in score.fielders) {
                         let fielder = score.fielders[index];
-                        fielders.push(this.props.playerMap[fielder.playerId]);
+                        text.push(
+                            <Link to={'/cricbuzz/players/detail?id=' + fielder.playerId}>
+                                {this.props.playerMap[fielder.playerId]}
+                            </Link>
+                        );
+                        text.push(<span>&nbsp;/&nbsp;</span>)
                     }
 
-                    text += ' ' + fielders.join(' / ');
+                    text.splice(text.length - 1);
                     return text;
                 case 'Caught':
-                    return 'c ' + this.props.playerMap[score.fielders[0].playerId] + ' b ' + this.props.playerMap[score.bowler.playerId];
+                    if (score.fielders[0].playerId === score.bowler.playerId) {
+                        return (
+                            <span>
+                                c & b&nbsp;
+                                <Link to={'/cricbuzz/players/detail?id=' + score.bowler.playerId}>
+                                    {this.props.playerMap[score.bowler.playerId]}
+                                </Link>
+                            </span>
+                        );
+                    } else {
+                        return (
+                            <span>
+                                c&nbsp;
+                                    <Link to={'/cricbuzz/players/detail?id=' + score.fielders[0].playerId}>
+                                    {this.props.playerMap[score.fielders[0].playerId]}
+                                </Link>
+                                    &nbsp;b&nbsp;
+                                    <Link to={'/cricbuzz/players/detail?id=' + score.bowler.playerId}>
+                                    {this.props.playerMap[score.bowler.playerId]}
+                                </Link>
+                            </span>
+                        );
+                    }
                 case 'Stumped':
-                    return 'st ' + this.props.playerMap[score.fielders[0].playerId] + ' b ' + this.props.playerMap[score.bowler.playerId];
+                    return (
+                        <span>
+                            st&nbsp;
+                            <Link to={'/cricbuzz/players/detail?id=' + score.fielders[0].playerId}>
+                                {this.props.playerMap[score.fielders[0].playerId]}
+                            </Link>
+                            &nbsp;b&nbsp;
+                            <Link to={'/cricbuzz/players/detail?id=' + score.bowler.playerId}>
+                                {this.props.playerMap[score.bowler.playerId]}
+                            </Link>
+                        </span>
+                    );
                 case 'LBW':
-                    return 'lbw b ' + this.props.playerMap[score.bowler.playerId];
+                    return (
+                        <span>
+                            lbw&nbsp;
+                            <Link to={'/cricbuzz/players/detail?id=' + score.bowler.playerId}>
+                                {this.props.playerMap[score.bowler.playerId]}
+                            </Link>
+                        </span>
+                    );
                 case 'Retired Hurt':
                     return 'Retired Hurt';
                 case 'Hit Twice':
                     return 'Hit Twice';
                 case 'Hit Wicket':
-                    return 'Hit Wicket b ' + this.props.playerMap[score.bowler.playerId];
+                    return (
+                        <span>
+                            Hit Wicket b&nbsp;
+                            <Link to={'/cricbuzz/players/detail?id=' + score.bowler.playerId}>
+                                {this.props.playerMap[score.bowler.playerId]}
+                            </Link>
+                        </span>
+                    );
                 case 'Obstructing the Field':
                     return 'Obstructing the field';
                 case 'Timed Out':
@@ -285,7 +352,9 @@ class MatchCore extends Component {
                         hover
                     >
                         <TableCell align={'center'}>
-                            {this.props.playerMap[score.playerId]}
+                            <Link to={'/cricbuzz/players/detail?id=' + score.playerId}>
+                                {this.props.playerMap[score.playerId]}
+                            </Link>
                         </TableCell>
                         <TableCell align={'center'}>
                             {this.renderDismissal(score)}
@@ -351,7 +420,9 @@ class MatchCore extends Component {
                         hover
                     >
                         <TableCell align={'center'}>
-                            {this.props.playerMap[score.playerId]}
+                            <Link to={'/cricbuzz/players/detail?id=' + score.playerId}>
+                                {this.props.playerMap[score.playerId]}
+                            </Link>
                         </TableCell>
                         <TableCell align={'center'}>
                             {this.renderOverDetails(score.balls)}
@@ -479,6 +550,7 @@ class MatchCore extends Component {
                 className={this.props.classes.chip}
                 variant="outlined"
                 key={'motm_' + motm.playerId}
+                onClick={this.handlePlayerClick(motm.playerId)}
             />
         ));
     };
