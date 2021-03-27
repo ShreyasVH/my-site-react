@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    build: ./
+    ports:
+      - "3000:3000"
+      - "8888:8888"
+    expose:
+      - 3000
+      - 8888
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    container_name: my-site-react
