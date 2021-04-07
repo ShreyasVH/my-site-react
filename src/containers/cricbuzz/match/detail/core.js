@@ -73,6 +73,18 @@ class MatchCore extends Component {
             roles.push('c');
         }
 
+        let isWicketKeeper = false;
+        for (const player of this.props.wicketKeepers) {
+            if (playerId === player.playerId) {
+                isWicketKeeper = true;
+                break;
+            }
+        }
+
+        if (isWicketKeeper) {
+            roles.push('wk');
+        }
+
         if (roles.length > 0) {
             text += ' ( ' + roles.join(' & ') + ' ) ';
         }
