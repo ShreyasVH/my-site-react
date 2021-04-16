@@ -56,6 +56,42 @@ const styles = theme => ({
 });
 
 class MatchCore extends Component {
+    getPlayerLabel = (playerId) => {
+        let text = this.props.playerMap[playerId];
+
+        let roles = [];
+
+        let isCaptain = false;
+        for (const player of this.props.captains) {
+            if (playerId === player.playerId) {
+                isCaptain = true;
+                break;
+            }
+        }
+
+        if (isCaptain) {
+            roles.push('c');
+        }
+
+        let isWicketKeeper = false;
+        for (const player of this.props.wicketKeepers) {
+            if (playerId === player.playerId) {
+                isWicketKeeper = true;
+                break;
+            }
+        }
+
+        if (isWicketKeeper) {
+            roles.push('wk');
+        }
+
+        if (roles.length > 0) {
+            text += ' ( ' + roles.join(' & ') + ' ) ';
+        }
+
+        return text;
+    }
+
     handlePlayerClick = playerId => (event) => (this.props.onPlayerClick && this.props.onPlayerClick(playerId));
 
     renderPlayers = () => {
@@ -91,7 +127,7 @@ class MatchCore extends Component {
                 let playerObject = playerObjects[index];
                 markup.push(
                     <Chip
-                        label={this.props.playerMap[playerObject.playerId]}
+                        label={this.getPlayerLabel(playerObject.playerId)}
                         className={this.props.classes.chip}
                         variant="outlined"
                         key={'player_' + playerObject.playerId}
@@ -99,6 +135,8 @@ class MatchCore extends Component {
                     />
                 );
             }
+
+
         }
         return markup;
     };
