@@ -171,15 +171,16 @@ class UpdateCore extends Component {
     };
 
     renderManOfTheSeriesListMarkup = () => {
-        return this.props.manOfTheSeriesList.map(mots => {
+        return this.props.manOfTheSeriesNames.map((player, index) => {
+            let playerId = this.props.manOfTheSeriesIds[index];
 
             return (
                 <Chip
                     className={this.props.classes.playerChip}
-                    label={mots.name}
-                    onDelete={this.handleManOfTheSeriesRemove(mots.id)}
+                    label={player}
+                    onDelete={this.handleManOfTheSeriesRemove(playerId)}
                     color="primary"
-                    key={'mots-' + mots.id}
+                    key={'mots-' + playerId}
                 />
             );
         });
@@ -327,30 +328,6 @@ class UpdateCore extends Component {
                                                     displayValue={this.props.playerNameForMOTS}
                                                 />
                                             </div>
-                                        </div>
-
-                                        <div className={` ${this.props.classes.formField} ${this.props.classes.quarterWidth}`}>
-                                            <div className={this.props.classes.formFieldInput}>
-                                                <SearchDropDown
-                                                    items={this.props.teams}
-                                                    label="Team"
-                                                    placeholder="Team"
-                                                    onSelect={this.handleTeamSelectForMOTS}
-                                                    displayValue={this.props.teamNameForMOTS}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            className={this.props.classes.pickMots}
-                                        >
-                                            <Button
-                                                color="secondary"
-                                                variant="contained"
-                                                onClick={this.handleManOfTheSeriesPick}
-                                            >
-                                                PICK
-                                            </Button>
                                         </div>
                                     </div>
 

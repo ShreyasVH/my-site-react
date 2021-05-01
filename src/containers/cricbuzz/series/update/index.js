@@ -44,15 +44,18 @@ export default class Update extends Component {
             playerSuggestions: [],
             isLoaded: false,
             countrySuggestions: [],
-            teams: [],
-            manOfTheSeriesList: []
+            teams: []
         };
         this.seriesId = Utils.getUrlParam('id');
+        this.playerMap = {};
     }
 
     async componentDidMount() {
         Context.showLoader();
-        let state = {};
+        let state = {
+            manOfTheSeriesIds: [],
+            manOfTheSeriesNames: []
+        };
         try {
             const countriesResponse = await CricBuzzUtils.getAllCountries();
             const countries = countriesResponse.data;
@@ -72,6 +75,9 @@ export default class Update extends Component {
                 id: player.id,
                 name: player.name
             }));
+            state.allPlayers.forEach(player => {
+                this.playerMap[player.id] = player.name;
+            });
 
             const seriesResponse = await CricBuzzUtils.getSeriesByApi(this.seriesId);
             const series = seriesResponse.data;
@@ -86,11 +92,12 @@ export default class Update extends Component {
                 id: team.id,
                 name: team.name
             }));
-            state.manOfTheSeriesList = series.manOfTheSeriesList.map(mots => ({
-                id: mots.playerId,
-                name: mots.playerName,
-                teamId: mots.teamId
-            }));
+
+            for (const mots of series.manOfTheSeriesList) {
+                state.manOfTheSeriesIds.push(mots.playerId);
+                state.manOfTheSeriesNames.push(this.playerMap[mots.playerId]);
+            }
+
         } catch (error) {
             console.log(error);
             Context.showNotify('Error while loading data.', 'error');
@@ -212,10 +219,7 @@ export default class Update extends Component {
             gameType: this.state.gameType,
             startTime: this.state.startTime,
             teams: this.state.teams.map(team => team.id),
-            manOfTheSeriesList: this.state.manOfTheSeriesList.map(mots => ({
-                playerId: mots.id,
-                teamId: mots.teamId
-            }))
+            manOfTheSeriesList: this.state.manOfTheSeriesIds
         };
 
         if (this.isFormValid()) {
@@ -282,18 +286,15 @@ export default class Update extends Component {
         }
     };
 
-    handleTeamSelectForMOTS = (id, name) => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.teamNameForMOTS = name;
-        updatedState.teamIdForMOTS = id;
-        this.setState(updatedState);
-    };
-
     handlePlayerSelectForMOTS = (id, name) => {
         let updatedState = Utils.copyObject(this.state);
-        updatedState.playerNameForMOTS = name;
-        updatedState.playerIdForMOTS = id;
-        updatedState.playerSuggestions = [];
+
+        if (-1 === updatedState.manOfTheSeriesIds.indexOf(id)) {
+            updatedState.manOfTheSeriesIds.push(id);
+            updatedState.manOfTheSeriesNames.push(name);
+            updatedState.playerSuggestions = [];
+        }
+
         this.setState(updatedState);
     };
 
@@ -312,9 +313,6 @@ export default class Update extends Component {
         if (index !== -1) {
             updatedState.teams.splice(index, 1);
 
-            let validTeamIds = updatedState.teams.map(team => team.id);
-            updatedState.manOfTheSeriesList = updatedState.manOfTheSeriesList.filter(mots => (validTeamIds.indexOf(mots.teamId) !== -1));
-
             this.setState(updatedState);
         }
     };
@@ -322,10 +320,10 @@ export default class Update extends Component {
     handleManOfTheSeriesRemove = (playerId) => {
         let updatedState = Utils.copyObject(this.state);
 
-        let manOfTheSeriesIds = updatedState.manOfTheSeriesList.map(mots => mots.id);
-        let index = manOfTheSeriesIds.indexOf(playerId);
+        let index = this.state.manOfTheSeriesIds.indexOf(playerId);
         if (-1 !== index) {
-            updatedState.manOfTheSeriesList.splice(index, 1);
+            updatedState.manOfTheSeriesIds.splice(index, 1);
+            updatedState.manOfTheSeriesNames.splice(index, 1);
 
             this.setState(updatedState);
         }
@@ -373,23 +371,6 @@ export default class Update extends Component {
         });
     };
 
-    handleManOfTheSeriesPick = () => {
-        let updatedState = Utils.copyObject(this.state);
-
-        updatedState.manOfTheSeriesList.push({
-            id: updatedState.playerIdForMOTS,
-            name: updatedState.playerNameForMOTS,
-            teamId: updatedState.teamIdForMOTS
-        });
-        updatedState.playerIdForMOTS = '';
-        updatedState.playerNameForMOTS = '';
-        updatedState.teamIdForMOTS = '';
-        updatedState.teamNameForMOTS = '';
-
-        this.setState(updatedState);
-    };
-
-
     renderPage = () => {
         if (this.state.isLoaded) {
             return (
@@ -402,12 +383,10 @@ export default class Update extends Component {
                     onTypeSelect={this.handleTypeSelect}
                     onGameTypeSelect={this.handleGameTypeSelect}
                     onTeamSelect={this.handleTeamSelect}
-                    onTeamSelectForMOTS={this.handleTeamSelectForMOTS}
                     onPlayerSelectForMOTS={this.handlePlayerSelectForMOTS}
                     onTeamRemove={this.handleTeamRemove}
                     onManOfTheSeriesRemove={this.handleManOfTheSeriesRemove}
                     onPlayerSearch={this.handlePlayerSearch}
-                    onManOfTheSeriesPick={this.handleManOfTheSeriesPick}
                     isFormValid={this.isFormValid()}
                     validateName={this.validateName()}
                     validateCountry={this.validateCountry()}
