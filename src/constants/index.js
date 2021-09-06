@@ -47,6 +47,7 @@ export const GET_ALL_TEAMS = 'cricbuzz/teams';
 export const GET_ALL_PLAYERS = 'cricbuzz/players/all/{offset}/{count}';
 export const CREATE_MATCH = 'cricbuzz/matches';
 export const GET_YEARS = 'cricbuzz/tours/years';
+export const GET_STATS = 'cricbuzz/stats';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',
@@ -57,5 +58,7 @@ export const INPUT_TYPE = {
 };
 
 export const FILTER_TYPE = {
-	CHECKBOX: 'checkbox'
+	CHECKBOX: 'checkbox',
+	RADIO: 'radio',
+	RANGE: 'range'
 };

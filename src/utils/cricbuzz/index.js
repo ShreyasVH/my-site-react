@@ -20,7 +20,8 @@ import {
     UPDATE_SERIES,
     GET_ALL_STADIUMS,
     CREATE_MATCH,
-    GET_YEARS
+    GET_YEARS,
+    GET_STATS
 } from "../../constants";
 import ApiHelper from "../apiHelper";
 import store from "../../store";
@@ -407,6 +408,11 @@ export default class CricBuzzUtils {
 
     static createMatch = (payload) => {
         let url = BASE_URL_CRICBUZZ + CREATE_MATCH;
+        return ApiHelper.post(url, payload);
+    }
+
+    static getStats = (payload) => {
+        let url = BASE_URL_CRICBUZZ + GET_STATS;
         return ApiHelper.post(url, payload);
     }
 }
