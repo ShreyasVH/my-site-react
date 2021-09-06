@@ -16,6 +16,8 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Radio from '@material-ui/core/Radio';
+import TextField from '@material-ui/core/TextField';
 
 import { FILTER_TYPE } from '../../constants';
 
@@ -52,7 +54,20 @@ const styles = (theme) => ({
         right: 0,
         position: 'absolute',
         fontWeight: 'bold'
-    }
+    },
+    rangeContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        width: '100%'
+    },
+    rangeInput: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: '48%',
+        [theme.breakpoints.down('xs')]: {
+            width: '44%',
+        }
+    },
 });
 
 function Transition(props) {
@@ -90,6 +105,11 @@ class FiltersCore extends Component {
         switch (filter.type) {
             case FILTER_TYPE.CHECKBOX:
                 return this.renderCheckboxFilter(key, filter);
+            case FILTER_TYPE.RADIO:
+                return this.renderRadioFilter(key, filter);
+            case FILTER_TYPE.RANGE:
+                return this.renderRangeFilter(key, filter);
+
         }
     };
 
@@ -120,13 +140,15 @@ class FiltersCore extends Component {
 
     renderFilterSelectedIndicator = (key) => {
         if (this.isFilterSelected(key)) {
-            return <div className={this.props.classes.appliedFilter} />
+            return <span className={this.props.classes.appliedFilter} />
         }
     };
 
     renderFilter = (key, filter) => {
         return (
-            <ExpansionPanel>
+            <ExpansionPanel
+                key={key}
+            >
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography className={this.props.classes.heading}>
                         {filter.displayName}
@@ -145,6 +167,11 @@ class FiltersCore extends Component {
         return selectedFilters.hasOwnProperty(key) && (selectedFilters[key].indexOf(id) !== -1);
     };
 
+    isRadioChecked = (key, id) => {
+        let selectedFilters = this.props.selected;
+        return selectedFilters.hasOwnProperty(key) && (selectedFilters[key] === id);
+    };
+
     renderCheckboxOptions = (key, options) => {
         let markup = [];
 
@@ -152,24 +179,23 @@ class FiltersCore extends Component {
             if (options.hasOwnProperty(index)) {
                 let option = options[index];
                 markup.push(
-                    <div>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={this.isCheckboxChecked(key, option.id)}
-                                    name={key + '[]'}
-                                    data-filter={key}
-                                    onChange={this.handleEvent}
-                                    inputProps={{
-                                        'data-key': key,
-                                        'data-type': FILTER_TYPE.CHECKBOX,
-                                        'data-id': option.id
-                                    }}
-                                />
-                            }
-                            label={option.name}
-                        />
-                    </div>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.isCheckboxChecked(key, option.id)}
+                                name={key + '[]'}
+                                data-filter={key}
+                                onChange={this.handleEvent}
+                                inputProps={{
+                                    'data-key': key,
+                                    'data-type': FILTER_TYPE.CHECKBOX,
+                                    'data-id': option.id
+                                }}
+                            />
+                        }
+                        label={option.name}
+                        key={key + '_' + option.id}
+                    />
                 );
             }
         }
@@ -205,6 +231,85 @@ class FiltersCore extends Component {
         );
     };
 
+    renderRadioOptions = (key, options) => {
+        let markup = [];
+
+        for (let index in options) {
+            if (options.hasOwnProperty(index)) {
+                let option = options[index];
+                markup.push(
+                    <FormControlLabel
+                        control={
+                            <Radio
+                                checked={this.isRadioChecked(key, option.id)}
+                                name={key + '[]'}
+                                data-filter={key}
+                                onChange={this.handleEvent}
+                                inputProps={{
+                                    'data-key': key,
+                                    'data-type': FILTER_TYPE.RADIO,
+                                    'data-id': option.id
+                                }}
+                            />
+                        }
+                        label={option.name}
+                        key={key + '_' + option.id}
+                    />
+                );
+            }
+        }
+
+        return markup;
+    };
+
+    renderRadioFilter = (key, filter) => {
+        return (
+            <div>
+                {this.renderClearFilterButton(key)}
+                {this.renderRadioOptions(key, filter.values)}
+            </div>
+        );
+    };
+
+    renderRangeFilter = (key, filter) => {
+        return (
+            <div className={this.props.classes.rangeContainer}>
+                <TextField
+                    name={key + '[]'}
+                    data-filter={key}
+                    data-type={FILTER_TYPE.RANGE}
+                    onChange={this.handleEvent}
+                    inputProps={{
+                        'data-key': key,
+                        'data-type': FILTER_TYPE.RANGE,
+                        'data-rangetype': 'from'
+                    }}
+                    value={((this.props.selected.hasOwnProperty(key) && this.props.selected[key].hasOwnProperty('from')) ? this.props.selected[key].from : '')}
+                    variant="outlined"
+                    className={this.props.classes.rangeInput}
+                    label="From"
+                    margin="normal"
+                />
+                <TextField
+                    name={key + '[]'}
+                    data-filter={key}
+                    data-type={FILTER_TYPE.RANGE}
+                    onChange={this.handleEvent}
+                    inputProps={{
+                        'data-key': key,
+                        'data-type': FILTER_TYPE.RANGE,
+                        'data-rangetype': 'to'
+                    }}
+                    value={((this.props.selected.hasOwnProperty(key) && this.props.selected[key].hasOwnProperty('to')) ? this.props.selected[key].to : '')}
+                    variant="outlined"
+                    className={this.props.classes.rangeInput}
+                    label="To"
+                    margin="normal"
+                />
+            </div>
+        );
+    };
+
     renderFilters = () => {
         let markup = [];
 
@@ -229,12 +334,12 @@ class FiltersCore extends Component {
                         TransitionComponent={Transition}
                     >
                         <form name="filters" onSubmit={this.handleSubmit}>
-                            <AppBar className={classes.appBar}>
+                            <AppBar className={this.props.classes.appBar}>
                                 <Toolbar>
                                     <IconButton color="inherit" onClick={this.closeFilters} aria-label="Close">
                                         <CloseIcon />
                                     </IconButton>
-                                    <Typography variant="h6" color="inherit" className={classes.flex}>
+                                    <Typography variant="h6" color="inherit" className={this.props.classes.flex}>
                                         Filters
                                     </Typography>
                                     <Button color="inherit" name="submit" onClick={this.applyFilters}>
@@ -244,7 +349,7 @@ class FiltersCore extends Component {
                                     {this.renderClearAllButton()}
                                 </Toolbar>
                             </AppBar>
-                            <div className={classes.root}>
+                            <div className={this.props.classes.root}>
                                 {this.renderFilters()}
                             </div>
                         </form>
