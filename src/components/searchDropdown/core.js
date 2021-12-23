@@ -90,6 +90,8 @@ class SearchDropdownCore extends Component {
                     autoComplete="off"
                     placeholder={this.getPlaceHolder()}
                     onBlur={this.handleTextFieldBlur}
+                    disabled={this.props.disabled}
+                    InputLabelProps={{ shrink: true }}
                 />
             );
         } else {
@@ -106,6 +108,7 @@ class SearchDropdownCore extends Component {
                     value={this.getDisplayValue()}
                     error={this.props.error}
                     helperText={this.props.helperText}
+                    disabled={this.props.disabled}
                 />
             );
         }

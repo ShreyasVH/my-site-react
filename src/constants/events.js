@@ -64,3 +64,7 @@ export const CRIC_EVENTS = {
 	UPDATE_TEAM: 'UPDATE_TEAM',
 	UPDATE_PLAYER: 'UPDATE_PLAYER'
 };
+
+export const POGO_EVENTS = {
+
+};

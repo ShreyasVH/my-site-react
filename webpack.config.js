@@ -67,6 +67,7 @@ module.exports = {
 			'process.env.API_ENDPOINT_DUEL_LINKS': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_DUEL_LINKS),
 			'process.env.API_ENDPOINT_LOGGER': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_LOGGER),
 			'process.env.API_ENDPOINT_CRICBUZZ': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_CRICBUZZ),
+			'process.env.API_ENDPOINT_POGO': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_POGO),
 			'process.env.CLOUDINARY_ACCOUNT_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_ACCOUNT_NAME),
 			'process.env.CLOUDINARY_PRESET_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_PRESET_NAME)
 		}),

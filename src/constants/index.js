@@ -7,6 +7,7 @@ export const BASE_URL = process.env.API_ENDPOINT;
 export const BASE_URL_DUEL_LINKS = process.env.API_ENDPOINT_DUEL_LINKS;
 export const BASE_URL_LOGGER = process.env.API_ENDPOINT_LOGGER;
 export const BASE_URL_CRICBUZZ = process.env.API_ENDPOINT_CRICBUZZ;
+export const BASE_URL_POGO = process.env.API_ENDPOINT_POGO;
 export const GET_MODE_URL = 'data/getMode';
 // export const CHANGE_MODE_URL = 'index/changeMode?newMode={newMode}';
 export const MOVIES_DASHBOARD_URL = 'movies/dashboard';
@@ -48,6 +49,16 @@ export const GET_ALL_PLAYERS = 'cricbuzz/players/all/{offset}/{count}';
 export const CREATE_MATCH = 'cricbuzz/matches';
 export const GET_YEARS = 'cricbuzz/tours/years';
 export const GET_STATS = 'cricbuzz/stats';
+
+export const GEM_MON_BY_NUMBER = 'pogo/pokemon/num/{number}';
+export const GET_ALL_POKEMONS = 'pogo/pokemon/all';
+export const UPDATE_POKEMON = 'pogo/pokemon/{number}';
+
+export const GET_ALL_REGIONS = 'pogo/regions';
+
+export const GET_FORM_BY_ID = 'pogo/forms/{id}';
+export const UPDATE_FORM = 'pogo/forms/{id}';
+export const GET_FORMS_WITH_FILTER = 'pogo/forms/filter';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',
