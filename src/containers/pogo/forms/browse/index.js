@@ -10,6 +10,8 @@ import { FILTER_TYPE, BASE_FILTER_TYPE } from "../../../../constants";
 export default class Update extends Component {
     constructor(props) {
         super(props);
+
+        let urlParams = Utils.getUrlParams();
         this.state = {
             isLoaded: false,
             forms: [],
@@ -19,11 +21,8 @@ export default class Update extends Component {
             isFilterOpen: false,
             selectedFilters: {
             },
-            selectedFiltersTemp: {
-                filters: {}
-            }
+            selectedFiltersTemp: urlParams
         };
-        this.id = Utils.getUrlParam('id');
     }
 
     async componentDidMount() {
@@ -56,8 +55,15 @@ export default class Update extends Component {
         Context.showLoader();
 
         if (offset === 0 || offset < this.state.totalCount) {
-            let payload = Utils.copyObject(this.state.selectedFiltersTemp);
-            payload.offset = offset;
+
+            let payload = {
+                offset,
+                filters: {}
+            };
+
+            for (const [key, list] of Object.entries(this.state.selectedFiltersTemp)) {
+                payload.filters[key] = list;
+            }
 
             const filterResponse = await PogoUtils.getFormsWithFilter(payload);
             let updatedState = Utils.copyObject(this.state);
@@ -115,13 +121,13 @@ export default class Update extends Component {
                 let checked = target.checked;
 
                 if (checked) {
-                    if (!tempFilters.filters.hasOwnProperty(key)) {
-                        tempFilters.filters[key] = [];
+                    if (!tempFilters.hasOwnProperty(key)) {
+                        tempFilters[key] = [];
                     }
-                    tempFilters.filters[key].push(id);
+                    tempFilters[key].push(id);
                 } else {
-                    let index = tempFilters.filters[key].indexOf(id);
-                    tempFilters.filters[key].splice(index, 1);
+                    let index = tempFilters[key].indexOf(id);
+                    tempFilters[key].splice(index, 1);
                 }
                 this.setState({
                     selectedFiltersTemp: tempFilters

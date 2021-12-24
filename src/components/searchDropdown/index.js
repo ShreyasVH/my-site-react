@@ -34,6 +34,12 @@ export default class SearchDropDown extends Component {
         // }, 200);
     };
 
+    handleTextFieldFocus = () => {
+        this.setState(({
+            isFocussed: true
+        }));
+    };
+
     handleKeyUp = event => {
         if (this.props.onKeyUp) {
             this.props.onKeyUp(event);
@@ -60,6 +66,7 @@ export default class SearchDropDown extends Component {
                 {...this.state}
                 onDisplayFieldClick={this.handleDisplayFieldClick}
                 onTextFieldBlur={this.handleTextFieldBlur}
+                onTextFieldFocus={this.handleTextFieldFocus}
                 onSelect={this.handleSelect}
                 onKeyUp={this.handleKeyUp}
             />

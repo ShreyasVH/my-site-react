@@ -113,6 +113,10 @@ export const RouteMappings = [
         filePath: './containers/pogo/forms/update'
     },
     {
+        route: '/pogo/forms/add',
+        filePath: './containers/pogo/forms/add'
+    },
+    {
         route: '/pogo/forms/browse',
         filePath: './containers/pogo/forms/browse'
     },

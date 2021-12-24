@@ -78,6 +78,9 @@ class UpdateCore extends Component {
 
     handleFileUpload = files => (this.props.onImageSelect && this.props.onImageSelect(files[0]));
 
+    handlePokemonSearch = event => (this.props.onPokemonSearch && this.props.onPokemonSearch(event));
+    handlePokemonSelect = (id, name) => (this.props.onPokemonSelect && this.props.onPokemonSelect(id, name));
+
     handleReleaseDateChange = event => (this.props.onReleaseDateChange && this.props.onReleaseDateChange(event));
 
     render() {
@@ -85,7 +88,7 @@ class UpdateCore extends Component {
             <div>
                 <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
-                        Update Form
+                        Add Form
                     </div>
                     <div className={this.props.classes.container}>
                         <div className={this.props.classes.row}>
@@ -96,7 +99,10 @@ class UpdateCore extends Component {
                                         label="Pokemon"
                                         placeholder="Pokemon"
                                         displayValue={this.props.pokemonName}
-                                        disabled={true}
+                                        error={!this.props.validatePokemon.isValid}
+                                        helperText={this.props.validatePokemon.message}
+                                        onSelect={this.handlePokemonSelect}
+                                        onKeyUp={this.handlePokemonSearch}
                                     />
                                 </div>
                             </div>

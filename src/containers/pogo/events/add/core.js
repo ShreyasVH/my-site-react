@@ -7,6 +7,8 @@ import SearchDropDown from "../../../../components/searchDropdown";
 import DateTimePicker from "../../../../components/dateTimePicker";
 import FileUpload from "../../../../components/fileUpload";
 import Chip from "@material-ui/core/Chip";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 const styles = theme => ({
     form: {
@@ -81,6 +83,19 @@ const styles = theme => ({
         border: '1px solid gray',
         borderRadius: '5px'
     },
+    removeRow: {
+        verticalAlign: 'middle',
+        display: 'inline-block',
+        marginTop: '2%',
+        marginLeft: '0.5%',
+        '& button': {
+            padding: 'initial'
+        },
+        [theme.breakpoints.down('md')]: {
+            display: 'block',
+            textAlign: 'center'
+        }
+    }
 });
 
 class UpdateCore extends Component {
@@ -91,6 +106,7 @@ class UpdateCore extends Component {
 
     handlePokemonSearch = event => (this.props.onPokemonSearch && this.props.onPokemonSearch(event));
     handlePokemonSelect = (id, name) => (this.props.onPokemonSelect && this.props.onPokemonSelect(id, name));
+    handlePokemonRemove = event => this.props.onPokemonRemove && this.props.onPokemonRemove();
 
     handleFormSelect = (id, name) => (this.props.onFormSelect && this.props.onFormSelect(id, name));
     handleFormRemove = formId => event => this.props.onFormRemove && this.props.onFormRemove(formId);
@@ -134,9 +150,11 @@ class UpdateCore extends Component {
                                 <div className={this.props.classes.formFieldInput}>
                                     <DateTimePicker
                                         label={'Start Time'}
-                                        placeholder={'End Time'}
+                                        placeholder={'Start Time'}
                                         value={this.props.startTime}
                                         onChange={this.handleStartTimeChange}
+                                        error={!this.props.validateStartTime.isValid}
+                                        helperText={this.props.validateStartTime.message}
                                     />
                                 </div>
                             </div>
@@ -148,6 +166,8 @@ class UpdateCore extends Component {
                                         placeholder={'End Time'}
                                         value={this.props.endTime}
                                         onChange={this.handleEndTimeChange}
+                                        error={!this.props.validateEndTime.isValid}
+                                        helperText={this.props.validateEndTime.message}
                                     />
                                 </div>
                             </div>
@@ -187,6 +207,18 @@ class UpdateCore extends Component {
                                                     helperText={this.props.validateForms.message}
                                                 />
                                             </div>
+                                        </div>
+
+                                        <div
+                                            className={this.props.classes.removeRow}
+                                        >
+                                            <IconButton
+                                                color="secondary"
+                                                variant="contained"
+                                                onClick={this.handlePokemonRemove}
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
                                         </div>
                                     </div>
 

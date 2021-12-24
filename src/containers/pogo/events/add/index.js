@@ -65,8 +65,8 @@ export default class Update extends Component {
         let updatedState = Utils.copyObject(this.state);
         let pokemonSuggestions = [];
         if (keyword.length === 0) {
-            updatedState.PokemonId = null;
-            updatedState.PokemonName = '';
+            updatedState.pokemonId = null;
+            updatedState.pokemonName = '';
         } else if (keyword.length > 2) {
             pokemonSuggestions = this.state.allPokemons.filter(mon => (mon.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
@@ -100,9 +100,6 @@ export default class Update extends Component {
         let updatedState = Utils.copyObject(this.state);
 
         this.setState({
-            pokemonNumber: null,
-            pokemonName: '',
-            formSuggestions: [],
             forms: this.state.forms.concat({
                 id,
                 name,
@@ -110,6 +107,14 @@ export default class Update extends Component {
             })
         });
     };
+
+    handlePokemonRemove = () => {
+        this.setState({
+            pokemonNumber: null,
+            pokemonName: '',
+            formSuggestions: []
+        })
+    }
 
     handleFormRemove = (formId) => {
         let updatedState = Utils.copyObject(this.state);
@@ -223,6 +228,34 @@ export default class Update extends Component {
         return response;
     };
 
+    validateStartTime = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.startTime) {
+            response.isValid = false;
+            response.message = 'End Time cannot be empty';
+        }
+
+        return response;
+    };
+
+    validateEndTime = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (!this.state.endTime) {
+            response.isValid = false;
+            response.message = 'End Time cannot be empty';
+        }
+
+        return response;
+    };
+
     renderPage = () => {
         if (this.state.isLoaded) {
             return (
@@ -234,11 +267,14 @@ export default class Update extends Component {
                     onPokemonSearch={this.handlePokemonSearch}
                     onPokemonSelect={this.handlePokemonSelect}
                     onFormSelect={this.handleFormSelect}
+                    onPokemonRemove={this.handlePokemonRemove}
                     onFormRemove={this.handleFormRemove}
                     onSubmit={this.handleSubmit}
                     isFormValid={this.isFormValid()}
                     validateName={this.validateName()}
                     validateForms={this.validateForms()}
+                    validateStartTime={this.validateStartTime()}
+                    validateEndTime={this.validateEndTime()}
                 />
             );
         }

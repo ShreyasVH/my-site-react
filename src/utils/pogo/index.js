@@ -6,6 +6,7 @@ import {
     UPDATE_POKEMON,
     GET_FORM_BY_ID,
     UPDATE_FORM,
+    CREATE_FORM,
     GET_FORMS_WITH_FILTER,
     GET_EVENT_BY_ID,
     UPDATE_EVENT,
@@ -44,6 +45,11 @@ export default class PogoUtils {
         return ApiHelper.put(url, payload);
     }
 
+    static createForm = (payload) => {
+        let url = BASE_URL_POGO + CREATE_FORM;
+        return ApiHelper.post(url, payload);
+    }
+
     static getFormsWithFilter = (payload) => {
         let url = BASE_URL_POGO + GET_FORMS_WITH_FILTER;
         return ApiHelper.post(url, payload);
@@ -56,7 +62,7 @@ export default class PogoUtils {
 
     static createEvent = payload => {
         let url = BASE_URL_POGO + CREATE_EVENT;
-        return ApiHelper.put(url, payload);
+        return ApiHelper.post(url, payload);
     }
 
     static updateEvent = (id, payload) => {

@@ -98,15 +98,20 @@ export default class Update extends Component {
         let updatedState = Utils.copyObject(this.state);
 
         this.setState({
-            pokemonNumber: null,
-            pokemonName: '',
-            formSuggestions: [],
             forms: this.state.forms.concat({
                 id,
                 name,
                 number: updatedState.pokemonNumber
             })
         });
+    };
+
+    handlePokemonRemove = () => {
+        this.setState({
+            pokemonNumber: null,
+            pokemonName: '',
+            formSuggestions: []
+        })
     };
 
     handleFormRemove = (formId) => {
@@ -229,6 +234,7 @@ export default class Update extends Component {
                     onEndTimeChange={this.handleEndTimeChange}
                     onPokemonSearch={this.handlePokemonSearch}
                     onPokemonSelect={this.handlePokemonSelect}
+                    onPokemonRemove={this.handlePokemonRemove}
                     onFormSelect={this.handleFormSelect}
                     onFormRemove={this.handleFormRemove}
                     onSubmit={this.handleSubmit}

@@ -135,8 +135,8 @@ class BrowseCore extends Component {
                 >
                     <img
                         className={this.props.classes.cardImage}
-                        // src={form.imageUrl}
-                        src={"https://res.cloudinary.com/dyoxubvbg/image/upload/v1640195062/pogo/1_Standard.png"}
+                        src={form.imageUrl}
+                        // src={"https://res.cloudinary.com/dyoxubvbg/image/upload/v1640195062/pogo/1_Standard.png"}
                         alt={form.pokemonName + '_' + form.formName}
                     />
                 </Paper>
