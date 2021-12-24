@@ -61,7 +61,8 @@ export const UPDATE_FORM = 'pogo/forms/{id}';
 export const GET_FORMS_WITH_FILTER = 'pogo/forms/filter';
 
 export const GET_EVENT_BY_ID = 'pogo/events/{id}';
-export const UPDATE_EVENT = 'pogo/events/{id}'
+export const UPDATE_EVENT = 'pogo/events/{id}';
+export const CREATE_EVENT = 'pogo/events';
 
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',

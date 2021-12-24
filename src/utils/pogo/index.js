@@ -7,7 +7,9 @@ import {
     GET_FORM_BY_ID,
     UPDATE_FORM,
     GET_FORMS_WITH_FILTER,
-    GET_EVENT_BY_ID, UPDATE_EVENT
+    GET_EVENT_BY_ID,
+    UPDATE_EVENT,
+    CREATE_EVENT
 } from '../../constants';
 import ApiHelper from '../apiHelper';
 
@@ -50,6 +52,11 @@ export default class PogoUtils {
     static getEventId = id => {
         let url = BASE_URL_POGO + GET_EVENT_BY_ID.replace('{id}', id);
         return ApiHelper.get(url);
+    }
+
+    static createEvent = payload => {
+        let url = BASE_URL_POGO + CREATE_EVENT;
+        return ApiHelper.put(url, payload);
     }
 
     static updateEvent = (id, payload) => {

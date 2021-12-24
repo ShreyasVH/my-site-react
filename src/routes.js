@@ -121,6 +121,10 @@ export const RouteMappings = [
         filePath: './containers/pogo/events/update'
     },
     {
+        route: '/pogo/events/add',
+        filePath: './containers/pogo/events/add'
+    },
+    {
         filePath: './containers/notFound'
     }
 ];
