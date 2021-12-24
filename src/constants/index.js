@@ -60,6 +60,9 @@ export const GET_FORM_BY_ID = 'pogo/forms/{id}';
 export const UPDATE_FORM = 'pogo/forms/{id}';
 export const GET_FORMS_WITH_FILTER = 'pogo/forms/filter';
 
+export const GET_EVENT_BY_ID = 'pogo/events/{id}';
+export const UPDATE_EVENT = 'pogo/events/{id}'
+
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',
 	CHECKBOX: 'checkbox',
