@@ -73,3 +73,7 @@ export const FILTER_TYPE = {
 	RADIO: 'radio',
 	RANGE: 'range'
 };
+
+export const BASE_FILTER_TYPE = {
+	AND: 'and'
+};
