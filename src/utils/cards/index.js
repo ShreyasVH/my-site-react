@@ -81,33 +81,7 @@ export default class Cards {
         let filters = cardStore.filters;
         let sortMap = cardStore.sortMap;
 
-        let urlParams = [];
-
-        for (const key in filters) {
-            if (filters.hasOwnProperty(key)) {
-                let values = filters[key];
-                for (const index in values) {
-                    if (values.hasOwnProperty(index)) {
-                        let value = values[index];
-                        urlParams.push(key + "[]=" + value);
-                    }
-                }
-            }
-        }
-
-        let queryString = urlParams.join("&");
-
-        let sortParams = [];
-        for (const key in sortMap) {
-            if (sortMap.hasOwnProperty(key)) {
-                let value = sortMap[key];
-                sortParams.push(key + " " + value);
-            }
-        }
-        let sortString = "order=" + sortParams.join("&");
-
-        queryString = (('' !== queryString) ? (queryString + "&" + sortString) : (sortString));
-        return location.pathname + "?" + queryString;
+        return Utils.paramsToUrl(filters, sortMap);
     };
 
     static clearList = () => {

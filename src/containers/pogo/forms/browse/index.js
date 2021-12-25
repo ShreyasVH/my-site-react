@@ -81,6 +81,8 @@ export default class Update extends Component {
             updatedState.isFilterOpen = false;
 
             this.setState(updatedState);
+
+            this.updateUrl();
         }
 
         Context.hideLoader();
@@ -162,6 +164,13 @@ export default class Update extends Component {
 
     applyFilters = async () => {
         await this.loadForms(this.state.offset, true);
+    };
+
+    updateUrl = () => {
+        let url = Utils.paramsToUrl(this.state.selectedFiltersTemp, {});
+        if (url !== decodeURI(location.pathname + location.search)) {
+            history.pushState(null, "Browse with filters", url);
+        }
     };
 
     renderPage = () => {

@@ -4,13 +4,16 @@ import { withStyles } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SearchDropDown from "../../../../components/searchDropdown";
-import DatePicker from "../../../../components/datePicker";
+import DateTimePicker from "../../../../components/dateTimePicker";
 import FileUpload from "../../../../components/fileUpload";
+import Chip from "@material-ui/core/Chip";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Waypoint from "react-waypoint";
 import EditIcon from "@material-ui/icons/Edit";
-import Filters from "../../../filters";
+import Typography from "@material-ui/core/Typography";
+import Utils from '../../../../utils';
 
 const styles = theme => ({
     form: {
@@ -76,49 +79,37 @@ const styles = theme => ({
             width: '100%',
         }
     },
-    details: {
-        textAlign: 'center',
-        '& p': {
-            marginTop: 0,
-            marginBottom: 0
+    chip: {
+        margin: '0.25%'
+    },
+    formsContainer: {
+        margin: '0.25%',
+        width: '99.5%',
+        border: '1px solid gray',
+        borderRadius: '5px'
+    },
+    removeRow: {
+        verticalAlign: 'middle',
+        display: 'inline-block',
+        marginTop: '2%',
+        marginLeft: '0.5%',
+        '& button': {
+            padding: 'initial'
+        },
+        [theme.breakpoints.down('md')]: {
+            display: 'block',
+            textAlign: 'center'
         }
     },
-    edit: {
-        float: 'right',
-        cursor: 'pointer'
+    paper: {
+        textAlign: 'center'
+    },
+    details: {
+        textAlign: 'center'
     }
 });
 
-class BrowseCore extends Component {
-    handleScroll = event => this.props.onScroll && this.props.onScroll();
-    handleEditClick = id => event => this.props.onEditClick && this.props.onEditClick(id);
-
-    renderCount = () => {
-        return (
-            <h3
-                className="item-count"
-            >
-                {this.props.totalCount + ' forms'}
-            </h3>
-        );
-    };
-
-    renderFilter = () => {
-        return (
-            <Filters
-                isOpen={this.props.isFilterOpen}
-                selected={this.props.selectedFiltersTemp}
-                options={this.props.filterOptions}
-                onFilterOpen={this.props.onFilterOpen}
-                onFilterClose={this.props.onFilterClose}
-                handleEvent={this.props.onEvent}
-                applyFilters={this.props.onFilterApply}
-                clearFilters={this.props.FilterClearAll}
-                clearFilter={this.props.onFilterClear}
-            />
-        );
-    };
-
+class DetailCore extends Component {
     renderListMarkup = () => {
         return this.props.forms.map(form => (
             <Grid
@@ -136,23 +127,18 @@ class BrowseCore extends Component {
                     <img
                         className={this.props.classes.cardImage}
                         src={form.imageUrl}
-                        alt={form.pokemonName + '_' + form.formName}
+                        alt={this.props.pokemonMap[form.number].name + '_' + form.name}
                         height={200}
                         width={200}
                     />
                 </Paper>
                 <div className={this.props.classes.details}>
                     <p>
-                        {'#' + form.pokemonNumber + ' ' + form.pokemonName}
+                        {'#' + form.number + ' ' + this.props.pokemonMap[form.number].name}
                     </p>
                     <p>
-                        {form.formName}
+                        {form.name}
                     </p>
-                    <EditIcon
-                        className={this.props.classes.edit}
-                        color='primary'
-                        onClick={this.handleEditClick(form.formId)}
-                    />
                 </div>
             </Grid>
         ));
@@ -166,30 +152,62 @@ class BrowseCore extends Component {
         </div>
     }
 
-    renderWaypoint = () => {
-        if (this.props.totalCount > 0) {
-            return (
-                <Waypoint
-                    onEnter={this.handleScroll}
-                />
-            );
-        }
-    };
-
     render() {
         return (
             <div>
-                {this.renderFilter()}
-                {this.renderCount()}
-                {this.renderList()}
-                {this.renderWaypoint()}
+                <Grid container justify="center" spacing={16} key={"container"}>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        md={4}
+                        lg={4}
+                        xl={4}
+                        key={"name"}
+                    >
+                        <Typography component={'span'} color="textSecondary" className={this.props.classes.tourName}>
+                            {this.props.name}
+                        </Typography>
+                    </Grid>
+
+                    <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        md={4}
+                        lg={4}
+                        xl={4}
+                        key={"startTime"}
+                    >
+                        <Typography component={'span'} color="textSecondary" className={this.props.classes.tourName}>
+                            {Utils.formatDateToString(this.props.startTime) + ' ' + Utils.formatTimeToString(this.props.startTime)}
+                        </Typography>
+                    </Grid>
+
+                    <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        md={4}
+                        lg={4}
+                        xl={4}
+                        key={"startTime"}
+                    >
+                        <Typography component={'span'} color="textSecondary" className={this.props.classes.tourName}>
+                            {Utils.formatDateToString(this.props.endTime) + ' ' + Utils.formatTimeToString(this.props.endTime)}
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <div>
+                    {this.renderList()}
+                </div>
             </div>
         );
     }
 }
 
-BrowseCore.propTypes = {
+DetailCore.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(BrowseCore);
+export default withStyles(styles)(DetailCore);
