@@ -66,7 +66,7 @@ export default class Update extends Component {
             Context.showLoader();
 
             if (this.state.imageFile) {
-                const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'pogo', this.state.pokemonNumber + '_' + this.state.name);
+                const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'pogo', this.state.pokemonNumber + '_' + this.state.name.toLowerCase().replace(/\s/g, '_'));
                 let response = uploadResponse.data;
                 payload.imageUrl = response.secure_url;
             }
