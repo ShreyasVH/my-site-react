@@ -133,6 +133,10 @@ export const RouteMappings = [
         filePath: './containers/pogo/events/detail'
     },
     {
+        route: '/pogo/events/list',
+        filePath: './containers/pogo/events/list'
+    },
+    {
         filePath: './containers/notFound'
     }
 ];
