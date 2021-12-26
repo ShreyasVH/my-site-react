@@ -103,7 +103,8 @@ const styles = theme => ({
         }
     },
     paper: {
-        textAlign: 'center'
+        textAlign: 'center',
+        cursor: 'pointer'
     },
     details: {
         textAlign: 'center'
@@ -120,8 +121,9 @@ const styles = theme => ({
 });
 
 class DetailCore extends Component {
-    handleEditClick = id => event => this.props.onEditClick && this.props.onEditClick(id);
+    handleEditClick = id => event => this.props.onEditClick && this.props.onEditClick(id, event);
     handleNewClick = event => this.props.onNewClick && this.props.onNewClick();
+    handleDetailClick = id => event => this.props.onDetailClick && this.props.onDetailClick(id);
     handleScroll = event => this.props.onScroll && this.props.onScroll();
 
     renderListMarkup = () => {
@@ -137,6 +139,7 @@ class DetailCore extends Component {
             >
                 <Paper
                     className={this.props.classes.paper}
+                    onClick={this.handleDetailClick(event.id)}
                 >
                     <Typography component={'span'} color="textSecondary" className={this.props.classes.tourName}>
                         {event.name}

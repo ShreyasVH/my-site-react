@@ -57,9 +57,14 @@ export default class List extends Component {
         }
 
         Context.hideLoader();
+    };
+
+    handleDetailClick = (id) => {
+        this.props.history.push('/pogo/events/detail?id=' + id);
     }
 
-    handleEditClick = (id) => {
+    handleEditClick = (id, event) => {
+        event.stopPropagation();
         this.props.history.push('/pogo/events/update?id=' + id);
     };
 
@@ -78,6 +83,7 @@ export default class List extends Component {
                     {...this.state}
                     onEditClick={this.handleEditClick}
                     onNewClick={this.handleNewClick}
+                    onDetailClick={this.handleDetailClick}
                     onScroll={this.handleScroll}
                 />
             );

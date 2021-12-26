@@ -191,7 +191,7 @@ class DetailCore extends Component {
                         md={4}
                         lg={4}
                         xl={4}
-                        key={"startTime"}
+                        key={"endTime"}
                     >
                         <Typography component={'span'} color="textSecondary" className={this.props.classes.tourName}>
                             {Utils.formatDateToString(this.props.endTime) + ' ' + Utils.formatTimeToString(this.props.endTime)}
