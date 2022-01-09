@@ -107,7 +107,7 @@ const defaultState = {
 				}
 			]
 		},
-		seen_in_theatre: {
+		seenInTheatre: {
 			displayName: 'Seen',
 			type: FILTER_TYPE.CHECKBOX,
 			values: [

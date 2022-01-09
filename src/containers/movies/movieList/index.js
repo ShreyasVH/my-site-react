@@ -19,10 +19,19 @@ const styles = theme => ({
 class MovieList extends Component {
 	renderMarkup = () => (
 		this.props.movieList.map((movie) => (
-			<MovieCard
+			<Grid
+				item
 				key={'movie-' + movie.id}
-				movie={movie}
-			/>
+				xs={12}
+				sm={4}
+				md={3}
+				lg={2}
+				xl={1}
+			>
+				<MovieCard
+					movie={movie}
+				/>
+			</Grid>
 		))
 	);
 

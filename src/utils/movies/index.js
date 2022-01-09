@@ -57,9 +57,27 @@ export default class Movies {
 			offset = movieStore.offset;
 		}
 
+		const booleanFilterKeys = [
+			'subtitles',
+			'seenInTheatre'
+		];
+
+		let orFilters = {};
+		let booleanFilters = {};
+		for (const [key, values] of Object.entries(filters)) {
+			if (booleanFilterKeys.indexOf(key) !== -1 ) {
+				if (values.length === 1) {
+					booleanFilters[key] = values[0];
+				}
+			} else {
+				orFilters[key] = values;
+			}
+		}
+
 		if ((-1 === totalCount) || (offset < totalCount) || shouldReplace) {
 			let payload = {
-				filters,
+				filters: orFilters,
+				booleanFilters,
 				sortMap,
 				offset,
 				count: 24
@@ -69,7 +87,7 @@ export default class Movies {
 				let response = apiResponse.data;
 				if (0 !== Object.keys(response).length) {
 					Movies.updateUrl();
-					store.dispatch(updateMovieList(response.movies, response.offset, response.totalCount, shouldReplace));
+					store.dispatch(updateMovieList(response.list, response.offset + payload.count, response.totalCount, shouldReplace));
 					Filters.closeFilters('movies');
 					Context.hideLoader();
 				}

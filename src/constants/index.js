@@ -11,7 +11,7 @@ export const BASE_URL_POGO = process.env.API_ENDPOINT_POGO;
 export const GET_MODE_URL = 'data/getMode';
 // export const CHANGE_MODE_URL = 'index/changeMode?newMode={newMode}';
 export const MOVIES_DASHBOARD_URL = 'movies/dashboard';
-export const GET_MOVIES_WITH_FILTERS_URL = 'movies/moviesWithFilter';
+export const GET_MOVIES_WITH_FILTERS_URL = 'movies/filter';
 export const ACTOR_LIST_URL = 'data/getActorList';
 export const DIRECTOR_LIST_URL = 'data/getDirectorList';
 export const GET_DELETED_MOVIES = 'data/getDeletedMovies?isPwaRequest=true';
