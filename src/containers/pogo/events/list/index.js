@@ -11,7 +11,7 @@ export default class List extends Component {
         this.state = {
             isLoaded: false,
             offset: 0,
-            count: 48,
+            count: 24,
             totalCount: 0,
             events: []
         };
@@ -43,12 +43,6 @@ export default class List extends Component {
 
             let events = filterResponse.data.list;
 
-            // events = events.concat(events);
-            // events = events.concat(events);
-            // events = events.concat(events);
-            // events = events.concat(events);
-            // events = events.concat(events);
-
             this.setState({
                 events: this.state.events.concat(events),
                 offset: this.state.offset + (this.state.count),
@@ -73,7 +67,7 @@ export default class List extends Component {
     }
 
     handleScroll = async () => {
-        await this.loadEvents(this.state.offset + this.state.count);
+        await this.loadEvents(this.state.offset);
     }
 
     renderPage = () => {
