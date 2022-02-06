@@ -69,7 +69,9 @@ module.exports = {
 			'process.env.API_ENDPOINT_CRICBUZZ': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_CRICBUZZ),
 			'process.env.API_ENDPOINT_POGO': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_POGO),
 			'process.env.CLOUDINARY_ACCOUNT_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_ACCOUNT_NAME),
-			'process.env.CLOUDINARY_PRESET_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_PRESET_NAME)
+			'process.env.CLOUDINARY_PRESET_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_PRESET_NAME),
+			'process.env.ARTIST_DEFAULT_MALE': JSON.stringify(process.env.REACT_APP_ARTIST_DEFAULT_MALE),
+			'process.env.ARTIST_DEFAULT_FEMALE': JSON.stringify(process.env.REACT_APP_ARTIST_DEFAULT_FEMALE)
 		}),
 	],
 	optimization: {

@@ -10,9 +10,7 @@ const styles = theme => ({
 });
 
 class FileUpload extends Component {
-    handleFileUpload = event => {
-        this.props.onFileUpload && this.props.onFileUpload(event.target.files);
-    }
+    handleFileUpload = event => this.props.onFileUpload && this.props.onFileUpload(event.target.files);
 
     render () {
         return (

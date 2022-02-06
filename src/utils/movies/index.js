@@ -9,7 +9,10 @@ import {
 	GET_MOVIES_WITH_FILTERS_URL,
 	GET_DELETED_MOVIES,
 	GET_MOVIE_DETAILS,
-	GET_MOVIE_BY_NAME
+	GET_MOVIE_BY_NAME,
+	GET_ARTIST_BY_ID,
+	UPDATE_ARTIST,
+	ADD_ARTIST
 } from '../../constants';
 import ApiHelper from '../apiHelper';
 import store from '../../store';
@@ -194,4 +197,16 @@ export default class Movies {
 			}
 		}
 	}
+
+	static getArtist = (id) => {
+		return ApiHelper.get(BASE_URL + GET_ARTIST_BY_ID.replace('{id}', id));
+	};
+
+	static updateArtist = (id, payload) => {
+		return ApiHelper.put(BASE_URL + UPDATE_ARTIST.replace('{id}', id), payload);
+	};
+
+	static addArtist = (payload) => {
+		return ApiHelper.post(BASE_URL + ADD_ARTIST, payload);
+	};
 }
