@@ -140,11 +140,11 @@ class MovieDetailCore extends Component {
 	};
 
 	renderDirectors = () => {
-		let artistMarkup = this.props.movie.directors.map((directorId, index) => (
+		let artistMarkup = this.props.movie.directors.map((director, index) => (
 			<Grid
 				item
 				xs={3}
-				key={directorId}
+				key={director.id}
 			>
 				<Paper
 					className={this.props.classes.paper}
@@ -152,8 +152,8 @@ class MovieDetailCore extends Component {
 					<div>
 						<img
 							className={this.props.classes.artistImage}
-							src={this.props.movie.directorImageUrls[index]}
-							alt={this.props.movie.directorNames[index]}
+							src={director.imageUrl}
+							alt={director.name}
 						/>
 					</div>
 				</Paper>
@@ -161,10 +161,10 @@ class MovieDetailCore extends Component {
 					className={this.props.classes.artistLink}
 				>
 					<Link
-						to={'/movies/browseMovies?directors[]=' + directorId}
+						to={'/movies/browseMovies?directors[]=' + director.id}
 					>
 						<span className={this.props.classes.link}>
-							{this.props.movie.directorNames[index]}
+							{director.name}
 						</span>
 					</Link>
 				</div>
@@ -185,11 +185,11 @@ class MovieDetailCore extends Component {
 	};
 
 	renderActors = () => {
-		let artistMarkup = this.props.movie.actors.map((actorId, index) => (
+		let artistMarkup = this.props.movie.actors.map((actor, index) => (
 			<Grid
 				item
 				xs={4}
-				key={actorId}
+				key={actor.id}
 			>
 				<Paper
 					className={this.props.classes.paper}
@@ -197,8 +197,8 @@ class MovieDetailCore extends Component {
 					<div>
 						<img
 							className={this.props.classes.artistImage}
-							src={this.props.movie.actorImageUrls[index]}
-							alt={this.props.movie.actorNames[index]}
+							src={actor.imageUrl}
+							alt={actor.name}
 						/>
 					</div>
 				</Paper>
@@ -206,10 +206,10 @@ class MovieDetailCore extends Component {
 					className={this.props.classes.artistLink}
 				>
 					<Link
-						to={'/movies/browseMovies?actors[]=' + actorId}
+						to={'/movies/browseMovies?actors[]=' + actor.id}
 					>
 						<span className={this.props.classes.link}>
-							{this.props.movie.actorNames[index]}
+							{actor.name}
 						</span>
 					</Link>
 				</div>
