@@ -27,11 +27,17 @@ export default class SearchDropDown extends Component {
     };
 
     handleTextFieldBlur = () => {
-        setTimeout(() => {
-            this.setState(({
-                isFocussed: false
-            }));
-        }, 200);
+        // setTimeout(() => {
+        //     this.setState(({
+        //         isFocussed: false
+        //     }));
+        // }, 200);
+    };
+
+    handleTextFieldFocus = () => {
+        this.setState(({
+            isFocussed: true
+        }));
     };
 
     handleKeyUp = event => {
@@ -60,6 +66,7 @@ export default class SearchDropDown extends Component {
                 {...this.state}
                 onDisplayFieldClick={this.handleDisplayFieldClick}
                 onTextFieldBlur={this.handleTextFieldBlur}
+                onTextFieldFocus={this.handleTextFieldFocus}
                 onSelect={this.handleSelect}
                 onKeyUp={this.handleKeyUp}
             />

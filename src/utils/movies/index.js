@@ -9,7 +9,10 @@ import {
 	GET_MOVIES_WITH_FILTERS_URL,
 	GET_DELETED_MOVIES,
 	GET_MOVIE_DETAILS,
-	GET_MOVIE_BY_NAME
+	GET_MOVIE_BY_NAME,
+	GET_ARTIST_BY_ID,
+	UPDATE_ARTIST,
+	ADD_ARTIST
 } from '../../constants';
 import ApiHelper from '../apiHelper';
 import store from '../../store';
@@ -57,9 +60,27 @@ export default class Movies {
 			offset = movieStore.offset;
 		}
 
+		const booleanFilterKeys = [
+			'subtitles',
+			'seenInTheatre'
+		];
+
+		let orFilters = {};
+		let booleanFilters = {};
+		for (const [key, values] of Object.entries(filters)) {
+			if (booleanFilterKeys.indexOf(key) !== -1 ) {
+				if (values.length === 1) {
+					booleanFilters[key] = values[0];
+				}
+			} else {
+				orFilters[key] = values;
+			}
+		}
+
 		if ((-1 === totalCount) || (offset < totalCount) || shouldReplace) {
 			let payload = {
-				filters,
+				filters: orFilters,
+				booleanFilters,
 				sortMap,
 				offset,
 				count: 24
@@ -69,7 +90,7 @@ export default class Movies {
 				let response = apiResponse.data;
 				if (0 !== Object.keys(response).length) {
 					Movies.updateUrl();
-					store.dispatch(updateMovieList(response.movies, response.offset, response.totalCount, shouldReplace));
+					store.dispatch(updateMovieList(response.list, response.offset + payload.count, response.totalCount, shouldReplace));
 					Filters.closeFilters('movies');
 					Context.hideLoader();
 				}
@@ -176,4 +197,16 @@ export default class Movies {
 			}
 		}
 	}
+
+	static getArtist = (id) => {
+		return ApiHelper.get(BASE_URL + GET_ARTIST_BY_ID.replace('{id}', id));
+	};
+
+	static updateArtist = (id, payload) => {
+		return ApiHelper.put(BASE_URL + UPDATE_ARTIST.replace('{id}', id), payload);
+	};
+
+	static addArtist = (payload) => {
+		return ApiHelper.post(BASE_URL + ADD_ARTIST, payload);
+	};
 }

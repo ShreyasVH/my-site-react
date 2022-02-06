@@ -17,6 +17,14 @@ export const RouteMappings = [
         filePath: './containers/movies/movieDetail'
     },
     {
+        route: '/movies/artists/add',
+        filePath: './containers/movies/artists/add'
+    },
+    {
+        route: '/movies/artists/update',
+        filePath: './containers/movies/artists/update'
+    },
+    {
         route: '/cards/browse',
         filePath: './containers/cards/browse'
     },
@@ -103,6 +111,38 @@ export const RouteMappings = [
     {
         route: '/cricbuzz/players/stats',
         filePath: './containers/cricbuzz/player/stats'
+    },
+    {
+        route: '/pogo/mons/update',
+        filePath: './containers/pogo/mons/update'
+    },
+    {
+        route: '/pogo/forms/update',
+        filePath: './containers/pogo/forms/update'
+    },
+    {
+        route: '/pogo/forms/add',
+        filePath: './containers/pogo/forms/add'
+    },
+    {
+        route: '/pogo/forms/browse',
+        filePath: './containers/pogo/forms/browse'
+    },
+    {
+        route: '/pogo/events/update',
+        filePath: './containers/pogo/events/update'
+    },
+    {
+        route: '/pogo/events/add',
+        filePath: './containers/pogo/events/add'
+    },
+    {
+        route: '/pogo/events/detail',
+        filePath: './containers/pogo/events/detail'
+    },
+    {
+        route: '/pogo/events/list',
+        filePath: './containers/pogo/events/list'
     },
     {
         filePath: './containers/notFound'

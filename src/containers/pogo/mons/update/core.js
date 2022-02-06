@@ -64,29 +64,34 @@ const styles = theme => ({
         [theme.breakpoints.down('xs')]: {
             width: '100%',
         }
+    },
+    halfWidth: {
+        width: '50%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     }
 });
 
 class UpdateCore extends Component {
     handleNameChange = event => (this.props.onNameChange && this.props.onNameChange(event));
 
-    handleDateOfBirthChange = event => (this.props.onDateOfBirthChange && this.props.onDateOfBirthChange(event));
+    handleCandyPokemonSearch = event => (this.props.onCandyPokemonSearch && this.props.onCandyPokemonSearch(event));
+    handleRegionSelect = (id, name) => (this.props.onRegionSelect && this.props.onRegionSelect(id, name));
+    handleCandyPokemonSelect = (id, name) => (this.props.onCandyPokemonSelect && this.props.onCandyPokemonSelect(id, name));
 
-    handleCountrySearch = event => (this.props.onCountrySearch && this.props.onCountrySearch(event));
-    handleCountrySelect = (id, name) => (this.props.onCountrySelect && this.props.onCountrySelect(id, name));
-
-    handleFileUpload = files => (this.props.onImageSelect && this.props.onImageSelect(files[0]));
-
+    handleCandyCountChange = event => (this.props.onCandyCountChange && this.props.onCandyCountChange(event));
+    
     render() {
         return (
             <div>
                 <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
-                        Update Player
+                        Update Mon
                     </div>
                     <div className={this.props.classes.container}>
                         <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
                                         label="Name"
@@ -101,48 +106,49 @@ class UpdateCore extends Component {
                                 </div>
                             </div>
 
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
-                                        onKeyUp={this.handleCountrySearch}
-                                        items={this.props.countrySuggestions}
-                                        label="Country"
-                                        placeholder="Country"
-                                        onSelect={this.handleCountrySelect}
-                                        displayValue={this.props.countryName}
-                                        error={!this.props.validateCountry.isValid}
-                                        helperText={this.props.validateCountry.message}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
-                                    <DateTimePicker
-                                        label={'Date of Birth'}
-                                        placeholder={'Date of Birth'}
-                                        value={this.props.dateOfBirth}
-                                        onChange={this.handleDateOfBirthChange}
-                                        error={!this.props.validateDateOfBirth.isValid}
-                                        helperText={this.props.validateDateOfBirth.message}
+                                        items={this.props.regions}
+                                        label="Region"
+                                        placeholder="Region"
+                                        onSelect={this.handleRegionSelect}
+                                        displayValue={this.props.regionName}
+                                        error={!this.props.validateRegion.isValid}
+                                        helperText={this.props.validateRegion.message}
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.fullWidth}`}>
+                        <div>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
-                                    <FileUpload
-                                        name={'image'}
-                                        label={'Upload Image'}
-                                        onFileUpload={this.handleFileUpload}
-                                        fileName={this.props.imageName}
+                                    <SearchDropDown
+                                        items={this.props.candyPokemonSuggestions}
+                                        label="Candy Pokemon"
+                                        placeholder="Candy Pokemon"
+                                        onSelect={this.handleCandyPokemonSelect}
+                                        displayValue={this.props.candyPokemonName}
+                                        onKeyUp={this.handleCandyPokemonSearch}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <TextField
+                                        type="number"
+                                        label="Candies to evolve"
+                                        placeholder="Candies"
+                                        variant="outlined"
+                                        fullWidth
+                                        value={this.props.candiesToEvolve}
+                                        onChange={this.handleCandyCountChange}
                                     />
                                 </div>
                             </div>
                         </div>
-
 
                         <div className={`${this.props.classes.row}`}>
                             <Button

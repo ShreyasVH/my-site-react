@@ -7,15 +7,20 @@ export const BASE_URL = process.env.API_ENDPOINT;
 export const BASE_URL_DUEL_LINKS = process.env.API_ENDPOINT_DUEL_LINKS;
 export const BASE_URL_LOGGER = process.env.API_ENDPOINT_LOGGER;
 export const BASE_URL_CRICBUZZ = process.env.API_ENDPOINT_CRICBUZZ;
+export const BASE_URL_POGO = process.env.API_ENDPOINT_POGO;
 export const GET_MODE_URL = 'data/getMode';
 // export const CHANGE_MODE_URL = 'index/changeMode?newMode={newMode}';
 export const MOVIES_DASHBOARD_URL = 'movies/dashboard';
-export const GET_MOVIES_WITH_FILTERS_URL = 'movies/moviesWithFilter';
+export const GET_MOVIES_WITH_FILTERS_URL = 'movies/filter';
 export const ACTOR_LIST_URL = 'data/getActorList';
 export const DIRECTOR_LIST_URL = 'data/getDirectorList';
 export const GET_DELETED_MOVIES = 'data/getDeletedMovies?isPwaRequest=true';
 export const GET_MOVIE_DETAILS = 'movies/movie/id/{id}';
 export const GET_MOVIE_BY_NAME = 'movies/movies/keyword/{keyword}';
+
+export const GET_ARTIST_BY_ID = 'artists/{id}'
+export const UPDATE_ARTIST = 'artists/{id}'
+export const ADD_ARTIST = 'artists'
 
 export const GET_CARDS_WITH_FILTERS_URL = 'cards/filters';
 export const OBTAIN_CARDS_URL = 'cards/myCards';
@@ -49,6 +54,22 @@ export const CREATE_MATCH = 'cricbuzz/matches';
 export const GET_YEARS = 'cricbuzz/tours/years';
 export const GET_STATS = 'cricbuzz/stats';
 
+export const GEM_MON_BY_NUMBER = 'pogo/pokemon/num/{number}';
+export const GET_ALL_POKEMONS = 'pogo/pokemon/all';
+export const UPDATE_POKEMON = 'pogo/pokemon/{number}';
+
+export const GET_ALL_REGIONS = 'pogo/regions';
+
+export const GET_FORM_BY_ID = 'pogo/forms/{id}';
+export const UPDATE_FORM = 'pogo/forms/{id}';
+export const GET_FORMS_WITH_FILTER = 'pogo/forms/filter';
+export const CREATE_FORM = 'pogo/forms';
+
+export const GET_EVENT_BY_ID = 'pogo/events/{id}';
+export const UPDATE_EVENT = 'pogo/events/{id}';
+export const CREATE_EVENT = 'pogo/events';
+export const GET_EVENTS_WITH_FILTER = 'pogo/events/filter';
+
 export const INPUT_TYPE = {
 	TEXTFIELD: 'text',
 	CHECKBOX: 'checkbox',
@@ -61,4 +82,8 @@ export const FILTER_TYPE = {
 	CHECKBOX: 'checkbox',
 	RADIO: 'radio',
 	RANGE: 'range'
+};
+
+export const BASE_FILTER_TYPE = {
+	AND: 'and'
 };

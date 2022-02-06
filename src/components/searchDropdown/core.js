@@ -69,6 +69,8 @@ class SearchDropdownCore extends Component {
 
     handleTextFieldBlur = event => this.props.onTextFieldBlur && this.props.onTextFieldBlur();
 
+    handleTextFieldFocus = event => this.props.onTextFieldFocus && this.props.onTextFieldFocus();
+
     handleSelect = (selectedId, selectedName) => event => this.props.onSelect && this.props.onSelect(selectedId, selectedName);
 
     getDisplayValue = () => ((this.props.displayValue) ? this.props.displayValue : '');
@@ -90,6 +92,8 @@ class SearchDropdownCore extends Component {
                     autoComplete="off"
                     placeholder={this.getPlaceHolder()}
                     onBlur={this.handleTextFieldBlur}
+                    disabled={this.props.disabled}
+                    InputLabelProps={{ shrink: true }}
                 />
             );
         } else {
@@ -106,6 +110,8 @@ class SearchDropdownCore extends Component {
                     value={this.getDisplayValue()}
                     error={this.props.error}
                     helperText={this.props.helperText}
+                    disabled={this.props.disabled}
+                    onFocus={this.handleTextFieldFocus}
                 />
             );
         }

@@ -43,6 +43,41 @@ export default class Utils {
 		return param;
 	};
 
+	static paramsToUrl = (filters, sortMap) => {
+		let urlParams = [];
+
+		for (const key in filters) {
+			if (filters.hasOwnProperty(key)) {
+				let values = filters[key];
+				for (const index in values) {
+					if (values.hasOwnProperty(index)) {
+						let value = values[index];
+						urlParams.push(key + "[]=" + value);
+					}
+				}
+			}
+		}
+
+		let queryString = urlParams.join("&");
+
+		let sortString = '';
+		if (Object.keys(sortMap).length > 0) {
+			let sortParams = [];
+			for (const key in sortMap) {
+				if (sortMap.hasOwnProperty(key)) {
+					let value = sortMap[key];
+					sortParams.push(key + " " + value);
+				}
+			}
+			sortString = "order=" + sortParams.join("&");
+		}
+
+		if (sortString) {
+			queryString = (('' !== queryString) ? (queryString + "&" + sortString) : (sortString));
+		}
+		return ((queryString) ? location.pathname + "?" + queryString :  location.pathname);
+	};
+
 	static copyObject = (referencedObject) => JSON.parse(JSON.stringify(referencedObject));
 
 	static ucfirst = (string) => ((string) ? (string[0].toUpperCase() + string.slice(1)) : '');

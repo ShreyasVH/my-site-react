@@ -4,7 +4,7 @@ import { withStyles } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SearchDropDown from "../../../../components/searchDropdown";
-import DateTimePicker from "../../../../components/dateTimePicker";
+import DatePicker from "../../../../components/datePicker";
 import FileUpload from "../../../../components/fileUpload";
 
 const styles = theme => ({
@@ -64,28 +64,49 @@ const styles = theme => ({
         [theme.breakpoints.down('xs')]: {
             width: '100%',
         }
+    },
+    halfWidth: {
+        width: '50%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        }
     }
 });
 
 class UpdateCore extends Component {
     handleNameChange = event => (this.props.onNameChange && this.props.onNameChange(event));
 
-    handleDateOfBirthChange = event => (this.props.onDateOfBirthChange && this.props.onDateOfBirthChange(event));
-
-    handleCountrySearch = event => (this.props.onCountrySearch && this.props.onCountrySearch(event));
-    handleCountrySelect = (id, name) => (this.props.onCountrySelect && this.props.onCountrySelect(id, name));
-
     handleFileUpload = files => (this.props.onImageSelect && this.props.onImageSelect(files[0]));
+
+    handlePokemonSearch = event => (this.props.onPokemonSearch && this.props.onPokemonSearch(event));
+    handlePokemonSelect = (id, name) => (this.props.onPokemonSelect && this.props.onPokemonSelect(id, name));
+
+    handleReleaseDateChange = event => (this.props.onReleaseDateChange && this.props.onReleaseDateChange(event));
 
     render() {
         return (
             <div>
                 <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
                     <div className={this.props.classes.formTitle}>
-                        Update Player
+                        Add Form
                     </div>
                     <div className={this.props.classes.container}>
                         <div className={this.props.classes.row}>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
+                                <div className={this.props.classes.formFieldInput}>
+                                    <SearchDropDown
+                                        items={this.props.pokemonSuggestions}
+                                        label="Pokemon"
+                                        placeholder="Pokemon"
+                                        displayValue={this.props.pokemonName}
+                                        error={!this.props.validatePokemon.isValid}
+                                        helperText={this.props.validatePokemon.message}
+                                        onSelect={this.handlePokemonSelect}
+                                        onKeyUp={this.handlePokemonSearch}
+                                    />
+                                </div>
+                            </div>
+
                             <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
                                     <TextField
@@ -103,28 +124,11 @@ class UpdateCore extends Component {
 
                             <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
-                                    <SearchDropDown
-                                        onKeyUp={this.handleCountrySearch}
-                                        items={this.props.countrySuggestions}
-                                        label="Country"
-                                        placeholder="Country"
-                                        onSelect={this.handleCountrySelect}
-                                        displayValue={this.props.countryName}
-                                        error={!this.props.validateCountry.isValid}
-                                        helperText={this.props.validateCountry.message}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
-                                    <DateTimePicker
-                                        label={'Date of Birth'}
-                                        placeholder={'Date of Birth'}
-                                        value={this.props.dateOfBirth}
-                                        onChange={this.handleDateOfBirthChange}
-                                        error={!this.props.validateDateOfBirth.isValid}
-                                        helperText={this.props.validateDateOfBirth.message}
+                                    <DatePicker
+                                        label={'Release Date'}
+                                        placeholder={'Release Date'}
+                                        value={this.props.releaseDate}
+                                        onChange={this.handleReleaseDateChange}
                                     />
                                 </div>
                             </div>
@@ -142,7 +146,6 @@ class UpdateCore extends Component {
                                 </div>
                             </div>
                         </div>
-
 
                         <div className={`${this.props.classes.row}`}>
                             <Button
