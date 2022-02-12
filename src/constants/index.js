@@ -17,10 +17,15 @@ export const DIRECTOR_LIST_URL = 'data/getDirectorList';
 export const GET_DELETED_MOVIES = 'data/getDeletedMovies?isPwaRequest=true';
 export const GET_MOVIE_DETAILS = 'movies/{id}';
 export const GET_MOVIE_BY_NAME = 'movies/movies/keyword/{keyword}';
+export const GET_ALL_LANGUAGES = 'languages';
+export const GET_ALL_FORMATS = 'formats';
+export const UPDATE_MOVIE = 'movies/{id}';
+
 
 export const GET_ARTIST_BY_ID = 'artists/{id}'
 export const UPDATE_ARTIST = 'artists/{id}'
 export const ADD_ARTIST = 'artists'
+export const GET_ALL_ARTISTS = 'artists/{offset}/{count}';
 
 export const GET_CARDS_WITH_FILTERS_URL = 'cards/filters';
 export const OBTAIN_CARDS_URL = 'cards/myCards';

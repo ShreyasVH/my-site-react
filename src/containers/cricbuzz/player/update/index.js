@@ -110,7 +110,6 @@ export default class Update extends Component {
         let keyword = event.target.value;
         let countrySuggestions = [];
         if (keyword.length > 2) {
-            console.log(this.state);
             countrySuggestions = this.state.countries.filter(country => (country.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
         }
 
