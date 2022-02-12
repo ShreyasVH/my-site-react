@@ -16,7 +16,8 @@ import {
 	GET_ALL_LANGUAGES,
 	GET_ALL_FORMATS,
 	GET_ALL_ARTISTS,
-	UPDATE_MOVIE
+	UPDATE_MOVIE,
+	ADD_MOVIE
 } from '../../constants';
 import ApiHelper from '../apiHelper';
 import store from '../../store';
@@ -245,5 +246,9 @@ export default class Movies {
 
 	static updateMovie = (id, payload) => {
 		return ApiHelper.put(BASE_URL + UPDATE_MOVIE.replace('{id}', id), payload);
+	};
+
+	static addMovie = (payload) => {
+		return ApiHelper.post(BASE_URL + ADD_MOVIE, payload);
 	};
 }

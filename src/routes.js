@@ -17,6 +17,10 @@ export const RouteMappings = [
         filePath: './containers/movies/movieDetail'
     },
     {
+        route: '/movies/add',
+        filePath: './containers/movies/add'
+    },
+    {
         route: '/movies/update',
         filePath: './containers/movies/update'
     },

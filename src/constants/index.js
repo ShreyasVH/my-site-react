@@ -20,6 +20,7 @@ export const GET_MOVIE_BY_NAME = 'movies/movies/keyword/{keyword}';
 export const GET_ALL_LANGUAGES = 'languages';
 export const GET_ALL_FORMATS = 'formats';
 export const UPDATE_MOVIE = 'movies/{id}';
+export const ADD_MOVIE = "movies"
 
 
 export const GET_ARTIST_BY_ID = 'artists/{id}'

@@ -95,7 +95,7 @@ class MovieDetailCore extends Component {
 	};
 
 	renderLanguageDetails = () => {
-		return (this.renderField('Language', this.props.movie.languageName));
+		return (this.renderField('Language', this.props.movie.language.name));
 	};
 
 	renderYearDetails = () => {
@@ -118,7 +118,7 @@ class MovieDetailCore extends Component {
 	};
 
 	renderFormatDetails = () => {
-		return (this.renderField('Format', this.props.movie.formatName));
+		return (this.renderField('Format', this.props.movie.format.name));
 	};
 
 	renderQualityDetails = () => {
@@ -130,7 +130,7 @@ class MovieDetailCore extends Component {
 	};
 
 	renderSeenDetails = () => {
-		return (this.renderField('Seen', ((this.props.movie.seen_in_theatre) ? 'Yes' : 'No'), 'Seen in Theatre?'));
+		return (this.renderField('Seen', ((this.props.movie.seenInTheatre) ? 'Yes' : 'No'), 'Seen in Theatre?'));
 	};
 
 	renderBaseName = () => {
