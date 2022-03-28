@@ -39,6 +39,78 @@ export default class Update extends Component {
                     id: JSON.stringify(pokemon.number),
                     name: pokemon.name
                 }))
+            },
+            is_alolan: {
+                displayName: 'Alolan',
+                type: FILTER_TYPE.RADIO,
+                baseType: BASE_FILTER_TYPE.BOOLEAN,
+                values: [{
+                    id: 'true',
+                    name: 'Yes'
+                },{
+                    id: 'false',
+                    name: 'No'
+                }]
+            },
+            is_galarian: {
+                displayName: 'Galarian',
+                type: FILTER_TYPE.RADIO,
+                baseType: BASE_FILTER_TYPE.BOOLEAN,
+                values: [{
+                    id: 'true',
+                    name: 'Yes'
+                },{
+                    id: 'false',
+                    name: 'No'
+                }]
+            },
+            is_hisuian: {
+                displayName: 'Hisuian',
+                type: FILTER_TYPE.RADIO,
+                baseType: BASE_FILTER_TYPE.BOOLEAN,
+                values: [{
+                    id: 'true',
+                    name: 'Yes'
+                },{
+                    id: 'false',
+                    name: 'No'
+                }]
+            },
+            is_shiny: {
+                displayName: 'Shiny',
+                type: FILTER_TYPE.RADIO,
+                baseType: BASE_FILTER_TYPE.BOOLEAN,
+                values: [{
+                    id: 'true',
+                    name: 'Yes'
+                },{
+                    id: 'false',
+                    name: 'No'
+                }]
+            },
+            is_female: {
+                displayName: 'Female',
+                type: FILTER_TYPE.RADIO,
+                baseType: BASE_FILTER_TYPE.BOOLEAN,
+                values: [{
+                    id: 'true',
+                    name: 'Yes'
+                },{
+                    id: 'false',
+                    name: 'No'
+                }]
+            },
+            is_costumed: {
+                displayName: 'Costumed',
+                type: FILTER_TYPE.RADIO,
+                baseType: BASE_FILTER_TYPE.BOOLEAN,
+                values: [{
+                    id: 'true',
+                    name: 'Yes'
+                },{
+                    id: 'false',
+                    name: 'No'
+                }]
             }
         };
 
@@ -58,11 +130,25 @@ export default class Update extends Component {
 
             let payload = {
                 offset,
-                filters: {}
+                filters: {},
+                booleanFilters: {}
             };
 
-            for (const [key, list] of Object.entries(this.state.selectedFiltersTemp)) {
-                payload.filters[key] = list;
+            const booleanFilterKeys = [
+                'is_alolan',
+                'is_galarian',
+                'is_hisuian',
+                'is_shiny',
+                'is_female',
+                'is_costumed'
+            ];
+
+            for (const [key, data] of Object.entries(this.state.selectedFiltersTemp)) {
+                if (booleanFilterKeys.includes(key)) {
+                    payload.booleanFilters[key] = data;
+                } else {
+                    payload.filters[key] = data;
+                }
             }
 
             const filterResponse = await PogoUtils.getFormsWithFilter(payload);
@@ -98,7 +184,6 @@ export default class Update extends Component {
 
     openFilter = (event) => {
         event.preventDefault();
-        console.log(this.state.selectedFilters);
         this.setState({
             isFilterOpen: true,
             selectedFiltersTemp: this.state.selectedFilters
@@ -147,7 +232,6 @@ export default class Update extends Component {
             }
                 break;
             case FILTER_TYPE.RANGE: {
-                console.log(target.dataset);
                 let key = target.dataset['key'];
                 let type = target.dataset['rangetype'];
                 if (!tempFilters.hasOwnProperty(key)) {
@@ -163,7 +247,7 @@ export default class Update extends Component {
     };
 
     applyFilters = async () => {
-        await this.loadForms(this.state.offset, true);
+        await this.loadForms(0, true);
     };
 
     updateUrl = () => {
@@ -172,6 +256,17 @@ export default class Update extends Component {
             history.pushState(null, "Browse with filters", url);
         }
     };
+
+    clearFilter = key => {
+        let tempFilters = Utils.copyObject(this.state.selectedFiltersTemp);
+
+        if (tempFilters.hasOwnProperty(key)) {
+            delete tempFilters[key];
+            this.setState({
+                selectedFiltersTemp: tempFilters
+            })
+        }
+    }
 
     renderPage = () => {
         if (this.state.isLoaded) {
@@ -184,6 +279,7 @@ export default class Update extends Component {
                     onFilterClose={this.closeFilter}
                     onEvent={this.handleEvent}
                     onFilterApply={this.applyFilters}
+                    onFilterClear={this.clearFilter}
                 />
             );
         }
