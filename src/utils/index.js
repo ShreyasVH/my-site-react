@@ -49,11 +49,12 @@ export default class Utils {
 		for (const key in filters) {
 			if (filters.hasOwnProperty(key)) {
 				let values = filters[key];
-				for (const index in values) {
-					if (values.hasOwnProperty(index)) {
-						let value = values[index];
+				if (Array.isArray(values)) {
+					for (const value of values) {
 						urlParams.push(key + "[]=" + value);
 					}
+				} else {
+					urlParams.push(key + '=' + values)
 				}
 			}
 		}

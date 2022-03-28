@@ -85,5 +85,6 @@ export const FILTER_TYPE = {
 };
 
 export const BASE_FILTER_TYPE = {
-	AND: 'and'
+	AND: 'and',
+	BOOLEAN: 'boolean'
 };
