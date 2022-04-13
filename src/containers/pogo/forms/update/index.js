@@ -23,13 +23,33 @@ export default class Update extends Component {
 
             const formResponse = await PogoUtils.getFormById(this.id);
 
+            let allTypesResponse = await PogoUtils.getAllTypes();
+            const allTypes = allTypesResponse.data;
+
             let form = formResponse.data;
+
+            let types = [];
+            for (let index = 0; index < form.typeIds.length; index++) {
+                types.push({
+                    id: form.typeIds[index],
+                    name: form.typeNames[index]
+                });
+            }
+
             state = {
                 name: form.name,
                 pokemonNumber: form.pokemonNumber,
                 pokemonName: form.pokemonName,
                 imageUrl: form.imageUrl,
-                releaseDate: form.releaseDate
+                releaseDate: form.releaseDate,
+                alolan: form.alolan,
+                galarian: form.galarian,
+                hisuian: form.hisuian,
+                shiny: form.shiny,
+                female: form.female,
+                costumed: form.costumed,
+                types,
+                allTypes
             };
 
             const allPokemonsResponse = await PogoUtils.getAllPokemons();
@@ -59,7 +79,14 @@ export default class Update extends Component {
         if (this.isFormValid()) {
             let payload = {
                 name: this.state.name,
-                releaseDate: this.state.releaseDate
+                releaseDate: this.state.releaseDate,
+                isAlolan: this.state.alolan,
+                isGalarian: this.state.galarian,
+                isHisuian: this.state.hisuian,
+                isShiny: this.state.shiny,
+                isFemale: this.state.female,
+                isCostumed: this.state.costumed,
+                types: this.state.types.map(type => (type.id))
             }
 
             Context.showLoader();
@@ -106,8 +133,66 @@ export default class Update extends Component {
         });
     };
 
+    handleAlolanChange = (event, checked) => {
+        this.setState({
+            alolan: checked
+        })
+    };
+
+    handleGalarianChange = (event, checked) => {
+        this.setState({
+            galarian: checked
+        })
+    };
+
+    handleHisuianChange = (event, checked) => {
+        this.setState({
+            hisuian: checked
+        })
+    };
+
+    handleShinyChange = (event, checked) => {
+        this.setState({
+            shiny: checked
+        })
+    };
+
+    handleFemaleChange = (event, checked) => {
+        this.setState({
+            female: checked
+        })
+    };
+
+    handleCostumedChange = (event, checked) => {
+        this.setState({
+            costumed: checked
+        })
+    };
+
+    handleTypeSelect = (id, name) => {
+        let updatedState = Utils.copyObject(this.state);
+
+        updatedState.types.push({
+            id,
+            name
+        });
+
+        updatedState.directorSuggestions = [];
+
+        this.setState(updatedState);
+    };
+
+    handleTypeRemove = id => {
+        let updatedState = Utils.copyObject(this.state);
+
+        updatedState.types.splice(updatedState.types.map(type => type.id).indexOf(id), 1);
+
+        this.setState(updatedState);
+    };
+
     isFormValid = () => {
         let isValid = this.validateName().isValid;
+        isValid = isValid && this.validateTypes();
 
         return isValid;
     };
@@ -126,6 +211,20 @@ export default class Update extends Component {
         return response;
     };
 
+    validateTypes = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (this.state.types.length === 0) {
+            response.isValid = false;
+            response.message = 'Types cannot be empty';
+        }
+
+        return response;
+    };
+
     renderPage = () => {
         if (this.state.isLoaded) {
             return (
@@ -135,8 +234,17 @@ export default class Update extends Component {
                     onReleaseDateChange={this.handleReleaseDateChange}
                     onImageSelect={this.handleImageSelect}
                     onSubmit={this.handleSubmit}
+                    onAlolanChange={this.handleAlolanChange}
+                    onGalarianChange={this.handleGalarianChange}
+                    onHisuianChange={this.handleHisuianChange}
+                    onShinyChange={this.handleShinyChange}
+                    onFemaleChange={this.handleFemaleChange}
+                    onCostumedChange={this.handleCostumedChange}
+                    onTypeSelect={this.handleTypeSelect}
+                    onTypeRemove={this.handleTypeRemove}
                     isFormValid={this.isFormValid()}
                     validateName={this.validateName()}
+                    validateTypes={this.validateTypes()}
                 />
             );
         }

@@ -90,7 +90,7 @@ const styles = theme => ({
         [theme.breakpoints.down('md')]: {
             marginTop: '3%'
         }
-    },
+    }
 });
 
 class UpdateCore extends Component {
