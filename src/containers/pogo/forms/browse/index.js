@@ -12,6 +12,21 @@ export default class Update extends Component {
         super(props);
 
         let urlParams = Utils.getUrlParams();
+        let sortMap = {};
+
+        if (urlParams.hasOwnProperty('order')) {
+            const sortString = urlParams['order'];
+            delete urlParams['order'];
+            const sortParams = sortString.split(',');
+            sortMap = sortParams.reduce((object, value) => {
+                const parts = value.split(' ');
+                if (parts.length === 2) {
+                    object[parts[0]] = parts[1];
+                }
+                return object;
+            }, {});
+        }
+
         this.state = {
             isLoaded: false,
             forms: [],
@@ -21,7 +36,8 @@ export default class Update extends Component {
             isFilterOpen: false,
             selectedFilters: {
             },
-            selectedFiltersTemp: urlParams
+            selectedFiltersTemp: urlParams,
+            sortMap
         };
     }
 
@@ -29,6 +45,9 @@ export default class Update extends Component {
         Context.showLoader();
         let allPokemonsResponse = await PogoUtils.getAllPokemons();
         const allPokemons = allPokemonsResponse.data;
+
+        let allTypesResponse = await PogoUtils.getAllTypes();
+        const types = allTypesResponse.data;
 
         let filterOptions = {
             number: {
@@ -40,7 +59,7 @@ export default class Update extends Component {
                     name: pokemon.name
                 }))
             },
-            is_alolan: {
+            alolan: {
                 displayName: 'Alolan',
                 type: FILTER_TYPE.RADIO,
                 baseType: BASE_FILTER_TYPE.BOOLEAN,
@@ -52,7 +71,7 @@ export default class Update extends Component {
                     name: 'No'
                 }]
             },
-            is_galarian: {
+            galarian: {
                 displayName: 'Galarian',
                 type: FILTER_TYPE.RADIO,
                 baseType: BASE_FILTER_TYPE.BOOLEAN,
@@ -64,7 +83,7 @@ export default class Update extends Component {
                     name: 'No'
                 }]
             },
-            is_hisuian: {
+            hisuian: {
                 displayName: 'Hisuian',
                 type: FILTER_TYPE.RADIO,
                 baseType: BASE_FILTER_TYPE.BOOLEAN,
@@ -76,7 +95,7 @@ export default class Update extends Component {
                     name: 'No'
                 }]
             },
-            is_shiny: {
+            shiny: {
                 displayName: 'Shiny',
                 type: FILTER_TYPE.RADIO,
                 baseType: BASE_FILTER_TYPE.BOOLEAN,
@@ -88,7 +107,7 @@ export default class Update extends Component {
                     name: 'No'
                 }]
             },
-            is_female: {
+            female: {
                 displayName: 'Female',
                 type: FILTER_TYPE.RADIO,
                 baseType: BASE_FILTER_TYPE.BOOLEAN,
@@ -100,7 +119,7 @@ export default class Update extends Component {
                     name: 'No'
                 }]
             },
-            is_costumed: {
+            costumed: {
                 displayName: 'Costumed',
                 type: FILTER_TYPE.RADIO,
                 baseType: BASE_FILTER_TYPE.BOOLEAN,
@@ -111,19 +130,39 @@ export default class Update extends Component {
                     id: 'false',
                     name: 'No'
                 }]
+            },
+            typeIds: {
+                displayName: 'Type',
+                type: FILTER_TYPE.CHECKBOX,
+                baseType: BASE_FILTER_TYPE.AND,
+                values: types.map(type => ({
+                    id: JSON.stringify(type.id),
+                    name: type.name
+                }))
             }
         };
 
+        const sortOptions = [
+            {
+                id: 1,
+                name: 'pokemonNumber'
+            }, {
+                id: 2,
+                name: 'releaseDate'
+            }
+        ];
 
-        await this.loadForms(0, true);
+
+        await this.loadForms(0, true, this.state.sortMap);
 
         this.setState({
             isLoaded: true,
-            filterOptions
+            filterOptions,
+            sortOptions
         });
     }
 
-    loadForms = async (offset, replaceData) => {
+    loadForms = async (offset, replaceData, sortMap) => {
         Context.showLoader();
 
         if (offset === 0 || offset < this.state.totalCount) {
@@ -131,21 +170,29 @@ export default class Update extends Component {
             let payload = {
                 offset,
                 filters: {},
-                booleanFilters: {}
+                booleanFilters: {},
+                andFilters: {},
+                sortMap
             };
 
             const booleanFilterKeys = [
-                'is_alolan',
-                'is_galarian',
-                'is_hisuian',
-                'is_shiny',
-                'is_female',
-                'is_costumed'
+                'alolan',
+                'galarian',
+                'hisuian',
+                'shiny',
+                'female',
+                'costumed'
+            ];
+
+            const andFilterKeys = [
+                'typeIds'
             ];
 
             for (const [key, data] of Object.entries(this.state.selectedFiltersTemp)) {
                 if (booleanFilterKeys.includes(key)) {
                     payload.booleanFilters[key] = data;
+                } else if (andFilterKeys.includes(key)) {
+                    payload.andFilters[key] = data;
                 } else {
                     payload.filters[key] = data;
                 }
@@ -175,7 +222,7 @@ export default class Update extends Component {
     }
 
     handleScroll = async () => {
-        await this.loadForms(this.state.offset + (this.state.count), false);
+        await this.loadForms(this.state.offset + (this.state.count), false, this.state.sortMap);
     }
 
     handleEditClick = (id) => {
@@ -247,11 +294,11 @@ export default class Update extends Component {
     };
 
     applyFilters = async () => {
-        await this.loadForms(0, true);
+        await this.loadForms(0, true, this.state.sortMap);
     };
 
     updateUrl = () => {
-        let url = Utils.paramsToUrl(this.state.selectedFiltersTemp, {});
+        let url = Utils.paramsToUrl(this.state.selectedFiltersTemp, this.state.sortMap);
         if (url !== decodeURI(location.pathname + location.search)) {
             history.pushState(null, "Browse with filters", url);
         }
@@ -268,6 +315,25 @@ export default class Update extends Component {
         }
     }
 
+    handleSort = async (id, name) => {
+        let sortMap = Utils.copyObject(this.state.sortMap);
+
+        let order = 'ASC';
+        if (sortMap.hasOwnProperty(name)) {
+            if (sortMap[name] === 'ASC') {
+                order = 'DESC';
+            }
+        } else {
+            sortMap = {};
+        }
+        sortMap[name] = order;
+
+        this.setState({
+            sortMap
+        });
+        await this.loadForms(0, true, sortMap);
+    };
+
     renderPage = () => {
         if (this.state.isLoaded) {
             return (
@@ -280,6 +346,7 @@ export default class Update extends Component {
                     onEvent={this.handleEvent}
                     onFilterApply={this.applyFilters}
                     onFilterClear={this.clearFilter}
+                    onSort={this.handleSort}
                 />
             );
         }

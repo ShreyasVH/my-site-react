@@ -20,6 +20,7 @@ import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 
 import { FILTER_TYPE } from '../../constants';
+import SearchDropDown from "../../components/searchDropdown";
 
 const styles = (theme) => ({
     appBar: {
@@ -86,6 +87,8 @@ class FiltersCore extends Component {
     handleEvent = event => this.props.handleEvent && this.props.handleEvent(event);
 
     clearFilter = (key) => (event) => this.props.clearFilter && this.props.clearFilter(key);
+
+    handleSort = (id, name) => (this.props.handleSort && this.props.handleSort(id, name));
 
     renderButton = () => {
         return (
@@ -323,6 +326,16 @@ class FiltersCore extends Component {
         return markup;
     };
 
+    getSortDisplayValue = () => {
+        let value = '';
+
+        if (this.props.sortMap && Object.keys(this.props.sortMap).length > 0) {
+            value = Object.keys(this.props.sortMap)[0] + ' ' + Object.values(this.props.sortMap)[0]
+        }
+
+        return value;
+    };
+
     renderFiltersPopup = () => {
         const { classes } = this.props;
         if (this.props.isOpen) {
@@ -347,6 +360,16 @@ class FiltersCore extends Component {
                                     </Button>
 
                                     {this.renderClearAllButton()}
+
+                                    <div>
+                                        <SearchDropDown
+                                            items={this.props.sortOptions}
+                                            label="Sort"
+                                            placeholder="Sort field"
+                                            displayValue={this.getSortDisplayValue()}
+                                            onSelect={this.handleSort}
+                                        />
+                                    </div>
                                 </Toolbar>
                             </AppBar>
                             <div className={this.props.classes.root}>

@@ -74,3 +74,10 @@ export const setSuggestions = suggestions => ({
 		suggestions
 	}
 });
+
+export const setSortMap = (sortMap) => ({
+	type: MOVIE_EVENTS.SET_SORT_MAP,
+	payload: {
+		sortMap
+	}
+});

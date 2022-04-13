@@ -109,6 +109,9 @@ class BrowseCore extends Component {
                 isOpen={this.props.isFilterOpen}
                 selected={this.props.selectedFiltersTemp}
                 options={this.props.filterOptions}
+                sortOptions={this.props.sortOptions}
+                sortMap={this.props.sortMap}
+                handleSort={this.props.onSort}
                 onFilterOpen={this.props.onFilterOpen}
                 onFilterClose={this.props.onFilterClose}
                 handleEvent={this.props.onEvent}
@@ -136,7 +139,7 @@ class BrowseCore extends Component {
                     <img
                         className={this.props.classes.cardImage}
                         src={form.imageUrl}
-                        alt={form.pokemonName + '_' + form.formName}
+                        alt={form.pokemonName + '_' + form.name}
                         height={200}
                         width={200}
                     />
@@ -146,12 +149,12 @@ class BrowseCore extends Component {
                         {'#' + form.pokemonNumber + ' ' + form.pokemonName}
                     </p>
                     <p>
-                        {form.formName}
+                        {form.name}
                     </p>
                     <EditIcon
                         className={this.props.classes.edit}
                         color='primary'
-                        onClick={this.handleEditClick(form.formId)}
+                        onClick={this.handleEditClick(form.id)}
                     />
                 </div>
             </Grid>
