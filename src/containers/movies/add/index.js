@@ -77,7 +77,7 @@ export default class Update extends Component {
         if (this.isFormValid()) {
             let payload = {
                 name: this.state.name,
-                size: this.state.size,
+                size: this.state.size.replace(/,/g, ''),
                 languageId: this.state.languageId,
                 formatId: this.state.formatId,
                 subtitles: this.state.subtitles,
