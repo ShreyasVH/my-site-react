@@ -6,7 +6,7 @@
 export default class Utils {
 	static getUrlParams = () => {
 		let params = {};
-		let paramString = window.location.search.replace('?', '');
+		let paramString = decodeURIComponent(window.location.search.replace('?', ''));
 
 		if ('' !== paramString) {
 			let urlParams = paramString.split('&');
@@ -70,7 +70,7 @@ export default class Utils {
 					sortParams.push(key + " " + value);
 				}
 			}
-			sortString = "order=" + sortParams.join("&");
+			sortString = "order=" + sortParams.join(",");
 		}
 
 		if (sortString) {

@@ -59,6 +59,7 @@ export const GET_ALL_POKEMONS = 'pogo/pokemon/all';
 export const UPDATE_POKEMON = 'pogo/pokemon/{number}';
 
 export const GET_ALL_REGIONS = 'pogo/regions';
+export const GET_ALL_TYPES = 'pogo/types';
 
 export const GET_FORM_BY_ID = 'pogo/forms/{id}';
 export const UPDATE_FORM = 'pogo/forms/{id}';

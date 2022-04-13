@@ -26,15 +26,11 @@ export default class Update extends Component {
             let form = formResponse.data;
             state = {
                 name: form.name,
-                pokemonNumber: form.pokemon.number,
-                pokemonName: form.pokemon.name,
+                pokemonNumber: form.pokemonNumber,
+                pokemonName: form.pokemonName,
                 imageUrl: form.imageUrl,
                 releaseDate: form.releaseDate
-
             };
-
-            // const regionsResponse = await PogoUtils.getAllRegions();
-            // state.regions = regionsResponse.data;
 
             const allPokemonsResponse = await PogoUtils.getAllPokemons();
             state.allPokemons = allPokemonsResponse.data.map(mon => ({

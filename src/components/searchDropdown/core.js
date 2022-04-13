@@ -71,7 +71,9 @@ class SearchDropdownCore extends Component {
 
     handleTextFieldFocus = event => this.props.onTextFieldFocus && this.props.onTextFieldFocus();
 
-    handleSelect = (selectedId, selectedName) => event => this.props.onSelect && this.props.onSelect(selectedId, selectedName);
+    handleSelect = (selectedId, selectedName) => event => {
+        this.props.onSelect && this.props.onSelect(selectedId, selectedName);
+    }
 
     getDisplayValue = () => ((this.props.displayValue) ? this.props.displayValue : '');
 

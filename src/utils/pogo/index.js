@@ -10,7 +10,7 @@ import {
     GET_FORMS_WITH_FILTER,
     GET_EVENT_BY_ID,
     UPDATE_EVENT,
-    CREATE_EVENT, GET_EVENTS_WITH_FILTER
+    CREATE_EVENT, GET_EVENTS_WITH_FILTER, GET_ALL_TYPES
 } from '../../constants';
 import ApiHelper from '../apiHelper';
 
@@ -74,4 +74,9 @@ export default class PogoUtils {
         let url = BASE_URL_POGO + GET_EVENTS_WITH_FILTER;
         return ApiHelper.post(url, payload);
     }
+
+    static getAllTypes = () => {
+        let url = BASE_URL_POGO + GET_ALL_TYPES;
+        return ApiHelper.get(url);
+    };
 }

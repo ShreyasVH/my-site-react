@@ -22,7 +22,8 @@ import {
 	clearMovieList,
 	updateFilters,
 	setMovie,
-	setSuggestions
+	setSuggestions,
+	setSortMap
 } from '../../actions/moviesActions';
 import Utils from '../index';
 import Context from '../context';
@@ -103,6 +104,22 @@ export default class Movies {
 
 	static updateFilters = () => {
 		let urlParams = Utils.getUrlParams();
+
+		let sortMap = {};
+		if (urlParams.hasOwnProperty('order')) {
+			const sortString = urlParams['order'];
+			delete urlParams['order'];
+			const sortParams = sortString.split(',');
+			sortMap = sortParams.reduce((object, value) => {
+				const parts = value.split(' ');
+				if (parts.length === 2) {
+					object[parts[0]] = parts[1];
+				}
+				return object;
+			}, {});
+		}
+		store.dispatch(setSortMap(sortMap));
+
 		delete urlParams.order;
 		store.dispatch(updateFilters(urlParams));
 	};

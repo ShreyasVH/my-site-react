@@ -172,6 +172,7 @@ const moviesReducer = (state = defaultState, action) => {
 			break;
 		case MOVIE_EVENTS.SET_MOVIE:
 		case MOVIE_EVENTS.TOGGLE_FILTER:
+		case MOVIE_EVENTS.SET_SORT_MAP:
 			state = Object.assign({}, state, action.payload);
 			break;
 		case MOVIE_EVENTS.RESET_TEMP_FILTERS:
