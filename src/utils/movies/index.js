@@ -12,7 +12,12 @@ import {
 	GET_MOVIE_BY_NAME,
 	GET_ARTIST_BY_ID,
 	UPDATE_ARTIST,
-	ADD_ARTIST
+	ADD_ARTIST,
+	GET_ALL_LANGUAGES,
+	GET_ALL_FORMATS,
+	GET_ALL_ARTISTS,
+	UPDATE_MOVIE,
+	ADD_MOVIE
 } from '../../constants';
 import ApiHelper from '../apiHelper';
 import store from '../../store';
@@ -181,8 +186,8 @@ export default class Movies {
 		});
 	};
 
-	static getMovieDetails = (id) => {
-		let promise = ApiHelper.get(BASE_URL + GET_MOVIE_DETAILS.replace('{id}', id));
+	static loadMovieDetails = (id) => {
+		let promise = Movies.getMovieDetails(id);
 		promise.then(apiResponse => {
 			let response = apiResponse.data;
 			if (0 !== Object.keys(response).length) {
@@ -191,6 +196,10 @@ export default class Movies {
 			}
 		});
 	};
+
+	static getMovieDetails = id => {
+		return ApiHelper.get(BASE_URL + GET_MOVIE_DETAILS.replace('{id}', id))
+	}
 
 	static clearMovieDetails = () => {
 		store.dispatch(setMovie({}));
@@ -225,5 +234,38 @@ export default class Movies {
 
 	static addArtist = (payload) => {
 		return ApiHelper.post(BASE_URL + ADD_ARTIST, payload);
+	};
+
+	static getAllLanguages = () => {
+		return ApiHelper.get(BASE_URL + GET_ALL_LANGUAGES);
+	};
+
+	static getAllFormats = () => {
+		return ApiHelper.get(BASE_URL + GET_ALL_FORMATS);
+	};
+
+	static getAllArtists = async () => {
+		const count = 100;
+		let offset = 0;
+		let totalCount = 0;
+		let artists = [];
+
+		do {
+			const response = await ApiHelper.get(BASE_URL + GET_ALL_ARTISTS.replace('{offset}', offset).replace('{count}', count));
+			const data = response.data;
+			totalCount = data.totalCount;
+			artists = artists.concat(data.list);
+			offset += count;
+		} while (offset < totalCount);
+
+		return artists;
+	};
+
+	static updateMovie = (id, payload) => {
+		return ApiHelper.put(BASE_URL + UPDATE_MOVIE.replace('{id}', id), payload);
+	};
+
+	static addMovie = (payload) => {
+		return ApiHelper.post(BASE_URL + ADD_MOVIE, payload);
 	};
 }

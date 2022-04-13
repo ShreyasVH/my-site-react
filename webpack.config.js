@@ -71,7 +71,8 @@ module.exports = {
 			'process.env.CLOUDINARY_ACCOUNT_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_ACCOUNT_NAME),
 			'process.env.CLOUDINARY_PRESET_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_PRESET_NAME),
 			'process.env.ARTIST_DEFAULT_MALE': JSON.stringify(process.env.REACT_APP_ARTIST_DEFAULT_MALE),
-			'process.env.ARTIST_DEFAULT_FEMALE': JSON.stringify(process.env.REACT_APP_ARTIST_DEFAULT_FEMALE)
+			'process.env.ARTIST_DEFAULT_FEMALE': JSON.stringify(process.env.REACT_APP_ARTIST_DEFAULT_FEMALE),
+			'process.env.MOVIE_DEFAULT_IMAGE': JSON.stringify(process.env.REACT_APP_MOVIE_DEFAULT_IMAGE)
 		}),
 	],
 	optimization: {

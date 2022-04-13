@@ -16,7 +16,7 @@ import Utils from '../../../utils';
 class MovieDetail extends Component {
 	componentDidMount() {
 		Context.showLoader();
-		Movie.getMovieDetails(Utils.getUrlParam('id'));
+		Movie.loadMovieDetails(Utils.getUrlParam('id'));
 	}
 
 	componentWillUnmount() {
