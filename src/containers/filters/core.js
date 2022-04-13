@@ -88,9 +88,7 @@ class FiltersCore extends Component {
 
     clearFilter = (key) => (event) => this.props.clearFilter && this.props.clearFilter(key);
 
-    handleSort = (id, name) => {
-        (this.props.handleSort && this.props.handleSort(id, name))
-    };
+    handleSort = (id, name) => (this.props.handleSort && this.props.handleSort(id, name));
 
     renderButton = () => {
         return (
