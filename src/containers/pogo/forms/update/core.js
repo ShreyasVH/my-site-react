@@ -75,6 +75,9 @@ const styles = theme => ({
     },
     oneSixthWidth: {
         width: '16.66%',
+        [theme.breakpoints.down('sm')]: {
+            width: '33.33%',
+        },
         [theme.breakpoints.down('xs')]: {
             width: '50%',
         }
@@ -288,28 +291,24 @@ class UpdateCore extends Component {
                         </div>
 
                         <div className={this.props.classes.row}>
-
-
-                            <div className={this.props.classes.row}>
-                                <div className={this.props.classes.playersContainer}>
-                                    <div className={this.props.classes.container}>
-                                        <div className={this.props.classes.row}>
-                                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                                <div className={this.props.classes.formFieldInput}>
-                                                    <SearchDropDown
-                                                        items={this.props.allTypes}
-                                                        label="Types"
-                                                        placeholder="Types"
-                                                        onSelect={this.handleTypeSelect}
-                                                        error={!this.props.validateTypes.isValid}
-                                                        helperText={this.props.validateTypes.message}
-                                                    />
-                                                </div>
+                            <div className={this.props.classes.playersContainer}>
+                                <div className={this.props.classes.container}>
+                                    <div className={this.props.classes.row}>
+                                        <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
+                                            <div className={this.props.classes.formFieldInput}>
+                                                <SearchDropDown
+                                                    items={this.props.allTypes}
+                                                    label="Types"
+                                                    placeholder="Types"
+                                                    onSelect={this.handleTypeSelect}
+                                                    error={!this.props.validateTypes.isValid}
+                                                    helperText={this.props.validateTypes.message}
+                                                />
                                             </div>
                                         </div>
-                                        <div className={this.props.classes.row}>
-                                            {this.renderTypesMarkup()}
-                                        </div>
+                                    </div>
+                                    <div className={this.props.classes.row}>
+                                        {this.renderTypesMarkup()}
                                     </div>
                                 </div>
                             </div>

@@ -192,7 +192,7 @@ export default class Update extends Component {
 
     isFormValid = () => {
         let isValid = this.validateName().isValid;
-        isValid = isValid && this.validateTypes();
+        isValid = isValid && this.validateTypes().isValid;
 
         return isValid;
     };

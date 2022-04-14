@@ -24,7 +24,14 @@ export default class Update extends Component {
                 pokemonNumber: null,
                 pokemonName: '',
                 imageUrl: '',
-                releaseDate: null
+                releaseDate: null,
+                alolan: false,
+                galarian: false,
+                hisuian: false,
+                shiny: false,
+                female: false,
+                costumed: false,
+                types: []
             };
 
             const allPokemonsResponse = await PogoUtils.getAllPokemons();
@@ -32,6 +39,9 @@ export default class Update extends Component {
                 id: mon.number,
                 name: mon.name
             }));
+
+            let allTypesResponse = await PogoUtils.getAllTypes();
+            state.allTypes = allTypesResponse.data;
         } catch (error) {
             console.log(error);
             Context.showNotify('Error while loading data.', 'error');
@@ -60,7 +70,14 @@ export default class Update extends Component {
             let payload = {
                 name: this.state.name,
                 number: this.state.pokemonNumber,
-                releaseDate: this.state.releaseDate
+                releaseDate: this.state.releaseDate,
+                isAlolan: this.state.alolan,
+                isGalarian: this.state.galarian,
+                isHisuian: this.state.hisuian,
+                isShiny: this.state.shiny,
+                isFemale: this.state.female,
+                isCostumed: this.state.costumed,
+                types: this.state.types.map(type => (type.id))
             }
 
             Context.showLoader();
@@ -132,9 +149,67 @@ export default class Update extends Component {
         });
     }
 
+    handleAlolanChange = (event, checked) => {
+        this.setState({
+            alolan: checked
+        })
+    };
+
+    handleGalarianChange = (event, checked) => {
+        this.setState({
+            galarian: checked
+        })
+    };
+
+    handleHisuianChange = (event, checked) => {
+        this.setState({
+            hisuian: checked
+        })
+    };
+
+    handleShinyChange = (event, checked) => {
+        this.setState({
+            shiny: checked
+        })
+    };
+
+    handleFemaleChange = (event, checked) => {
+        this.setState({
+            female: checked
+        })
+    };
+
+    handleCostumedChange = (event, checked) => {
+        this.setState({
+            costumed: checked
+        })
+    };
+
+    handleTypeSelect = (id, name) => {
+        let updatedState = Utils.copyObject(this.state);
+
+        updatedState.types.push({
+            id,
+            name
+        });
+
+        updatedState.directorSuggestions = [];
+
+        this.setState(updatedState);
+    };
+
+    handleTypeRemove = id => {
+        let updatedState = Utils.copyObject(this.state);
+
+        updatedState.types.splice(updatedState.types.map(type => type.id).indexOf(id), 1);
+
+        this.setState(updatedState);
+    };
+
     isFormValid = () => {
         let isValid = this.validateName().isValid;
         isValid = isValid && this.validatePokemon().isValid;
+        isValid = isValid && this.validateTypes().isValid;
 
         return isValid;
     };
@@ -167,6 +242,20 @@ export default class Update extends Component {
         return response;
     };
 
+    validateTypes = () => {
+        let response = {
+            isValid: true,
+            message: ''
+        };
+
+        if (this.state.types.length === 0) {
+            response.isValid = false;
+            response.message = 'Types cannot be empty';
+        }
+
+        return response;
+    };
+
     renderPage = () => {
         if (this.state.isLoaded) {
             return (
@@ -178,9 +267,18 @@ export default class Update extends Component {
                     onPokemonSearch={this.handlePokemonSearch}
                     onPokemonSelect={this.handlePokemonSelect}
                     onSubmit={this.handleSubmit}
+                    onAlolanChange={this.handleAlolanChange}
+                    onGalarianChange={this.handleGalarianChange}
+                    onHisuianChange={this.handleHisuianChange}
+                    onShinyChange={this.handleShinyChange}
+                    onFemaleChange={this.handleFemaleChange}
+                    onCostumedChange={this.handleCostumedChange}
+                    onTypeSelect={this.handleTypeSelect}
+                    onTypeRemove={this.handleTypeRemove}
                     isFormValid={this.isFormValid()}
                     validateName={this.validateName()}
                     validatePokemon={this.validatePokemon()}
+                    validateTypes={this.validateTypes()}
                 />
             );
         }
