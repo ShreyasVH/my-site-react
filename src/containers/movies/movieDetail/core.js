@@ -103,7 +103,7 @@ class MovieDetailCore extends Component {
 
 		let markup = (
 			<Link
-				to={'/movies/browseMovies?year[]=' + year + '&year[]=' + year}
+				to={'/movies/browseMovies?year[]=' + year + '&year[]=' + year + '&order=id DESC'}
 			>
 				<span className={this.props.classes.link}>
 					{year}
@@ -161,7 +161,7 @@ class MovieDetailCore extends Component {
 					className={this.props.classes.artistLink}
 				>
 					<Link
-						to={'/movies/browseMovies?directors[]=' + director.id}
+						to={'/movies/browseMovies?directorIds[]=' + director.id + '&order=year DESC'}
 					>
 						<span className={this.props.classes.link}>
 							{director.name}
@@ -206,7 +206,7 @@ class MovieDetailCore extends Component {
 					className={this.props.classes.artistLink}
 				>
 					<Link
-						to={'/movies/browseMovies?actors[]=' + actor.id}
+						to={'/movies/browseMovies?actorIds[]=' + actor.id + '&order=year DESC'}
 					>
 						<span className={this.props.classes.link}>
 							{actor.name}

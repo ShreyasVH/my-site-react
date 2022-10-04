@@ -71,7 +71,7 @@ export default class Movies {
 			'seenInTheatre'
 		];
 
-		let orFilters = {};
+		let andFilters = {};
 		let booleanFilters = {};
 		for (const [key, values] of Object.entries(filters)) {
 			if (booleanFilterKeys.indexOf(key) !== -1 ) {
@@ -79,13 +79,13 @@ export default class Movies {
 					booleanFilters[key] = values[0];
 				}
 			} else {
-				orFilters[key] = values;
+				andFilters[key] = values;
 			}
 		}
 
 		if ((-1 === totalCount) || (offset < totalCount) || shouldReplace) {
 			let payload = {
-				filters: orFilters,
+				andFilters,
 				booleanFilters,
 				sortMap,
 				offset,

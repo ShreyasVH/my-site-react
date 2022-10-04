@@ -21,7 +21,7 @@ const defaultState = {
 	},
 	suggestions: [],
 	filterOptions: {
-		language: {
+		languageId: {
 			displayName: 'Language',
 			type: FILTER_TYPE.CHECKBOX,
 			values: [
@@ -51,7 +51,7 @@ const defaultState = {
 				}
 			]
 		},
-		format: {
+		formatId: {
 			displayName: 'Format',
 			type: FILTER_TYPE.CHECKBOX,
 			values: [
