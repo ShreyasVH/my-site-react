@@ -14,7 +14,7 @@ export default class Update extends Component {
     }
 
     getDefaultState = () => ({
-        name: '',
+        name: this.props.name,
         genders: [
             {
                 id: 'M',
@@ -29,7 +29,8 @@ export default class Update extends Component {
         genderName: '',
         imageUrl: '',
         imageFile: '',
-        imageName: ''
+        imageName: '',
+        embedded: !!this.props.embedded
     })
 
     handleSubmit = async event => {
@@ -63,11 +64,18 @@ export default class Update extends Component {
                 }
 
                 Context.hideLoader();
-                if (isSuccess) {
-                    Context.showNotify('Added Successfully', 'success');
-                }
 
-                this.setState(this.getDefaultState());
+                if (this.props.embedded) {
+                    if (isSuccess) {
+                        this.props.onArtistAdded && this.props.onArtistAdded(artistId, apiResponse.data.name);
+                    }
+                } else {
+                    if (isSuccess) {
+                        Context.showNotify('Added Successfully', 'success');
+                    }
+
+                    this.setState(this.getDefaultState());
+                }
             }).catch(apiResponse => {
                 Context.hideLoader();
                 if (apiResponse.response) {

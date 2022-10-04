@@ -73,6 +73,8 @@ class SearchDropdownCore extends Component {
 
     handleSelect = (selectedId, selectedName) => event => this.props.onSelect && this.props.onSelect(selectedId, selectedName);
 
+    handleNewAddition = event => this.props.onNewAdd && this.props.onNewAdd(this.props.inputValue);
+
     getDisplayValue = () => ((this.props.displayValue) ? this.props.displayValue : '');
 
     getLabel = () => ((this.props.label) ? this.props.label : '');
@@ -133,7 +135,7 @@ class SearchDropdownCore extends Component {
     };
 
     renderDropdown = () => {
-        if ((this.props.isFocussed) && this.props.items && (this.props.items.length > 0)) {
+        if ((this.props.isFocussed) && ((this.props.items && (this.props.items.length > 0)) || this.props.newAdditionEnabled && this.props.inputValue)) {
             let listMarkup = [];
 
             for (let index in this.props.items) {
@@ -156,6 +158,24 @@ class SearchDropdownCore extends Component {
                         </div>
                     );
                 }
+            }
+
+            if (this.props.newAdditionEnabled && this.props.inputValue) {
+                listMarkup.push(
+                    <div
+                        onClick={this.handleNewAddition}
+                        key={this.props.inputValue}
+                    >
+                        <ListItem
+                            alignItems="center"
+                            className={this.props.classes.item}
+                        >
+                            <ListItemText
+                                primary={'Add ' + this.props.inputValue}
+                            />
+                        </ListItem>
+                    </div>
+                );
             }
 
             return (

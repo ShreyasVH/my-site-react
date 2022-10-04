@@ -7,6 +7,7 @@ export default class SearchDropDown extends Component {
         super(props);
         this.state = {
             isFocussed: false,
+            inputValue: '',
             displayValue: (props.displayValue ? props.displayValue : '')
         };
     }
@@ -44,12 +45,16 @@ export default class SearchDropDown extends Component {
         if (this.props.onKeyUp) {
             this.props.onKeyUp(event);
         }
+        this.setState({
+            inputValue: event.target.value
+        });
     };
 
     handleSelect = (selectedId, selectedName)  => {
         this.props.onSelect && this.props.onSelect(selectedId, selectedName);
         this.setState({
-            isFocussed: false
+            isFocussed: false,
+            inputValue: ''
         });
 
         if (this.props.clearOnSelect) {
@@ -58,6 +63,14 @@ export default class SearchDropDown extends Component {
             })
         }
     };
+
+    handleNewAddition = (value) => {
+        this.setState({
+            isFocussed: false,
+            inputValue: ''
+        });
+        this.props.onNewAdd && this.props.onNewAdd(value);
+    }
 
     render = () => {
         return (
@@ -69,6 +82,7 @@ export default class SearchDropDown extends Component {
                 onTextFieldFocus={this.handleTextFieldFocus}
                 onSelect={this.handleSelect}
                 onKeyUp={this.handleKeyUp}
+                onNewAdd={this.handleNewAddition}
             />
         );
     }

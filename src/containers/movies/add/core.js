@@ -4,10 +4,16 @@ import { withStyles } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 // import SearchDropDown from "../../../../components/searchDropdown";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
 import FileUpload from "../../../components/fileUpload";
 import SearchDropDown from "../../../components/searchDropdown";
 import Checkbox from "@material-ui/core/Checkbox";
 import Chip from "@material-ui/core/Chip";
+import AddArtist from "../artists/add";
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = theme => ({
     form: {
@@ -116,10 +122,15 @@ class UpdateCore extends Component {
     handleDirectorRemove = (id) => event => (this.props.onDirectorRemove && this.props.onDirectorRemove(id));
     handleDirectorSearch = event => (this.props.onDirectorSearch && this.props.onDirectorSearch(event));
     handleDirectorSelect = (id, name) => (this.props.onDirectorSelect && this.props.onDirectorSelect(id, name));
+    handleDirectorAddInitiate = value => this.props.onInitiateAddDirector && this.props.onInitiateAddDirector(value);
 
     handleActorRemove = (id) => event => (this.props.onActorRemove && this.props.onActorRemove(id));
     handleActorSearch = event => (this.props.onActorSearch && this.props.onActorSearch(event));
     handleActorSelect = (id, name) => (this.props.onActorSelect && this.props.onActorSelect(id, name));
+    handleActorAddInitiate = value => this.props.onInitiateAddActor && this.props.onInitiateAddActor(value);
+
+    handleArtistDialogClose = event => this.props.onArtistDialogClose && this.props.onArtistDialogClose();
+    handleArtistAdd = (id, name) => this.props.onArtistAdded && this.props.onArtistAdded(id, name);
 
     renderDirectorsMarkup = () => {
         let markup = [];
@@ -159,6 +170,35 @@ class UpdateCore extends Component {
         }
 
         return markup;
+    };
+
+    renderArtistDialog = () => {
+        if (this.props.artistDialogOpen) {
+            return (
+                <Dialog
+                    open={true}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle sx={{ m: 0, p: 2 }}>
+                        {'Add Artist'}
+                        <IconButton
+                            aria-label="close"
+                            onClick={this.handleArtistDialogClose}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </DialogTitle>
+                    <DialogContent>
+                        <AddArtist
+                            name={this.props.newArtistText}
+                            embedded={true}
+                            onArtistAdded={this.handleArtistAdd}
+                        />
+                    </DialogContent>
+                </Dialog>
+            );
+        }
     };
 
     render() {
@@ -321,6 +361,8 @@ class UpdateCore extends Component {
                                         onSelect={this.handleDirectorSelect}
                                         error={!this.props.validateDirectors.isValid}
                                         helperText={this.props.validateDirectors.message}
+                                        newAdditionEnabled={true}
+                                        onNewAdd={this.handleDirectorAddInitiate}
                                     />
                                 </div>
                             </div>
@@ -350,6 +392,8 @@ class UpdateCore extends Component {
                                         onSelect={this.handleActorSelect}
                                         error={!this.props.validateActors.isValid}
                                         helperText={this.props.validateActors.message}
+                                        newAdditionEnabled={true}
+                                        onNewAdd={this.handleActorAddInitiate}
                                     />
                                 </div>
                             </div>
@@ -394,6 +438,7 @@ class UpdateCore extends Component {
                         </div>
                     </div>
                 </form>
+                {this.renderArtistDialog()}
             </div>
         );
     }

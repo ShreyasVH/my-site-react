@@ -79,13 +79,21 @@ class UpdateCore extends Component {
 
     handleFileUpload = files => (this.props.onImageSelect && this.props.onImageSelect(files[0]));
 
+    renderTitle = () => {
+        if (!this.props.embedded) {
+            return (
+                <div className={this.props.classes.formTitle}>
+                    Add Artist
+                </div>
+            );
+        }
+    }
+
     render() {
         return (
             <div>
                 <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
-                    <div className={this.props.classes.formTitle}>
-                        Add Artist
-                    </div>
+                    {this.renderTitle()}
                     <div className={this.props.classes.container}>
                         <div className={this.props.classes.row}>
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>

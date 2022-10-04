@@ -83,6 +83,8 @@ export default class Utils {
 
 	static ucfirst = (string) => ((string) ? (string[0].toUpperCase() + string.slice(1)) : '');
 
+	static ucwords = string => string.split(' ').map(word => Utils.ucfirst(word)).join(' ');
+
 	static getProtocol = () => (window.location.protocol + '//');
 
 	static getDomain = () => (window.location.hostname);

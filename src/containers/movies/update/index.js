@@ -27,7 +27,9 @@ export default class Update extends Component {
             ],
             directorSuggestions: [],
             actorSuggestions: [],
-            isLoaded: false
+            isLoaded: false,
+            artistDialogOpen: false,
+            newArtistText: ''
         };
         this.movieId = Utils.getUrlParam('id');
     }
@@ -252,6 +254,45 @@ export default class Update extends Component {
         this.setState(updatedState);
     };
 
+    handleInitiateAddActor = value => {
+        this.setState({
+            artistDialogOpen: true,
+            newArtistText: Utils.ucwords(value),
+            artistType: 'actor'
+        });
+    };
+
+    handleInitiateAddDirector = value => {
+        this.setState({
+            artistDialogOpen: true,
+            newArtistText: Utils.ucwords(value),
+            artistType: 'director'
+        });
+    };
+
+    handleArtistDialogClose = () => {
+        this.setState({
+            artistDialogOpen: false
+        });
+    }
+
+    handleArtistAdd = (id, name) => {
+        if (this.state.artistType === 'actor') {
+            this.handleActorSelect(id, name);
+        } else {
+            this.handleDirectorSelect(id, name);
+        }
+
+        let updatedState = Utils.copyObject(this.state);
+        updatedState.allArtists.push({
+            id,
+            name
+        });
+        this.setState(updatedState);
+
+        this.handleArtistDialogClose();
+    }
+
     handleImageSelect = (file) => {
         this.setState({
             imageFile: file,
@@ -390,9 +431,11 @@ export default class Update extends Component {
                     onDirectorSearch={this.handleDirectorSearch}
                     onDirectorSelect={this.handleDirectorSelect}
                     onDirectorRemove={this.handleDirectorRemove}
+                    onInitiateAddDirector={this.handleInitiateAddDirector}
                     onActorSearch={this.handleActorSearch}
                     onActorSelect={this.handleActorSelect}
                     onActorRemove={this.handleActorRemove}
+                    onInitiateAddActor={this.handleInitiateAddActor}
                     onSubmit={this.handleSubmit}
                     isFormValid={this.isFormValid()}
                     validateName={this.validateName()}
@@ -402,6 +445,8 @@ export default class Update extends Component {
                     validateYear={this.validateYear()}
                     validateDirectors={this.validateDirectors()}
                     validateActors={this.validateActors()}
+                    onArtistDialogClose={this.handleArtistDialogClose}
+                    onArtistAdded={this.handleArtistAdd}
                 />
             );
         }
