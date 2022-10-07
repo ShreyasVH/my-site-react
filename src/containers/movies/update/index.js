@@ -92,9 +92,11 @@ export default class Update extends Component {
     handleSubmit = async event => {
         event.preventDefault();
         if (this.isFormValid()) {
+            Context.showLoader();
+
             let payload = {
                 name: this.state.name,
-                size: this.state.size,
+                size: this.state.size.replace(/,/g, ''),
                 languageId: this.state.languageId,
                 formatId: this.state.formatId,
                 subtitles: this.state.subtitles,
@@ -106,10 +108,9 @@ export default class Update extends Component {
                 directors: this.state.directors.map(director => director.id)
             }
 
-            Context.showLoader();
-
             if (this.state.imageFile) {
-                const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'movies', this.movieId);
+                const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_');
+                const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'movies', formattedName);
                 let response = uploadResponse.data;
                 payload.imageUrl = response.secure_url;
             }

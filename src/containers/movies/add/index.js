@@ -76,6 +76,17 @@ export default class Update extends Component {
     handleSubmit = async event => {
         event.preventDefault();
         if (this.isFormValid()) {
+            Context.showLoader();
+            let imageUrl = process.env.MOVIE_DEFAULT_IMAGE;
+            if (this.state.imageFile) {
+                const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_');
+                const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'movies', formattedName);
+                let response = uploadResponse.data;
+                if (uploadResponse.status === 200) {
+                    imageUrl = response.secure_url;
+                }
+            }
+
             let payload = {
                 name: this.state.name,
                 size: this.state.size.replace(/,/g, ''),
@@ -88,34 +99,13 @@ export default class Update extends Component {
                 basename: this.state.basename,
                 actors: this.state.actors.map(actor => actor.id),
                 directors: this.state.directors.map(director => director.id),
-                imageUrl: process.env.MOVIE_DEFAULT_IMAGE
+                imageUrl
             }
-
-            Context.showLoader();
 
             const addPromise = MovieUtils.addMovie(payload);
             addPromise.then(async apiResponse => {
-                const movieId = apiResponse.data.id;
-                let isSuccess = true;
-                if (this.state.imageFile) {
-                    const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'movies', movieId);
-                    let response = uploadResponse.data;
-                    const updatePayload = {
-                        imageUrl: response.secure_url
-                    };
-
-                    const updateResponse = await MovieUtils.updateMovie(movieId, updatePayload);
-                    isSuccess = updateResponse.status === 200;
-
-                    if (!isSuccess) {
-                        Context.showNotify('Error while updating image', 'error');
-                    }
-                }
-
                 Context.hideLoader();
-                if (isSuccess) {
-                    Context.showNotify('Added Successfully', 'success');
-                }
+                Context.showNotify('Added Successfully', 'success');
 
                 this.setState(this.getDefaultState());
             }).catch(apiResponse => {
