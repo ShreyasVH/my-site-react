@@ -14,6 +14,7 @@ import Chip from "@material-ui/core/Chip";
 import AddArtist from "../artists/add";
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close';
+import DatePicker from "../../../components/datePicker";
 
 const styles = theme => ({
     form: {
@@ -107,7 +108,7 @@ class UpdateCore extends Component {
 
     handleFormatSelect = (id, name) => (this.props.onFormatSelect && this.props.onFormatSelect(id, name));
 
-    handleYearChange = event => (this.props.onYearChange && this.props.onYearChange(event));
+    handleReleaseDateChange = event => (this.props.onReleaseDateChange && this.props.onReleaseDateChange(event));
 
     handleSubtitleChange = (event, checked) => (this.props.onSubtitleChange && this.props.onSubtitleChange(event, checked));
 
@@ -322,16 +323,15 @@ class UpdateCore extends Component {
                         <div className={this.props.classes.row}>
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
-                                    <TextField
-                                        label="Year of Release"
-                                        placeholder="Year of Release"
+                                    <DatePicker
+                                        label={'Release Date'}
+                                        placeholder={'Release Date'}
+                                        value={this.props.releaseDate}
                                         variant="outlined"
                                         fullWidth
-                                        value={this.props.year}
-                                        type={'Number'}
-                                        onChange={this.handleYearChange}
-                                        error={!this.props.validateYear.isValid}
-                                        helperText={this.props.validateYear.message}
+                                        onChange={this.handleReleaseDateChange}
+                                        error={!this.props.validateReleaseDate.isValid}
+                                        helperText={this.props.validateReleaseDate.message}
                                     />
                                 </div>
                             </div>

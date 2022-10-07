@@ -48,7 +48,7 @@ export default class Update extends Component {
                 languageName: movie.language.name,
                 formatId: movie.format.id,
                 formatName: movie.format.name,
-                year: movie.year,
+                releaseDate: movie.releaseDate,
                 subtitles: movie.subtitles,
                 seenInTheatre: movie.seenInTheatre,
                 qualityId: movie.quality,
@@ -102,7 +102,7 @@ export default class Update extends Component {
                 subtitles: this.state.subtitles,
                 seenInTheatre: this.state.seenInTheatre,
                 quality: this.state.qualityId,
-                year: this.state.year,
+                releaseDate: Utils.formatDateToString(this.state.releaseDate),
                 basename: this.state.basename,
                 actors: this.state.actors.map(actor => actor.id),
                 directors: this.state.directors.map(director => director.id)
@@ -156,11 +156,13 @@ export default class Update extends Component {
         });
     };
 
-    handleYearChange = event => {
+    handleReleaseDateChange = (event) => {
+        const releaseDate = (new Date(event.target.value)).getTime();
+
         let updatedState = Utils.copyObject(this.state);
-        updatedState.year = parseInt(event.target.value);
+        updatedState.releaseDate = releaseDate;
         this.setState(updatedState);
-    };
+    }
 
     handleSubtitleChange = (event, checked) => {
         let updatedState = Utils.copyObject(this.state);
@@ -306,7 +308,7 @@ export default class Update extends Component {
         isValid = isValid && this.validateSize().isValid;
         isValid = isValid && this.validateLanguage().isValid;
         isValid = isValid && this.validateFormat().isValid;
-        isValid = isValid && this.validateYear().isValid;
+        isValid = isValid && this.validateReleaseDate().isValid;
         isValid = isValid && this.validateDirectors().isValid;
         isValid = isValid && this.validateActors().isValid;
 
@@ -372,15 +374,15 @@ export default class Update extends Component {
         return response;
     };
 
-    validateYear = () => {
+    validateReleaseDate = () => {
         let response = {
             isValid: true,
             message: ''
         };
 
-        if (!this.state.year) {
+        if (!this.state.releaseDate) {
             response.isValid = false;
-            response.message = 'Year cannot be empty';
+            response.message = 'Release Date cannot be empty';
         }
 
         return response;
@@ -424,7 +426,7 @@ export default class Update extends Component {
                     onImageSelect={this.handleImageSelect}
                     onLanguageSelect={this.handleLanguageSelect}
                     onFormatSelect={this.handleFormatSelect}
-                    onYearChange={this.handleYearChange}
+                    onReleaseDateChange={this.handleReleaseDateChange}
                     onSubtitleChange={this.handleSubtitleChange}
                     onViewedChange={this.handleViewedChange}
                     onQualitySelect={this.handleQualitySelect}
@@ -443,7 +445,7 @@ export default class Update extends Component {
                     validateSize={this.validateSize()}
                     validateLanguage={this.validateLanguage()}
                     validateFormat={this.validateFormat()}
-                    validateYear={this.validateYear()}
+                    validateReleaseDate={this.validateReleaseDate()}
                     validateDirectors={this.validateDirectors()}
                     validateActors={this.validateActors()}
                     onArtistDialogClose={this.handleArtistDialogClose}
