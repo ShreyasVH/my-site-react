@@ -98,19 +98,22 @@ class MovieDetailCore extends Component {
 		return (this.renderField('Language', this.props.movie.language.name));
 	};
 
-	renderYearDetails = () => {
-		let year = this.props.movie.year;
+	renderReleaseDateDetails = () => {
+		let releaseDate = this.props.movie.releaseDate;
 
 		let markup = (
-			<Link
-				to={'/movies/browseMovies?year[]=' + year + '&year[]=' + year + '&order=id DESC'}
-			>
-				<span className={this.props.classes.link}>
-					{year}
-				</span>
-			</Link>
+			// <Link
+			// 	to={'/movies/browseMovies?year[]=' + year + '&year[]=' + year + '&order=id DESC'}
+			// >
+			// 	<span className={this.props.classes.link}>
+			// 		{year}
+			// 	</span>
+			// </Link>
+			<span>
+				{Utils.formatDateToString(releaseDate)}
+			</span>
 		);
-		return (this.renderField('Year', markup));
+		return (this.renderField('Release Date', markup));
 	};
 
 	renderSizeDetails = () => {
@@ -237,7 +240,7 @@ class MovieDetailCore extends Component {
 						{this.renderDirectors()}
 						{this.renderActors()}
 						{this.renderLanguageDetails()}
-						{this.renderYearDetails()}
+						{this.renderReleaseDateDetails()}
 						{this.renderSizeDetails()}
 						{this.renderFormatDetails()}
 						{this.renderQualityDetails()}
