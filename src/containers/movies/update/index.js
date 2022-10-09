@@ -109,7 +109,7 @@ export default class Update extends Component {
             }
 
             if (this.state.imageFile) {
-                const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_');
+                const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_') + '_' + (new Date(this.state.releaseDate)).getFullYear() + '_' + this.state.languageName.toLowerCase();
                 const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'movies', formattedName);
                 let response = uploadResponse.data;
                 payload.imageUrl = response.secure_url;

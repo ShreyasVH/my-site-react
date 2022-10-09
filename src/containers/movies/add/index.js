@@ -39,7 +39,7 @@ export default class Update extends Component {
         qualityName: 'Normal',
         actors: [],
         directors: [],
-        year: '',
+        releaseDate: '',
         basename: '',
         imageUrl: '',
         imageFile: '',
@@ -79,7 +79,7 @@ export default class Update extends Component {
             Context.showLoader();
             let imageUrl = process.env.MOVIE_DEFAULT_IMAGE;
             if (this.state.imageFile) {
-                const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_');
+                const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_') + '_' + (new Date(this.state.releaseDate)).getFullYear() + '_' + this.state.languageName.toLowerCase();
                 const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'movies', formattedName);
                 let response = uploadResponse.data;
                 if (uploadResponse.status === 200) {
