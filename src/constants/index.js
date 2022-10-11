@@ -16,7 +16,7 @@ export const ACTOR_LIST_URL = 'data/getActorList';
 export const DIRECTOR_LIST_URL = 'data/getDirectorList';
 export const GET_DELETED_MOVIES = 'data/getDeletedMovies?isPwaRequest=true';
 export const GET_MOVIE_DETAILS = 'movies/{id}';
-export const GET_MOVIE_BY_NAME = 'movies/movies/keyword/{keyword}';
+export const GET_MOVIE_BY_NAME = 'movies/keyword/{keyword}';
 export const GET_ALL_LANGUAGES = 'languages';
 export const GET_ALL_FORMATS = 'formats';
 export const UPDATE_MOVIE = 'movies/{id}';
