@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {Grid, Table, TableBody, TableCell, TableHead, TableRow, withStyles} from "@material-ui/core";
 
 import Filters from "../../../filters";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
     table: {
@@ -62,6 +63,9 @@ const styles = theme => ({
         color: '#FFFFFF',
         border: '1px solid #303F9F',
         borderRadius: '10%'
+    },
+    player: {
+        color: '#42a5f5'
     }
 });
 
@@ -137,7 +141,9 @@ class StatsCore extends Component {
                                         {stat.id}
                                     </TableCell>
                                     <TableCell align="center" padding="none">
-                                        {stat.name}
+                                        <Link className={this.props.classes.player} to={'/cricbuzz/players/detail?id=' + stat.id}>
+                                            {stat.name}
+                                        </Link>
                                     </TableCell>
                                     <TableCell align="center" padding="none">
                                         {stat.innings}
@@ -241,7 +247,9 @@ class StatsCore extends Component {
                                         {stat.id}
                                     </TableCell>
                                     <TableCell align="center" padding="none">
-                                        {stat.name}
+                                        <Link className={this.props.classes.player} to={'/cricbuzz/players/detail?id=' + stat.id}>
+                                            {stat.name}
+                                        </Link>
                                     </TableCell>
                                     <TableCell align="center" padding="none">
                                         {stat.innings}
