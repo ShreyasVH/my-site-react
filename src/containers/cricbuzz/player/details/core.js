@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import {Grid, Table, TableBody, TableCell, TableHead, TableRow, withStyles} from "@material-ui/core";
 
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, ArcElement);
+
 import { Doughnut } from 'react-chartjs-2';
 
 const styles = theme => ({
@@ -42,44 +46,34 @@ class DetailsCore extends Component {
     formatDismissalStatsForRender = (stats) => {
         const colorMap = {
             Bowled: {
-                backgroundColor: '#a6cee3',
-                hoverBackgroundColor: ''
+                backgroundColor: '#a6cee3'
             },
             Caught: {
-                backgroundColor: '#1f78b4',
-                hoverBackgroundColor: ''
+                backgroundColor: '#1f78b4'
             },
             LBW: {
-                backgroundColor: '#b2df8a',
-                hoverBackgroundColor: ''
+                backgroundColor: '#b2df8a'
             },
             'Run Out': {
-                backgroundColor: '#33a02c',
-                hoverBackgroundColor: ''
+                backgroundColor: '#33a02c'
             },
             Stumped: {
-                backgroundColor: '#fb9a99',
-                hoverBackgroundColor: ''
+                backgroundColor: '#fb9a99'
             },
             'Hit Twice': {
-                backgroundColor: '#e31a1c',
-                hoverBackgroundColor: ''
+                backgroundColor: '#e31a1c'
             },
             'Hit Wicket': {
-                backgroundColor: '#fdbf6f',
-                hoverBackgroundColor: ''
+                backgroundColor: '#fdbf6f'
             },
             'Obstructing the Field': {
-                backgroundColor: '#ff7f00',
-                hoverBackgroundColor: ''
+                backgroundColor: '#ff7f00'
             },
             'Timed Out': {
-                backgroundColor: '#cab2d6',
-                hoverBackgroundColor: ''
+                backgroundColor: '#cab2d6'
             },
             'Handled the Ball': {
-                backgroundColor: '#6a3d9a',
-                hoverBackgroundColor: ''
+                backgroundColor: '#6a3d9a'
             }
         };
 

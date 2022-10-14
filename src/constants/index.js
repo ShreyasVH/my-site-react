@@ -59,6 +59,7 @@ export const GET_ALL_PLAYERS = 'cricbuzz/players/all/{offset}/{count}';
 export const CREATE_MATCH = 'cricbuzz/matches';
 export const GET_YEARS = 'cricbuzz/tours/years';
 export const GET_STATS = 'cricbuzz/stats';
+export const GET_SCORES = 'cricbuzz/players/scores';
 
 export const GEM_MON_BY_NUMBER = 'pogo/pokemon/num/{number}';
 export const GET_ALL_POKEMONS = 'pogo/pokemon/all';

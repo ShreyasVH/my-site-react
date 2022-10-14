@@ -121,6 +121,10 @@ export const RouteMappings = [
         filePath: './containers/cricbuzz/player/stats'
     },
     {
+        route: '/cricbuzz/players/scores',
+        filePath: './containers/cricbuzz/player/scores'
+    },
+    {
         route: '/pogo/mons/update',
         filePath: './containers/pogo/mons/update'
     },
