@@ -21,12 +21,44 @@ const styles = theme => ({
 		marginLeft: 'auto',
 		marginRight: 'auto'
 	},
+	artistImageDiv: {
+		textAlign: 'center',
+		display: 'inline-block',
+		verticalAlign: 'top',
+		width: '50%',
+		marginBottom: '5%',
+		[theme.breakpoints.up('sm')]: {
+			width: '33%',
+		},
+		[theme.breakpoints.up('lg')]: {
+			width: '20%',
+		},
+		[theme.breakpoints.up('xl')]: {
+			width: '16.5%',
+		}
+	},
+	directorImageDiv: {
+		marginBottom: 0
+	},
 	artistImage: {
 		height: '80px',
-		width: '60px'
+		maxWidth: '90%',
+		[theme.breakpoints.up('sm')]: {
+			height: 100
+		},
+		[theme.breakpoints.up('md')]: {
+			height: 160
+		},
+		[theme.breakpoints.up('lg')]: {
+			height: 120
+		},
+		[theme.breakpoints.up('xl')]: {
+			height: 200
+		},
 	},
 	artistLink: {
-		textAlign: 'center'
+		textAlign: 'center',
+		display: 'inline-block'
 	},
 	link: {
 		fontWeight: 'bold',
@@ -36,6 +68,24 @@ const styles = theme => ({
 	title: {
 		textAlign: 'center',
 		color: '#FF3C3C'
+	},
+	posterDiv: {
+		textAlign: 'center'
+	},
+	poster: {
+		maxWidth: 270,
+		maxHeight: 360,
+		marginBottom: '10%',
+		[theme.breakpoints.up('sm')]: {
+			maxWidth: 240,
+			maxHeight: 320,
+			marginBottom: '8%'
+		},
+		[theme.breakpoints.up('md')]: {
+			maxWidth: 300,
+			maxHeight: 400,
+			marginBottom: '5%'
+		}
 	}
 });
 
@@ -54,16 +104,13 @@ class MovieDetailCore extends Component {
 
 	renderImage = () => {
 		return (
-			<Grid container spacing={16}>
-				<Grid item xs={12}>
-					<Grid container justify="center" spacing={16}>
-						<MovieCard
-							movie={this.props.movie}
-							showLink={false}
-						/>
-					</Grid>
-				</Grid>
-			</Grid>
+			<div className={this.props.classes.posterDiv}>
+				<img
+					className={this.props.classes.poster}
+					alt={this.props.movie.name}
+					src={this.props.movie.imageUrl}
+				/>
+			</div>
 		);
 	};
 
@@ -129,11 +176,11 @@ class MovieDetailCore extends Component {
 	};
 
 	renderSubtitleDetails = () => {
-		return (this.renderField('Subtitles', ((this.props.movie.subtitles) ? 'Yes' : 'No'), 'Has Subtitles?'));
+		return (this.renderField('Subtitles', ((this.props.movie.subtitles) ? 'Yes' : 'No'), 'Subtitles?'));
 	};
 
 	renderSeenDetails = () => {
-		return (this.renderField('Seen', ((this.props.movie.seenInTheatre) ? 'Yes' : 'No'), 'Seen in Theatre?'));
+		return (this.renderField('Seen', ((this.props.movie.seenInTheatre) ? 'Yes' : 'No'), 'Theatre?'));
 	};
 
 	renderBaseName = () => {
@@ -143,96 +190,58 @@ class MovieDetailCore extends Component {
 	};
 
 	renderDirectors = () => {
-		let artistMarkup = this.props.movie.directors.map((director, index) => (
-			<Grid
-				item
-				xs={3}
-				key={director.id}
-			>
-				<Paper
-					className={this.props.classes.paper}
-				>
-					<div>
-						<img
-							className={this.props.classes.artistImage}
-							src={director.imageUrl}
-							alt={director.name}
-						/>
-					</div>
-				</Paper>
-				<div
-					className={this.props.classes.artistLink}
-				>
+		let artistMarkup = this.props.movie.directors.map((director) => (
+			<div className={`${this.props.classes.artistImageDiv} ${this.props.classes.directorImageDiv}`}>
+				<div>
+					<img
+						className={this.props.classes.artistImage}
+						src={director.imageUrl}
+						alt={director.name}
+					/>
+				</div>
+
+				<div className={this.props.classes.artistLink}>
 					<Link
-						to={'/movies/browseMovies?directorIds[]=' + director.id + '&order=year DESC'}
+						to={'/movies/browseMovies?actorIds[]=' + director.id + '&order=year DESC'}
 					>
-						<span className={this.props.classes.link}>
-							{director.name}
-						</span>
+					<span className={this.props.classes.link}>
+						{director.name}
+					</span>
 					</Link>
 				</div>
-			</Grid>
+			</div>
 		));
 
-		let markup = (
-			<Grid container spacing={16}>
-				<Grid item xs={12}>
-					<Grid container justify="center" spacing={16}>
-						{artistMarkup}
-					</Grid>
-				</Grid>
-			</Grid>
-		);
-
-		return (this.renderField('Directors', markup));
+		return (this.renderField('Directors', artistMarkup));
 	};
 
 	renderActors = () => {
-		let artistMarkup = this.props.movie.actors.map((actor, index) => (
-			<Grid
-				item
-				xs={4}
-				key={actor.id}
-			>
-				<Paper
-					className={this.props.classes.paper}
-				>
-					<div>
-						<img
-							className={this.props.classes.artistImage}
-							src={actor.imageUrl}
-							alt={actor.name}
-						/>
-					</div>
-				</Paper>
-				<div
-					className={this.props.classes.artistLink}
-				>
+		let artistMarkup = this.props.movie.actors.map((actor) => (
+			<div className={this.props.classes.artistImageDiv}>
+				<div>
+					<img
+						className={this.props.classes.artistImage}
+						src={actor.imageUrl}
+						alt={actor.name}
+					/>
+				</div>
+
+				<div className={this.props.classes.artistLink}>
 					<Link
 						to={'/movies/browseMovies?actorIds[]=' + actor.id + '&order=year DESC'}
 					>
-						<span className={this.props.classes.link}>
-							{actor.name}
-						</span>
+					<span className={this.props.classes.link}>
+						{actor.name}
+					</span>
 					</Link>
 				</div>
-			</Grid>
+			</div>
 		));
 
-		let markup = (
-			<Grid container spacing={16}>
-				<Grid item xs={12}>
-					<Grid container justify="center" spacing={8}>
-						{artistMarkup}
-					</Grid>
-				</Grid>
-			</Grid>
-		);
-
-		return (this.renderField('Actors', markup));
+		return (this.renderField('Actors', artistMarkup));
 	};
 
-	renderDeatils = () => {
+	renderDetails = () => {
 		if (!this.props.isEmpty()) {
 			return (
 				<div className="detailsSection">
@@ -257,8 +266,15 @@ class MovieDetailCore extends Component {
 		return (
 			<div className="movieDetailsContainer">
 				{this.renderTitle()}
-				{this.renderImage()}
-				{this.renderDeatils()}
+				<Grid container spacing={16}>
+					<Grid item xs={12} sm={4}>
+						{this.renderImage()}
+					</Grid>
+
+					<Grid item xs={12} sm={8}>
+						{this.renderDetails()}
+					</Grid>
+				</Grid>
 			</div>
 		);
 	}
