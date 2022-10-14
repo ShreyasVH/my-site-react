@@ -12,12 +12,50 @@ import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
 	paper: {
-		height: 240,
-		width: 180,
+		height: 180,
+		width: 135,
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		[theme.breakpoints.up('sm')]: {
+			height: 304,
+			width: 228
+		},
+		[theme.breakpoints.up('md')]: {
+			height: 308,
+			width: 231
+		},
+		[theme.breakpoints.up('lg')]: {
+			height: 288,
+			width: 216
+		},
+		[theme.breakpoints.up('xl')]: {
+			height: 520,
+			width: 390
+		}
+	},
+	movieImage: {
+		height: 180,
+		width: 135,
+		[theme.breakpoints.up('sm')]: {
+			height: 304,
+			width: 228
+		},
+		[theme.breakpoints.up('md')]: {
+			height: 308,
+			width: 231
+		},
+		[theme.breakpoints.up('lg')]: {
+			height: 288,
+			width: 216
+		},
+		[theme.breakpoints.up('xl')]: {
+			height: 520,
+			width: 390
+		}
 	},
 	movieLink: {
 		textAlign: 'center',
-		width: '180px',
+		// width: '180px',
 		marginTop: '10px'
 	},
 	cardWrapper: {
@@ -25,10 +63,6 @@ const styles = theme => ({
 		marginRight: 'auto',
 		marginTop: '15px',
 		marginBottom: '15px'
-	},
-	movieImage: {
-		height: '240px',
-		width: '180px'
 	},
 	link: {
 		fontWeight: 'bold',
@@ -59,22 +93,16 @@ class MovieCard extends Component {
 		let { movie } = this.props;
 		return (
 			<div className={this.props.classes.cardWrapper}>
-				<Grid
-					item
-					xs={6}
-					key={movie.id}
+				<Paper
+					className={this.props.classes.paper}
 				>
-					<Paper
-						className={this.props.classes.paper}
-					>
-						<img
-							className={this.props.classes.movieImage}
-							src={movie.imageUrl}
-							alt={movie.name}
-						/>
-					</Paper>
-					{this.renderLink()}
-				</Grid>
+					<img
+						className={this.props.classes.movieImage}
+						src={movie.imageUrl}
+						alt={movie.name}
+					/>
+				</Paper>
+				{this.renderLink()}
 			</div>
 		);
 	}

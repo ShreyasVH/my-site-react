@@ -22,11 +22,11 @@ class MovieList extends Component {
 			<Grid
 				item
 				key={'movie-' + movie.id}
-				xs={12}
+				xs={6}
 				sm={4}
 				md={3}
 				lg={2}
-				xl={1}
+				xl={2}
 			>
 				<MovieCard
 					movie={movie}
@@ -40,7 +40,7 @@ class MovieList extends Component {
 			<div>
 				<Grid container className={this.props.classes.root} spacing={16}>
 					<Grid item xs={12}>
-						<Grid container className={this.props.classes.demo} justify="center" spacing={16}>
+						<Grid container justify="center" spacing={16}>
 							{this.renderMarkup()}
 						</Grid>
 					</Grid>
