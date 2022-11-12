@@ -57,6 +57,15 @@ class ScoresCore extends Component {
             <TableCell>
                 {gameTypes[score.gameType]}
             </TableCell>
+            <TableCell>
+                {score.team}
+            </TableCell>
+            <TableCell>
+                {score.opposingTeam}
+            </TableCell>
+            <TableCell>
+                {score.series}
+            </TableCell>
         </TableRow>));
 
         return (
@@ -67,6 +76,9 @@ class ScoresCore extends Component {
                         <TableCell>Balls</TableCell>
                         <TableCell>Match Date</TableCell>
                         <TableCell>Game Type</TableCell>
+                        <TableCell>Team</TableCell>
+                        <TableCell>Opposing Team</TableCell>
+                        <TableCell>Series</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
