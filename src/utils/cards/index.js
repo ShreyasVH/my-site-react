@@ -70,8 +70,8 @@ export default class Cards {
 
     static updateUrl = () => {
         let url = Cards.getUrlFromFilters();
-        if (url !== decodeURI(location.pathname + location.search)) {
-            history.pushState(null, "Browse with filters", url);
+        if (url !== decodeURI(window.location.pathname + window.location.search)) {
+            window.history.pushState(null, "Browse with filters", url);
         }
     };
 

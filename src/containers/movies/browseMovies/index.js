@@ -67,7 +67,7 @@ class BrowseMovies extends Component {
 	};
 
 	handleSearchClick = selectedId => {
-		location.href = ('/movies/movieDetail?id=' + selectedId);
+		window.location.href = ('/movies/movieDetail?id=' + selectedId);
 	};
 
 	render() {

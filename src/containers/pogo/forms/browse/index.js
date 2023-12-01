@@ -299,8 +299,8 @@ export default class Update extends Component {
 
     updateUrl = () => {
         let url = Utils.paramsToUrl(this.state.selectedFiltersTemp, this.state.sortMap);
-        if (url !== decodeURI(location.pathname + location.search)) {
-            history.pushState(null, "Browse with filters", url);
+        if (url !== decodeURI(window.location.pathname + window.location.search)) {
+            window.history.pushState(null, "Browse with filters", url);
         }
     };
 

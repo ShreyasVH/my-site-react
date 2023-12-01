@@ -77,7 +77,7 @@ export default class Update extends Component {
         event.preventDefault();
         if (this.isFormValid()) {
             Context.showLoader();
-            let imageUrl = process.env.MOVIE_DEFAULT_IMAGE;
+            let imageUrl = process.env.REACT_APP_MOVIE_DEFAULT_IMAGE;
             if (this.state.imageFile) {
                 const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_') + '_' + (new Date(this.state.releaseDate)).getFullYear() + '_' + this.state.languageName.toLowerCase();
                 const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'movies', formattedName);

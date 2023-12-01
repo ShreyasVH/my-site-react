@@ -39,7 +39,7 @@ export default class Update extends Component {
             let payload = {
                 name: this.state.name,
                 gender: this.state.genderId,
-                imageUrl: ((this.state.genderId === 'M') ? process.env.ARTIST_DEFAULT_MALE : process.env.ARTIST_DEFAULT_FEMALE)
+                imageUrl: ((this.state.genderId === 'M') ? process.env.REACT_APP_ARTIST_DEFAULT_MALE : process.env.REACT_APP_ARTIST_DEFAULT_FEMALE)
             }
 
             Context.showLoader();

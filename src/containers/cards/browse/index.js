@@ -62,7 +62,7 @@ class Browse extends Component {
     };
 
     handleSearchClick = selectedId => {
-        location.href = ('/cards/detail?id=' + selectedId);
+        window.location.href = ('/cards/detail?id=' + selectedId);
     };
 
     render() {

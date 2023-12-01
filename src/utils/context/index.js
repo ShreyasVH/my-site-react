@@ -11,7 +11,7 @@ import {
 	hideNotify
 } from '../../actions/contextActions';
 import ApiHelper from '../apiHelper';
-import { BASE_URL, GET_MODE_URL, CHANGE_MODE_URL } from '../../constants';
+import { BASE_URL, GET_MODE_URL } from '../../constants';
 
 export default class Context {
 	static initializeContext = () => {
@@ -27,7 +27,7 @@ export default class Context {
 	};
 
 	static changeMode = newMode => {
-		ApiHelper.get((BASE_URL + CHANGE_MODE_URL).replace('{newMode}', newMode));
+		ApiHelper.get((BASE_URL).replace('{newMode}', newMode));
 	};
 
 	static showLoader = () => {

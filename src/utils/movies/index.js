@@ -131,8 +131,8 @@ export default class Movies {
 
 	static updateUrl = () => {
 		let url = Movies.getUrlFromFilters();
-		if (url !== decodeURI(location.pathname + location.search)) {
-			history.pushState(null, "Browse with filters", url);
+		if (url !== decodeURI(window.location.pathname + window.location.search)) {
+			window.history.pushState(null, "Browse with filters", url);
 		}
 	};
 
@@ -168,7 +168,7 @@ export default class Movies {
 		let sortString = "order=" + sortParams.join("&");
 
 		queryString = (('' !== queryString) ? (queryString + "&" + sortString) : (sortString));
-		return location.pathname + "?" + queryString;
+		return window.location.pathname + "?" + queryString;
 	};
 
 	static clearList = () => {

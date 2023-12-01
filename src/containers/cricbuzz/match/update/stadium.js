@@ -25,7 +25,7 @@ class Stadium extends Component {
         shouldUpdate = (this.props.stadiumName !== nextProps.stadiumName);
         const currentStadiumIds = this.props.stadiumSuggestions.map(stadium => stadium.id);
         const newStadiumIds = nextProps.stadiumSuggestions.map(stadium => stadium.id);
-        shouldUpdate = shou(newStadiumIds != currentStadiumIds);
+        shouldUpdate = shouldUpdate && (newStadiumIds != currentStadiumIds);
 
         return shouldUpdate;
     }

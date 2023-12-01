@@ -7,7 +7,6 @@ const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const webpack = require('webpack');
 
 module.exports = {
 	entry: path.resolve(__dirname, 'src/index.js'),
@@ -62,18 +61,6 @@ module.exports = {
 		// new BundleAnalyzerPlugin({
 		// 	analyzerHost: "0.0.0.0"
 		// }),
-		new webpack.DefinePlugin({
-			'process.env.API_ENDPOINT': JSON.stringify(process.env.REACT_APP_API_ENDPOINT),
-			'process.env.API_ENDPOINT_DUEL_LINKS': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_DUEL_LINKS),
-			'process.env.API_ENDPOINT_LOGGER': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_LOGGER),
-			'process.env.API_ENDPOINT_CRICBUZZ': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_CRICBUZZ),
-			'process.env.API_ENDPOINT_POGO': JSON.stringify(process.env.REACT_APP_API_ENDPOINT_POGO),
-			'process.env.CLOUDINARY_ACCOUNT_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_ACCOUNT_NAME),
-			'process.env.CLOUDINARY_PRESET_NAME': JSON.stringify(process.env.REACT_APP_CLOUDINARY_PRESET_NAME),
-			'process.env.ARTIST_DEFAULT_MALE': JSON.stringify(process.env.REACT_APP_ARTIST_DEFAULT_MALE),
-			'process.env.ARTIST_DEFAULT_FEMALE': JSON.stringify(process.env.REACT_APP_ARTIST_DEFAULT_FEMALE),
-			'process.env.MOVIE_DEFAULT_IMAGE': JSON.stringify(process.env.REACT_APP_MOVIE_DEFAULT_IMAGE)
-		}),
 	],
 	optimization: {
 		splitChunks: {

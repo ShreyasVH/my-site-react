@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import {Grid, Table, TableBody, TableCell, TableHead, TableRow, withStyles} from "@material-ui/core";
 
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js';
+// import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 
-ChartJS.register(Title, Tooltip, Legend, ArcElement);
+// import { Doughnut } from 'react-chartjs-2';
 
-import { Doughnut } from 'react-chartjs-2';
+// ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
 const styles = theme => ({
     table: {
@@ -389,22 +389,22 @@ class DetailsCore extends Component {
                     >
                         {Object.keys(this.props.player.dismissalStats).map(gameType => (
                             <Grid item xs={4}>
-                                <Doughnut
-                                    data={this.formatDismissalStatsForRender(this.props.player.dismissalStats[gameType])}
-                                    options={{
-                                        title:{
-                                            display:true,
-                                            text:gameType,
-                                            fontSize:20
-                                        },
-                                        legend:{
-                                            display:true,
-                                            position:'right'
-                                        },
-                                        responsive: true,
-                                        maintainAspectRatio: true
-                                    }}
-                                />
+                                {/*<Doughnut*/}
+                                {/*    data={this.formatDismissalStatsForRender(this.props.player.dismissalStats[gameType])}*/}
+                                {/*    options={{*/}
+                                {/*        title:{*/}
+                                {/*            display:true,*/}
+                                {/*            text:gameType,*/}
+                                {/*            fontSize:20*/}
+                                {/*        },*/}
+                                {/*        legend:{*/}
+                                {/*            display:true,*/}
+                                {/*            position:'right'*/}
+                                {/*        },*/}
+                                {/*        responsive: true,*/}
+                                {/*        maintainAspectRatio: true*/}
+                                {/*    }}*/}
+                                {/*/>*/}
                             </Grid>
                         ))}
                     </Grid>

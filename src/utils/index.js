@@ -76,7 +76,7 @@ export default class Utils {
 		if (sortString) {
 			queryString = (('' !== queryString) ? (queryString + "&" + sortString) : (sortString));
 		}
-		return ((queryString) ? location.pathname + "?" + queryString :  location.pathname);
+		return ((queryString) ? window.location.pathname + "?" + queryString :  window.location.pathname);
 	};
 
 	static copyObject = (referencedObject) => JSON.parse(JSON.stringify(referencedObject));

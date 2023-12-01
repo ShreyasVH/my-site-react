@@ -56,9 +56,9 @@ export default class ApiHelper {
 	static execute = options => (axios(options));
 
 	static uploadFile = (file, folder, fileName) => {
-		let url = 'https://api.cloudinary.com/v1_1/' + process.env.CLOUDINARY_ACCOUNT_NAME + '/upload';
+		let url = 'https://api.cloudinary.com/v1_1/' + process.env.REACT_APP_CLOUDINARY_ACCOUNT_NAME + '/upload';
 		let formData = new FormData();
-		formData.append('upload_preset', process.env.CLOUDINARY_PRESET_NAME);
+		formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_PRESET_NAME);
 		formData.append('file', file);
 		formData.append('public_id', fileName);
 		formData.append('folder', folder);

@@ -3,11 +3,11 @@
  *
  */
 import Utils from '../utils';
-export const BASE_URL = process.env.API_ENDPOINT;
-export const BASE_URL_DUEL_LINKS = process.env.API_ENDPOINT_DUEL_LINKS;
-export const BASE_URL_LOGGER = process.env.API_ENDPOINT_LOGGER;
-export const BASE_URL_CRICBUZZ = process.env.API_ENDPOINT_CRICBUZZ;
-export const BASE_URL_POGO = process.env.API_ENDPOINT_POGO;
+export const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
+export const BASE_URL_DUEL_LINKS = process.env.REACT_APP_API_ENDPOINT_DUEL_LINKS;
+export const BASE_URL_LOGGER = process.env.REACT_APP_API_ENDPOINT_LOGGER;
+export const BASE_URL_CRICBUZZ = process.env.REACT_APP_API_ENDPOINT_CRICBUZZ;
+export const BASE_URL_POGO = process.env.REACT_APP_API_ENDPOINT_POGO;
 export const GET_MODE_URL = 'data/getMode';
 // export const CHANGE_MODE_URL = 'index/changeMode?newMode={newMode}';
 export const MOVIES_DASHBOARD_URL = 'movies/dashboard';
