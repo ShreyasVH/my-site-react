@@ -202,7 +202,7 @@ class MovieDetailCore extends Component {
 
 				<div className={this.props.classes.artistLink}>
 					<Link
-						to={'/movies/browseMovies?directorIds[]=' + director.id + '&order=year DESC'}
+						to={'/movies/browseMovies?directorIds[]=' + director.id + '&order=releaseDate DESC'}
 					>
 					<span className={this.props.classes.link}>
 						{director.name}
@@ -228,7 +228,7 @@ class MovieDetailCore extends Component {
 
 				<div className={this.props.classes.artistLink}>
 					<Link
-						to={'/movies/browseMovies?actorIds[]=' + actor.id + '&order=year DESC'}
+						to={'/movies/browseMovies?actorIds[]=' + actor.id + '&order=releaseDate DESC'}
 					>
 					<span className={this.props.classes.link}>
 						{actor.name}
