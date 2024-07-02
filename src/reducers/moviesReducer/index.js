@@ -135,6 +135,20 @@ const defaultState = {
 				}
 			]
 		},
+		obtained: {
+			displayName: 'Obtained',
+			type: FILTER_TYPE.CHECKBOX,
+			values: [
+				{
+					id: 'true',
+					name: 'Yes'
+				},
+				{
+					id: 'false',
+					name: 'No'
+				}
+			]
+		},
 	}
 };
 

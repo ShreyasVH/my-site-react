@@ -102,21 +102,12 @@ const styles = theme => ({
 
 class UpdateCore extends Component {
     handleNameChange = event => (this.props.onNameChange && this.props.onNameChange(event));
-    handleSizeChange = event => (this.props.onSizeChange && this.props.onSizeChange(event));
 
     handleLanguageSelect = (id, name) => (this.props.onLanguageSelect && this.props.onLanguageSelect(id, name));
 
-    handleFormatSelect = (id, name) => (this.props.onFormatSelect && this.props.onFormatSelect(id, name));
-
     handleReleaseDateChange = event => (this.props.onReleaseDateChange && this.props.onReleaseDateChange(event));
 
-    handleSubtitleChange = (event, checked) => (this.props.onSubtitleChange && this.props.onSubtitleChange(event, checked));
-
     handleViewedChange = (event, checked) => (this.props.onViewedChange && this.props.onViewedChange(event, checked));
-
-    handleQualitySelect = (id, name) => (this.props.onQualitySelect && this.props.onQualitySelect(id, name));
-
-    handleBaseNameChange = event => (this.props.onBaseNameChange && this.props.onBaseNameChange(event));
 
     handleFileUpload = files => (this.props.onImageSelect && this.props.onImageSelect(files[0]));
 
@@ -228,23 +219,6 @@ class UpdateCore extends Component {
 
                             <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
-                                    <TextField
-                                        label="Size"
-                                        placeholder="Size"
-                                        variant="outlined"
-                                        fullWidth
-                                        value={this.props.size}
-                                        onChange={this.handleSizeChange}
-                                        error={!this.props.validateSize.isValid}
-                                        helperText={this.props.validateSize.message}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
                                     <SearchDropDown
                                         items={this.props.languages}
                                         label="Language"
@@ -257,67 +231,6 @@ class UpdateCore extends Component {
                                 </div>
                             </div>
 
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
-                                    <SearchDropDown
-                                        items={this.props.formats}
-                                        label="Format"
-                                        placeholder="Format"
-                                        onSelect={this.handleFormatSelect}
-                                        displayValue={this.props.formatName}
-                                        error={!this.props.validateFormat.isValid}
-                                        helperText={this.props.validateFormat.message}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
-                                    <div>
-                                        <label>
-                                            Subtitles:
-                                        </label>
-
-                                        <Checkbox
-                                            variant="outlined"
-                                            fullWidth
-                                            checked={this.props.subtitles}
-                                            onChange={this.handleSubtitleChange}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
-                                    <div>
-                                        <label>
-                                            Viewed:
-                                        </label>
-
-                                        <Checkbox
-                                            variant="outlined"
-                                            fullWidth
-                                            checked={this.props.seenInTheatre}
-                                            onChange={this.handleViewedChange}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
-                                    <SearchDropDown
-                                        items={this.props.qualities}
-                                        label="Quality"
-                                        placeholder="Quality"
-                                        onSelect={this.handleQualitySelect}
-                                        displayValue={this.props.qualityName}
-                                    />
-                                </div>
-                            </div>
                         </div>
 
                         <div className={this.props.classes.row}>
@@ -336,16 +249,20 @@ class UpdateCore extends Component {
                                 </div>
                             </div>
 
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
+                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
                                 <div className={this.props.classes.formFieldInput}>
-                                    <TextField
-                                        label="Basename"
-                                        placeholder="Basename"
-                                        variant="outlined"
-                                        fullWidth
-                                        value={this.props.basename}
-                                        onChange={this.handleBaseNameChange}
-                                    />
+                                    <div>
+                                        <label>
+                                            Viewed:
+                                        </label>
+
+                                        <Checkbox
+                                            variant="outlined"
+                                            fullWidth
+                                            checked={this.props.seenInTheatre}
+                                            onChange={this.handleViewedChange}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

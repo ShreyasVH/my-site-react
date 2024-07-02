@@ -68,7 +68,8 @@ export default class Movies {
 
 		const booleanFilterKeys = [
 			'subtitles',
-			'seenInTheatre'
+			'seenInTheatre',
+			'obtained'
 		];
 
 		let andFilters = {};

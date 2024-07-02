@@ -23,6 +23,10 @@ class MovieDetail extends Component {
 		Movie.clearMovieDetails();
 	}
 
+	handleUpdateClick = () => {
+		this.props.history.push('/movies/update?id=' + this.props.movie.id);
+	}
+
 	isEmpty = () => (0 === Object.keys(this.props.movie).length);
 
 	getPageTitle = () => ((this.isEmpty()) ? 'Movie Mania' : (this.props.movie.name + ' - Movie Mania'));
@@ -36,6 +40,7 @@ class MovieDetail extends Component {
 				<MovieDetailCore
 					{...this.props}
 					isEmpty={this.isEmpty}
+					onUpdateClick={this.handleUpdateClick}
 				/>
 			</div>
 		);

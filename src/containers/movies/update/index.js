@@ -43,17 +43,10 @@ export default class Update extends Component {
             let movie = movieResponse.data;
             state = {
                 name: movie.name,
-                size: movie.size.toString(),
                 languageId: movie.language.id,
                 languageName: movie.language.name,
-                formatId: movie.format.id,
-                formatName: movie.format.name,
                 releaseDate: movie.releaseDate,
-                subtitles: movie.subtitles,
                 seenInTheatre: movie.seenInTheatre,
-                qualityId: movie.quality,
-                qualityName: this.state.qualities.filter(quality => quality.id === movie.quality)[0].name,
-                basename: movie.basename,
                 imageUrl: movie.imageUrl,
                 directors: movie.directors.map(director => ({
                     id: director.id,
@@ -62,8 +55,19 @@ export default class Update extends Component {
                 actors: movie.actors.map(actor => ({
                     id: actor.id,
                     name: actor.name
-                }))
+                })),
+                obtained: movie.obtained
             };
+
+            if (movie.obtained) {
+                state.size = movie.size.toString();
+                state.formatId = movie.format.id;
+                state.formatName = movie.format.name;
+                state.subtitles = movie.subtitles;
+                state.qualityId = movie.quality;
+                state.qualityName = this.state.qualities.filter(quality => quality.id === movie.quality)[0].name;
+                state.basename = movie.basename;
+            }
 
             if (movie.imageUrl) {
                 let imageParts = movie.imageUrl.split('/');
@@ -96,7 +100,6 @@ export default class Update extends Component {
 
             let payload = {
                 name: this.state.name,
-                size: this.state.size.replace(/,/g, ''),
                 languageId: this.state.languageId,
                 formatId: this.state.formatId,
                 subtitles: this.state.subtitles,
@@ -105,8 +108,14 @@ export default class Update extends Component {
                 releaseDate: Utils.formatDateToString(this.state.releaseDate),
                 basename: this.state.basename,
                 actors: this.state.actors.map(actor => actor.id),
-                directors: this.state.directors.map(director => director.id)
+                directors: this.state.directors.map(director => director.id),
+                obtained: this.state.obtained
             }
+            let size = null;
+            if (this.state.obtained) {
+                size = this.state.size.replace(/,/g, '');
+            }
+            payload.size = size;
 
             if (this.state.imageFile) {
                 const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_') + '_' + (new Date(this.state.releaseDate)).getFullYear() + '_' + this.state.languageName.toLowerCase();
@@ -173,6 +182,21 @@ export default class Update extends Component {
     handleViewedChange = (event, checked) => {
         let updatedState = Utils.copyObject(this.state);
         updatedState.seenInTheatre = checked;
+        this.setState(updatedState);
+    };
+
+    handleObtainedChange = (event, checked) => {
+        let updatedState = Utils.copyObject(this.state);
+        updatedState.obtained = checked;
+        if (!checked) {
+            updatedState.size = null;
+            updatedState.qualityId = null;
+            updatedState.quality = '';
+            updatedState.basename = null;
+            updatedState.formatId = null;
+            updatedState.formatName = '';
+            updatedState.subtitles = null;
+        }
         this.setState(updatedState);
     };
 
@@ -305,12 +329,16 @@ export default class Update extends Component {
 
     isFormValid = () => {
         let isValid = this.validateName().isValid;
-        isValid = isValid && this.validateSize().isValid;
+
         isValid = isValid && this.validateLanguage().isValid;
-        isValid = isValid && this.validateFormat().isValid;
         isValid = isValid && this.validateReleaseDate().isValid;
         isValid = isValid && this.validateDirectors().isValid;
         isValid = isValid && this.validateActors().isValid;
+
+        if (this.state.obtained) {
+            isValid = isValid && this.validateSize().isValid;
+            isValid = isValid && this.validateFormat().isValid;
+        }
 
         return isValid;
     };
@@ -429,6 +457,7 @@ export default class Update extends Component {
                     onReleaseDateChange={this.handleReleaseDateChange}
                     onSubtitleChange={this.handleSubtitleChange}
                     onViewedChange={this.handleViewedChange}
+                    onObtainedChange={this.handleObtainedChange}
                     onQualitySelect={this.handleQualitySelect}
                     onBaseNameChange={this.handleBaseNameChange}
                     onDirectorSearch={this.handleDirectorSearch}
