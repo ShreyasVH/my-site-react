@@ -56,7 +56,6 @@ export default class Update extends Component {
                     id: actor.id,
                     name: actor.name
                 })),
-                // obtained: true
                 obtained: movie.obtained
             };
 

@@ -372,9 +372,6 @@ class UpdateCore extends Component {
                             </div>
                         </div>
 
-                        {/*{this.props.obtained && <p>abc</p>*/}
-                        {/*}*/}
-
                         {this.props.obtained && <div>
                                 <div className={this.props.classes.row}>
                                     <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
