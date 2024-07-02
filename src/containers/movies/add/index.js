@@ -28,19 +28,12 @@ export default class Update extends Component {
 
     getDefaultState = () => ({
         name: '',
-        size: '',
-        formatId: '',
-        formatName: '',
         languageId: '',
         languageName: '',
-        subtitles: false,
         seenInTheatre: false,
-        qualityId: 'normal',
-        qualityName: 'Normal',
         actors: [],
         directors: [],
         releaseDate: '',
-        basename: '',
         imageUrl: '',
         imageFile: '',
         imageName: '',
@@ -56,9 +49,6 @@ export default class Update extends Component {
         try {
             const allLanguagesResponse = await MovieUtils.getAllLanguages();
             state.languages = allLanguagesResponse.data;
-
-            const allFormatsResponse = await MovieUtils.getAllFormats();
-            state.formats = allFormatsResponse.data;
 
             state.allArtists = await MovieUtils.getAllArtists();
         } catch (error) {
@@ -89,14 +79,9 @@ export default class Update extends Component {
 
             let payload = {
                 name: this.state.name,
-                size: this.state.size.replace(/,/g, ''),
                 languageId: this.state.languageId,
-                formatId: this.state.formatId,
-                subtitles: this.state.subtitles,
                 seenInTheatre: this.state.seenInTheatre,
-                quality: this.state.qualityId,
                 releaseDate: Utils.formatDateToString(this.state.releaseDate),
-                basename: this.state.basename,
                 actors: this.state.actors.map(actor => actor.id),
                 directors: this.state.directors.map(director => director.id),
                 imageUrl
@@ -125,23 +110,10 @@ export default class Update extends Component {
         this.setState(updatedState);
     };
 
-    handleSizeChange = event => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.size = event.target.value;
-        this.setState(updatedState);
-    };
-
     handleLanguageSelect = (id, name) => {
         this.setState({
             languageId: id,
             languageName: name
-        });
-    };
-
-    handleFormatSelect = (id, name) => {
-        this.setState({
-            formatId: id,
-            formatName: name
         });
     };
 
@@ -153,28 +125,9 @@ export default class Update extends Component {
         this.setState(updatedState);
     }
 
-    handleSubtitleChange = (event, checked) => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.subtitles = checked;
-        this.setState(updatedState);
-    };
-
     handleViewedChange = (event, checked) => {
         let updatedState = Utils.copyObject(this.state);
         updatedState.seenInTheatre = checked;
-        this.setState(updatedState);
-    };
-
-    handleQualitySelect = (id, name) => {
-        this.setState({
-            qualityId: id,
-            qualityName: name
-        });
-    };
-
-    handleBaseNameChange = event => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.basename = event.target.value;
         this.setState(updatedState);
     };
 
@@ -294,9 +247,7 @@ export default class Update extends Component {
 
     isFormValid = () => {
         let isValid = this.validateName().isValid;
-        isValid = isValid && this.validateSize().isValid;
         isValid = isValid && this.validateLanguage().isValid;
-        isValid = isValid && this.validateFormat().isValid;
         isValid = isValid && this.validateReleaseDate().isValid;
         isValid = isValid && this.validateDirectors().isValid;
         isValid = isValid && this.validateActors().isValid;
@@ -318,23 +269,6 @@ export default class Update extends Component {
         return response;
     };
 
-    validateSize = () => {
-        let response = {
-            isValid: true,
-            message: ''
-        };
-
-        if (!this.state.size) {
-            response.isValid = false;
-            response.message = 'Size cannot be empty';
-        } else if (isNaN(this.state.size.replace(/,/g, ''))) {
-            response.isValid = false;
-            response.message = 'Invalid size';
-        }
-
-        return response;
-    };
-
     validateLanguage = () => {
         let response = {
             isValid: true,
@@ -344,20 +278,6 @@ export default class Update extends Component {
         if (!this.state.languageId) {
             response.isValid = false;
             response.message = 'Language cannot be empty';
-        }
-
-        return response;
-    };
-
-    validateFormat = () => {
-        let response = {
-            isValid: true,
-            message: ''
-        };
-
-        if (!this.state.formatId) {
-            response.isValid = false;
-            response.message = 'Format cannot be empty';
         }
 
         return response;
@@ -411,15 +331,10 @@ export default class Update extends Component {
                 <UpdateCore
                     {...this.state}
                     onNameChange={this.handleNameChange}
-                    onSizeChange={this.handleSizeChange}
                     onImageSelect={this.handleImageSelect}
                     onLanguageSelect={this.handleLanguageSelect}
-                    onFormatSelect={this.handleFormatSelect}
                     onReleaseDateChange={this.handleReleaseDateChange}
-                    onSubtitleChange={this.handleSubtitleChange}
                     onViewedChange={this.handleViewedChange}
-                    onQualitySelect={this.handleQualitySelect}
-                    onBaseNameChange={this.handleBaseNameChange}
                     onDirectorSearch={this.handleDirectorSearch}
                     onDirectorSelect={this.handleDirectorSelect}
                     onDirectorRemove={this.handleDirectorRemove}
@@ -431,9 +346,7 @@ export default class Update extends Component {
                     onSubmit={this.handleSubmit}
                     isFormValid={this.isFormValid()}
                     validateName={this.validateName()}
-                    validateSize={this.validateSize()}
                     validateLanguage={this.validateLanguage()}
-                    validateFormat={this.validateFormat()}
                     validateReleaseDate={this.validateReleaseDate()}
                     validateDirectors={this.validateDirectors()}
                     validateActors={this.validateActors()}

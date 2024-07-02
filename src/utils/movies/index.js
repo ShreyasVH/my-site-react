@@ -42,12 +42,12 @@ export default class Movies {
 			let promise = ApiHelper.get(BASE_URL + MOVIES_DASHBOARD_URL);
 			promise.then(apiResponse => {
 				let response = apiResponse.data;
-				if (0 !== response.length) {
+				// if (0 !== response.length) {
 					store.dispatch(updateDashBoard({
 						dashboard: response
 					}));
 					Context.hideLoader();
-				}
+				// }
 			}).catch(apiResponse => {
 				Context.hideLoader();
 			});
@@ -68,7 +68,8 @@ export default class Movies {
 
 		const booleanFilterKeys = [
 			'subtitles',
-			'seenInTheatre'
+			'seenInTheatre',
+			'obtained'
 		];
 
 		let andFilters = {};

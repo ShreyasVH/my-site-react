@@ -57,6 +57,7 @@ class DashBoardCore extends Component {
 					<TableRow>
 						<TableCell className={`${this.props.classes.cell} ${this.props.classes.headCell}`}>Language</TableCell>
 						<TableCell className={this.props.classes.headCell} numeric>No of Movies</TableCell>
+						<TableCell className={this.props.classes.headCell} numeric>No of Obtained Movies</TableCell>
 						<TableCell className={this.props.classes.headCell} numeric>
 							Size
 							<br />
@@ -76,6 +77,7 @@ class DashBoardCore extends Component {
 									</Link>
 								</TableCell>
 								<TableCell numeric>{row.count}</TableCell>
+								<TableCell numeric>{row.obtained_count}</TableCell>
 								<TableCell numeric>{Math.round(parseInt(row.size, 10) / (1024 * 1024 * 1024), 2)}</TableCell>
 							</TableRow>
 						))

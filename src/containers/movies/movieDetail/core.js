@@ -13,6 +13,8 @@ import { withStyles } from '@material-ui/core/styles';
 import MovieCard from '../movieList/card';
 
 import Utils from '../../../utils';
+import {Button} from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 
 const styles = theme => ({
 	paper: {
@@ -90,6 +92,8 @@ const styles = theme => ({
 });
 
 class MovieDetailCore extends Component {
+	handleUpdateClick = event => (this.props.onUpdateClick && this.props.onUpdateClick());
+
 	renderTitle = () => {
 		if (!this.props.isEmpty()) {
 			return (
@@ -164,19 +168,27 @@ class MovieDetailCore extends Component {
 	};
 
 	renderSizeDetails = () => {
-		return (this.renderField('Size', ((this.props.movie.size / (1024 * 1024)).toFixed(3) + ' MB (' + this.props.movie.size + ')')));
+		if (this.props.movie.obtained) {
+			return (this.renderField('Size', ((this.props.movie.size / (1024 * 1024)).toFixed(3) + ' MB (' + this.props.movie.size + ')')));
+		}
 	};
 
 	renderFormatDetails = () => {
-		return (this.renderField('Format', this.props.movie.format.name));
+		if (this.props.movie.obtained) {
+			return (this.renderField('Format', this.props.movie.format.name));
+		}
 	};
 
 	renderQualityDetails = () => {
-		return (this.renderField('Quality', Utils.ucfirst(this.props.movie.quality)));
+		if (this.props.movie.obtained) {
+			return (this.renderField('Quality', Utils.ucfirst(this.props.movie.quality)));
+		}
 	};
 
 	renderSubtitleDetails = () => {
-		return (this.renderField('Subtitles', ((this.props.movie.subtitles) ? 'Yes' : 'No'), 'Subtitles?'));
+		if (this.props.movie.obtained) {
+			return (this.renderField('Subtitles', ((this.props.movie.subtitles) ? 'Yes' : 'No'), 'Subtitles?'));
+		}
 	};
 
 	renderSeenDetails = () => {
@@ -184,7 +196,7 @@ class MovieDetailCore extends Component {
 	};
 
 	renderBaseName = () => {
-		if ('' !== this.props.movie.basename) {
+		if (this.props.movie.obtained && '' !== this.props.movie.basename) {
 			return (this.renderField('Basename', this.props.movie.basename));
 		}
 	};
@@ -269,6 +281,14 @@ class MovieDetailCore extends Component {
 				<Grid container spacing={16}>
 					<Grid item xs={12} sm={4}>
 						{this.renderImage()}
+
+						<div style={{'textAlign': 'center'}}>
+							<Button color={'primary'} variant={'contained'} onClick={this.handleUpdateClick}>
+								<EditIcon />
+								&nbsp;
+								Edit
+							</Button>
+						</div>
 					</Grid>
 
 					<Grid item xs={12} sm={8}>
