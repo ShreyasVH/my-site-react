@@ -128,6 +128,7 @@ export default class Update extends Component {
             updatePromise.then(apiResponse => {
                 Context.hideLoader();
                 Context.showNotify('Updated Successfully', 'success');
+                this.props.history.push('/movies/movieDetail?id=' + this.movieId);
             }).catch(apiResponse => {
                 Context.hideLoader();
                 if (apiResponse.response) {
