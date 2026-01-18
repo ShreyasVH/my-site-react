@@ -5,28 +5,29 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+// import { withStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/system';
+import { Grid } from '@mui/material';
 
 import MovieCard from './card';
 
-const styles = theme => ({
-	root: {
+const Container = styled("div")(({ theme }) => ({
+	'.root': {
 		flexGrow: 1,
 	}
-});
+}));
 
 class MovieList extends Component {
 	renderMarkup = () => (
 		this.props.movieList.map((movie) => (
 			<Grid
-				item
 				key={'movie-' + movie.id}
-				xs={6}
+				xs={12}
 				sm={4}
 				md={3}
 				lg={2}
 				xl={2}
+				size={{xs: 12, sm: 4, md: 3, lg: 2, xl: 2}}
 			>
 				<MovieCard
 					movie={movie}
@@ -37,15 +38,15 @@ class MovieList extends Component {
 
 	render() {
 		return (
-			<div>
-				<Grid container className={this.props.classes.root} spacing={16}>
-					<Grid item xs={12}>
-						<Grid container justify="center" spacing={16}>
+			<Container>
+				<Grid container className="root" spacing={16}>
+					<Grid size={{xs: 12}}>
+						<Grid container justify="center" spacing={3}>
 							{this.renderMarkup()}
 						</Grid>
 					</Grid>
 				</Grid>
-			</div>
+			</Container>
 		);
 	}
 }
@@ -54,4 +55,5 @@ MovieList.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(MovieList);
+// export default withStyles(styles)(MovieList);
+export default MovieList;

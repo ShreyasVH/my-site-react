@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
+// import { withStyles } from '@material-ui/core';
 
-import List from '@material-ui/core/List';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import { TextField, List, ListItemAvatar, Avatar, ListItem, ListItemText } from '@mui/material';
 
-const styles = theme => ({
-    dropdown: {
+import { styled } from '@mui/system';
+
+const Container = styled("div")(({ theme }) => ({
+    '.dropdown': {
         width: '100%',
         // maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
         position: 'relative',
         display: 'inline-block'
     },
-    inline: {
+    '.inline': {
         display: 'inline',
     },
-    textField: {
+    '.textField': {
         // marginLeft: theme.spacing.unit,
         // marginRight: theme.spacing.unit,
         marginBottom: 0,
         marginTop: 0
     },
-    dropdownList: {
+    '.dropdownList': {
         position: 'absolute',
         top: '100%',
         left: 0,
@@ -50,17 +47,17 @@ const styles = theme => ({
         marginTop: '0',
         borderRadius: '0 0 5px 5px'
     },
-    image: {
+    '.image': {
         width: 50,
         height: 75,
         borderRadius: 'initial !important'
     },
-    item: {
+    '.item': {
         '&:hover': {
             backgroundColor: '#57CBB6'
         }
     }
-});
+}));
 
 class SearchDropdownCore extends Component {
     handleKeyUp = event => this.props.onKeyUp && this.props.onKeyUp(event);
@@ -86,7 +83,7 @@ class SearchDropdownCore extends Component {
             return (
                 <TextField
                     label={this.getLabel()}
-                    className={this.props.classes.textField}
+                    className="textField"
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -102,7 +99,7 @@ class SearchDropdownCore extends Component {
             return (
                 <TextField
                     label={this.getLabel()}
-                    className={this.props.classes.textField}
+                    className="textField"
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -125,7 +122,7 @@ class SearchDropdownCore extends Component {
             return (
                 <ListItemAvatar>
                     <Avatar
-                        className={this.props.classes.image}
+                        className="image"
                         alt={entity.name}
                         src={entity.imageUrl}
                     />
@@ -148,7 +145,7 @@ class SearchDropdownCore extends Component {
                         >
                             <ListItem
                                 alignItems="center"
-                                className={this.props.classes.item}
+                                className="item"
                             >
                                 {this.renderAvatar(entity)}
                                 <ListItemText
@@ -168,7 +165,7 @@ class SearchDropdownCore extends Component {
                     >
                         <ListItem
                             alignItems="center"
-                            className={this.props.classes.item}
+                            className="item"
                         >
                             <ListItemText
                                 primary={'Add ' + this.props.inputValue}
@@ -179,7 +176,7 @@ class SearchDropdownCore extends Component {
             }
 
             return (
-                <List className={this.props.classes.dropdownList}>
+                <List className="dropdownList">
                     {listMarkup}
                 </List>
             );
@@ -188,10 +185,12 @@ class SearchDropdownCore extends Component {
 
     render() {
         return (
-            <div className={this.props.classes.dropdown}>
-                {this.renderInput()}
-                {this.renderDropdown()}
-            </div>
+            <Container>
+                <div className="dropdown">
+                    {this.renderInput()}
+                    {this.renderDropdown()}
+                </div>
+            </Container>
         );
     }
 }
@@ -200,4 +199,6 @@ SearchDropdownCore.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(SearchDropdownCore);
+// export default withStyles(styles)(SearchDropdownCore);
+
+export default SearchDropdownCore;

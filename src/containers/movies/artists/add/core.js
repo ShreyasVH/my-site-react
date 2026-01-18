@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core";
+import { TextField, Button } from '@mui/material';
 import SearchDropDown from "../../../../components/searchDropdown";
 import FileUpload from "../../../../components/fileUpload";
+import {styled} from "@mui/system";
 
-const styles = theme => ({
-    form: {
+const Container = styled("div")(({ theme }) => ({
+    '.form': {
         margin: '2.5%',
         border: '1px solid black',
         borderRadius: '5px',
         minHeight: '200px'
     },
-    formTitle: {
+    '.formTitle': {
         textAlign: 'center',
         padding: '2%',
         fontSize: '25px',
@@ -23,54 +23,54 @@ const styles = theme => ({
             marginBottom: '5%',
         }
     },
-    row: {
+    '.row': {
         width: '100%',
         marginTop: '0.5%',
         marginBottom: '0.5%'
     },
-    quarterWidth: {
+    '.quarterWidth': {
         width: '25%',
     },
-    fullWidth: {
+    '.fullWidth': {
         width: '100%',
     },
-    formFieldInput: {
+    '.formFieldInput': {
         width: '99%',
         marginLeft: '0.5%',
         marginRight: '0.5%'
     },
-    formField: {
+    '.formField': {
         display: 'inline-block',
         [theme.breakpoints.down('xs')]: {
             marginBottom: '5%',
         }
     },
-    container: {
+    '.container': {
         padding: '1%',
         [theme.breakpoints.down('xs')]: {
             padding: '4%',
         }
     },
-    submit: {
+    '.submit': {
         backgroundColor: '#428bca',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: '2%',
         display: 'block'
     },
-    oneThirdWidth: {
+    '.oneThirdWidth': {
         width: '33.33%',
         [theme.breakpoints.down('xs')]: {
             width: '100%',
         }
     },
-    halfWidth: {
+    '.halfWidth': {
         width: '50%',
         [theme.breakpoints.down('xs')]: {
             width: '100%',
         }
     }
-});
+}));
 
 class UpdateCore extends Component {
     handleNameChange = event => (this.props.onNameChange && this.props.onNameChange(event));
@@ -82,7 +82,7 @@ class UpdateCore extends Component {
     renderTitle = () => {
         if (!this.props.embedded) {
             return (
-                <div className={this.props.classes.formTitle}>
+                <div className="formTitle">
                     Add Artist
                 </div>
             );
@@ -91,13 +91,13 @@ class UpdateCore extends Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
+            <Container>
+                <form onSubmit={this.props.onSubmit} className="form" >
                     {this.renderTitle()}
-                    <div className={this.props.classes.container}>
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                    <div className="container">
+                        <div className="row">
+                            <div className="formField halfWidth">
+                                <div className="formFieldInput">
                                     <TextField
                                         label="Name"
                                         placeholder="Name"
@@ -111,8 +111,8 @@ class UpdateCore extends Component {
                                 </div>
                             </div>
 
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                            <div className="formField halfWidth">
+                                <div className="formFieldInput">
                                     <SearchDropDown
                                         items={this.props.genders}
                                         label="Gender"
@@ -126,9 +126,9 @@ class UpdateCore extends Component {
                             </div>
                         </div>
 
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.fullWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                        <div className="row">
+                            <div className="formField fullWidth">
+                                <div className="formFieldInput">
                                     <FileUpload
                                         name={'image'}
                                         label={'Upload Image'}
@@ -139,11 +139,11 @@ class UpdateCore extends Component {
                             </div>
                         </div>
 
-                        <div className={`${this.props.classes.row}`}>
+                        <div className="row">
                             <Button
                                 color="secondary"
                                 variant="contained"
-                                className={this.props.classes.submit}
+                                className="submit"
                                 type="submit"
                                 disabled={!this.props.isFormValid}
                             >
@@ -152,7 +152,7 @@ class UpdateCore extends Component {
                         </div>
                     </div>
                 </form>
-            </div>
+            </Container>
         );
     }
 }
@@ -161,4 +161,4 @@ UpdateCore.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(UpdateCore);
+export default UpdateCore;

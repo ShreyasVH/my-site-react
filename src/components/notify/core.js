@@ -1,43 +1,40 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
-import Snackbar from "@material-ui/core/Snackbar";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from '@material-ui/icons/Close';
-import green from '@material-ui/core/colors/green';
-import amber from '@material-ui/core/colors/amber';
+import {Snackbar, SnackbarContent, IconButton,} from '@mui/material';
+import {Close as CloseIcon, CheckCircle as SuccessIcon, Error as ErrorIcon, Info as InfoIcon, Warning as WarningIcon} from '@mui/icons-material';
+import { green, amber } from '@mui/material/colors';
 
-import SuccessIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import InfoIcon from '@material-ui/icons/Info';
-import WarningIcon from '@material-ui/icons/Warning';
+import {styled} from "@mui/system";
 
 const styles = theme => ({
-    success: {
+
+});
+
+const Container = styled("div")(({ theme }) => ({
+    '.success': {
         backgroundColor: green[600],
     },
-    error: {
+    '.error': {
         backgroundColor: theme.palette.error.dark,
     },
-    info: {
+    '.info': {
         backgroundColor: theme.palette.primary.dark,
     },
-    warning: {
+    '.warning': {
         backgroundColor: amber[700],
     },
-    icon: {
+    '.icon': {
         fontSize: 20,
     },
-    iconVariant: {
+    '.iconVariant': {
         opacity: 0.9,
         marginRight: theme.spacing.unit,
     },
-    message: {
+    '.message': {
         display: 'flex',
         alignItems: 'center',
     },
-});
+}));
 
 class NotifyCore extends Component {
     handleClose = () => this.props.handleClose && this.props.handleClose();
@@ -65,39 +62,41 @@ class NotifyCore extends Component {
 
     render() {
         return (
-            <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                open={this.props.isOpen}
-                autoHideDuration={2000}
-                onClose={this.handleClose}
-            >
+            <Container>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.props.isOpen}
+                    autoHideDuration={2000}
+                    onClose={this.handleClose}
+                >
 
-                <SnackbarContent
-                    className={this.props.classes[this.props.type]}
-                    aria-describedby="client-snackbar"
-                    message={
-                        <span id="client-snackbar" className={this.props.classes.message}>
+                    <SnackbarContent
+                        className={this.props.type}
+                        aria-describedby="client-snackbar"
+                        message={
+                            <span id="client-snackbar" className="message">
                             {this.renderIcon()}
-                            &nbsp;
-                            {this.props.message}
+                                &nbsp;
+                                {this.props.message}
                         </span>
-                    }
-                    action={[
-                        <IconButton
-                            key="close"
-                            aria-label="Close"
-                            color="inherit"
-                            className={this.props.classes.close}
-                            onClick={this.handleClose}
-                        >
-                            <CloseIcon className={this.props.classes.icon} />
-                        </IconButton>,
-                    ]}
-                />
-            </Snackbar>
+                        }
+                        action={[
+                            <IconButton
+                                key="close"
+                                aria-label="Close"
+                                color="inherit"
+                                className="close"
+                                onClick={this.handleClose}
+                            >
+                                <CloseIcon className="icon" />
+                            </IconButton>,
+                        ]}
+                    />
+                </Snackbar>
+            </Container>
         );
     }
 }
@@ -106,4 +105,4 @@ NotifyCore.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(NotifyCore);
+export default NotifyCore;

@@ -17,7 +17,7 @@ const defaultState = {
 	offset: 0,
 	totalCount: -1,
 	sortMap: {
-		name: "ASC"
+		name: "Asc"
 	},
 	suggestions: [],
 	filterOptions: {

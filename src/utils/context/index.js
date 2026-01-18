@@ -30,16 +30,26 @@ export default class Context {
 		ApiHelper.get((BASE_URL).replace('{newMode}', newMode));
 	};
 
+	// static showLoader = () => {
+	// 	store.dispatch(toggleLoader(true));
+	// 	let body = document.getElementsByTagName('body');
+	// 	body[0].style['overflow-y'] = 'hidden';
+	// };
+	//
+	// static hideLoader = () => {
+	// 	store.dispatch(toggleLoader(false));
+	// 	let body = document.getElementsByTagName('body');
+	// 	body[0].style['overflow-y'] = 'auto';
+	// };
+
 	static showLoader = () => {
-		store.dispatch(toggleLoader(true));
-		let body = document.getElementsByTagName('body');
-		body[0].style['overflow-y'] = 'hidden';
+		const myEvent = new CustomEvent('show-loader', {});
+		window.dispatchEvent(myEvent);
 	};
 
 	static hideLoader = () => {
-		store.dispatch(toggleLoader(false));
-		let body = document.getElementsByTagName('body');
-		body[0].style['overflow-y'] = 'auto';
+		const myEvent = new CustomEvent('hide-loader', {});
+		window.dispatchEvent(myEvent);
 	};
 
 	static closeNotify = () => {
