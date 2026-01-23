@@ -155,6 +155,8 @@ export default class Update extends Component {
         updatedState.directorSuggestions = [];
 
         this.setState(updatedState);
+
+        return updatedState;
     };
 
     handleDirectorRemove = id => {
@@ -189,6 +191,7 @@ export default class Update extends Component {
         updatedState.actorSuggestions = [];
 
         this.setState(updatedState);
+        return updatedState;
     };
 
     handleActorRemove = id => {
@@ -222,13 +225,13 @@ export default class Update extends Component {
     }
 
     handleArtistAdd = (id, name) => {
+        let updatedState = Utils.copyObject(this.state);
         if (this.state.artistType === 'actor') {
-            this.handleActorSelect(id, name);
+            updatedState = this.handleActorSelect(id, name);
         } else {
-            this.handleDirectorSelect(id, name);
+            updatedState = this.handleDirectorSelect(id, name);
         }
 
-        let updatedState = Utils.copyObject(this.state);
         updatedState.allArtists.push({
             id,
             name
