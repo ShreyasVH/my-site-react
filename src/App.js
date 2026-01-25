@@ -31,7 +31,6 @@ class App extends Component {
 	render() {
 		return (
 			<ThemeProvider theme={themes}>
-				<Header />
 				<RouterProvider router={router} />
 				<Loader />
 				<Notify />

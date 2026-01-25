@@ -3,18 +3,21 @@
  *
  */
 import React, { Component } from 'react';
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
 	Drawer,
 	IconButton,
 	List,
 	ListItem,
 	ListItemButton,
+	ListItemIcon,
 	ListItemText,
-	Toolbar,
 	AppBar,
-	CssBaseline
+	CssBaseline,
+	Divider
 } from "@mui/material";
+
+import { Home as HomeIcon, Movie as MovieIcon } from '@mui/icons-material';
 
 import './styles.css';
 
@@ -382,19 +385,105 @@ export default class Hamburger extends Component {
 			// </Drawer>
 
 			<Drawer open={this.state.open} onClose={this.closeHamburger}>
-				<Toolbar />
 				<List sx={{width:256}}>
-					<ListItemButton>
-						<ListItem key="action1">
-							<ListItemText primary="Action 1" />
+					<Link
+						to="/"
+						onClick={this.closeHamburger}
+					>
+						<ListItem>
+							<ListItemIcon>
+								<HomeIcon />
+							</ListItemIcon>
+							<ListItemText
+								primary="Home"
+							/>
 						</ListItem>
-					</ListItemButton>
+					</Link>
 
-					<ListItemButton>
-						<ListItem key="action2">
-							<ListItemText primary="Action 2" />
+					<Divider />
+
+					<List component="nav">
+						<ListItem>
+							<ListItemIcon>
+								<MovieIcon />
+							</ListItemIcon>
+							<ListItemText
+								primary="Movies"
+							/>
 						</ListItem>
-					</ListItemButton>
+
+						<Link
+							to="/movies/dashboard"
+							onClick={this.closeHamburger}
+						>
+							<ListItem>
+								<ListItemText
+									inset
+									primary="Dashboard"
+								/>
+							</ListItem>
+						</Link>
+
+						<Link
+							to="/movies/actorList"
+							onClick={this.closeHamburger}
+						>
+							<ListItem>
+								<ListItemText
+									inset
+									primary="By Actors"
+								/>
+							</ListItem>
+						</Link>
+
+						<Link
+							to="/movies/directorList"
+							onClick={this.closeHamburger}
+						>
+							<ListItem>
+								<ListItemText
+									inset
+									primary="By Directors"
+								/>
+							</ListItem>
+						</Link>
+
+						<Link
+							to="/movies/yearList"
+							onClick={this.closeHamburger}
+						>
+							<ListItem>
+								<ListItemText
+									inset
+									primary="By Years"
+								/>
+							</ListItem>
+						</Link>
+
+						<Link
+							to="/movies/actorCombinations"
+							onClick={this.closeHamburger}
+						>
+							<ListItem>
+								<ListItemText
+									inset
+									primary="Actor Combinations"
+								/>
+							</ListItem>
+						</Link>
+
+						<Link
+							to="/movies/deletedMovies"
+							onClick={this.closeHamburger}
+						>
+							<ListItem>
+								<ListItemText
+									inset
+									primary="Deleted Movies"
+								/>
+							</ListItem>
+						</Link>
+					</List>
 				</List>
 			</Drawer>
 		);
