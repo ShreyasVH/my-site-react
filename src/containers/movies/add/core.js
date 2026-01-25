@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-// import SearchDropDown from "../../../../components/searchDropdown";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
+// import { withStyles } from "@material-ui/core";
 import FileUpload from "../../../components/fileUpload";
 import SearchDropDown from "../../../components/searchDropdown";
-import Checkbox from "@material-ui/core/Checkbox";
-import Chip from "@material-ui/core/Chip";
 import AddArtist from "../artists/add";
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close';
 import DatePicker from "../../../components/datePicker";
+import { TextField, Button, Dialog, DialogTitle, DialogContent, Checkbox, Chip, IconButton } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
+import {styled} from "@mui/system";
 
 const styles = theme => ({
-    form: {
+    
+});
+
+const Container = styled("div")(({ theme }) => ({
+    '.form': {
         margin: '2.5%',
         border: '1px solid black',
         borderRadius: '5px',
         minHeight: '200px'
     },
-    formTitle: {
+    '.formTitle': {
         textAlign: 'center',
         padding: '2%',
         fontSize: '25px',
@@ -33,54 +30,54 @@ const styles = theme => ({
             marginBottom: '5%',
         }
     },
-    row: {
+    '.row': {
         width: '100%',
         marginTop: '1%',
         marginBottom: '1%'
     },
-    quarterWidth: {
+    '.quarterWidth': {
         width: '25%',
     },
-    fullWidth: {
+    '.fullWidth': {
         width: '100%',
     },
-    formFieldInput: {
+    '.formFieldInput': {
         width: '99%',
         marginLeft: '0.5%',
         marginRight: '0.5%'
     },
-    formField: {
+    '.formField': {
         display: 'inline-block',
         [theme.breakpoints.down('xs')]: {
             marginBottom: '5%',
         }
     },
-    container: {
+    '.container': {
         padding: '1%',
         [theme.breakpoints.down('xs')]: {
             padding: '4%',
         }
     },
-    submit: {
+    '.submit': {
         backgroundColor: '#428bca',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: '2%',
         display: 'block'
     },
-    oneThirdWidth: {
+    '.oneThirdWidth': {
         width: '33.33%',
         [theme.breakpoints.down('xs')]: {
             width: '100%',
         }
     },
-    halfWidth: {
+    '.halfWidth': {
         width: '50%',
         [theme.breakpoints.down('xs')]: {
             width: '100%',
         }
     },
-    playerChip: {
+    '.playerChip': {
         margin: '0.25%',
         [theme.breakpoints.down('md')]: {
             width: '99%',
@@ -88,7 +85,7 @@ const styles = theme => ({
             marginRight: '0.5%'
         }
     },
-    playersContainer: {
+    '.playersContainer': {
         margin: '0.25%',
         width: '99.5%',
         border: '1px solid gray',
@@ -98,7 +95,7 @@ const styles = theme => ({
             marginTop: '3%'
         }
     },
-});
+}));
 
 class UpdateCore extends Component {
     handleNameChange = event => (this.props.onNameChange && this.props.onNameChange(event));
@@ -132,7 +129,7 @@ class UpdateCore extends Component {
         for (let director of this.props.directors) {
             markup.push(
                 <Chip
-                    className={this.props.classes.playerChip}
+                    className="playerChip"
                     label={director.name}
                     onDelete={this.handleDirectorRemove(director.id)}
                     color={color}
@@ -152,7 +149,7 @@ class UpdateCore extends Component {
         for (let actor of this.props.actors) {
             markup.push(
                 <Chip
-                    className={this.props.classes.playerChip}
+                    className="playerChip"
                     label={actor.name}
                     onDelete={this.handleActorRemove(actor.id)}
                     color={color}
@@ -195,15 +192,15 @@ class UpdateCore extends Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={this.props.onSubmit} className={this.props.classes.form} >
-                    <div className={this.props.classes.formTitle}>
+            <Container>
+                <form onSubmit={this.props.onSubmit} className="form" >
+                    <div className="formTitle">
                         Add Movie
                     </div>
-                    <div className={this.props.classes.container}>
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                    <div className="container">
+                        <div className="row">
+                            <div className="formField halfWidth">
+                                <div className="formFieldInput" style={{marginTop: 0}}>
                                     <TextField
                                         label="Name"
                                         placeholder="Name"
@@ -213,12 +210,13 @@ class UpdateCore extends Component {
                                         onChange={this.handleNameChange}
                                         error={!this.props.validateName.isValid}
                                         helperText={this.props.validateName.message}
+                                        sx={{'marginTop': 0}}
                                     />
                                 </div>
                             </div>
 
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                            <div className="formField halfWidth">
+                                <div className="formFieldInput">
                                     <SearchDropDown
                                         items={this.props.languages}
                                         label="Language"
@@ -233,9 +231,9 @@ class UpdateCore extends Component {
 
                         </div>
 
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.halfWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                        <div className="row">
+                            <div className="formField halfWidth">
+                                <div className="formFieldInput">
                                     <DatePicker
                                         label={'Release Date'}
                                         placeholder={'Release Date'}
@@ -249,8 +247,8 @@ class UpdateCore extends Component {
                                 </div>
                             </div>
 
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                            <div className="formField oneThirdWidth">
+                                <div className="formFieldInput">
                                     <div>
                                         <label>
                                             Viewed:
@@ -267,9 +265,9 @@ class UpdateCore extends Component {
                             </div>
                         </div>
 
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                        <div className="row">
+                            <div className="formField oneThirdWidth">
+                                <div className="formFieldInput">
                                     <SearchDropDown
                                         items={this.props.directorSuggestions}
                                         onKeyUp={this.handleDirectorSearch}
@@ -284,13 +282,13 @@ class UpdateCore extends Component {
                                 </div>
                             </div>
 
-                            <div className={this.props.classes.row}>
-                                <div className={this.props.classes.playersContainer}>
-                                    <div className={this.props.classes.container}>
-                                        <div className={this.props.classes.row}>
+                            <div className="row">
+                                <div className="playersContainer">
+                                    <div className="container">
+                                        <div className="row">
                                             <strong>Directors:</strong>
                                         </div>
-                                        <div className={this.props.classes.row}>
+                                        <div className="row">
                                             {this.renderDirectorsMarkup()}
                                         </div>
                                     </div>
@@ -298,9 +296,9 @@ class UpdateCore extends Component {
                             </div>
                         </div>
 
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.oneThirdWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                        <div className="row">
+                            <div className="formField oneThirdWidth">
+                                <div className="formFieldInput">
                                     <SearchDropDown
                                         items={this.props.actorSuggestions}
                                         onKeyUp={this.handleActorSearch}
@@ -315,13 +313,13 @@ class UpdateCore extends Component {
                                 </div>
                             </div>
 
-                            <div className={this.props.classes.row}>
-                                <div className={this.props.classes.playersContainer}>
-                                    <div className={this.props.classes.container}>
-                                        <div className={this.props.classes.row}>
+                            <div className="row">
+                                <div className="playersContainer">
+                                    <div className="container">
+                                        <div className="row">
                                             <strong>Actors:</strong>
                                         </div>
-                                        <div className={this.props.classes.row}>
+                                        <div className="row">
                                             {this.renderActorsMarkup()}
                                         </div>
                                     </div>
@@ -329,9 +327,9 @@ class UpdateCore extends Component {
                             </div>
                         </div>
 
-                        <div className={this.props.classes.row}>
-                            <div className={` ${this.props.classes.formField} ${this.props.classes.fullWidth}`}>
-                                <div className={this.props.classes.formFieldInput}>
+                        <div className="row">
+                            <div className="formField fullWidth">
+                                <div className="formFieldInput">
                                     <FileUpload
                                         name={'image'}
                                         label={'Upload Image'}
@@ -342,11 +340,11 @@ class UpdateCore extends Component {
                             </div>
                         </div>
 
-                        <div className={`${this.props.classes.row}`}>
+                        <div className="row">
                             <Button
                                 color="secondary"
                                 variant="contained"
-                                className={this.props.classes.submit}
+                                className="submit"
                                 type="submit"
                                 disabled={!this.props.isFormValid}
                             >
@@ -356,7 +354,7 @@ class UpdateCore extends Component {
                     </div>
                 </form>
                 {this.renderArtistDialog()}
-            </div>
+            </Container>
         );
     }
 }
@@ -365,4 +363,4 @@ UpdateCore.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(UpdateCore);
+export default UpdateCore;

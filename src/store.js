@@ -4,7 +4,6 @@
  */
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import reduxLogger from 'redux-logger';
 
 import ContextReducer from './reducers/contextReducer';
 import MoviesReducer from './reducers/moviesReducer';

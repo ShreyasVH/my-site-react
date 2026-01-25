@@ -4,13 +4,14 @@
  */
 
 import React, { Component } from 'react';
-import Waypoint from 'react-waypoint';
+import { Waypoint } from 'react-waypoint';
 
 import MovieList from '../movieList/index';
 import Filters from '../../filters';
 import SearchDropDown from '../../../components/searchDropdown';
 import PropTypes from "prop-types";
-import {withStyles} from "@material-ui/core";
+// import {withStyles} from "@material-ui/core";
+import { styled } from '@mui/system';
 
 const styles = theme => ({
 	title: {
@@ -19,12 +20,19 @@ const styles = theme => ({
 	}
 });
 
+const Container = styled("div")(({ theme }) => ({
+	'.title': {
+		textAlign: 'center',
+		color: '#FF3C3C'
+	}
+}));
+
 class BrowseMoviesCore extends Component {
 	renderTitle = () => {
 		if (!this.props.isEmpty()) {
 			return (
 				<h1
-					className={this.props.classes.title}
+					className="title"
 				>
 					Browse Movies
 				</h1>
@@ -121,9 +129,9 @@ class BrowseMoviesCore extends Component {
 
 	render() {
 		return (
-			<div>
+			<Container>
 				{this.renderMarkup()}
-			</div>
+			</Container>
 		);
 	}
 }
@@ -132,5 +140,5 @@ BrowseMoviesCore.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(BrowseMoviesCore);
-
+// export default withStyles(styles)(BrowseMoviesCore);
+export default BrowseMoviesCore;

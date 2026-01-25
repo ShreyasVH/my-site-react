@@ -1,7 +1,8 @@
 import React, {h, Component} from 'react';
-import Button from "@material-ui/core/Button";
+import { Button } from '@mui/material';
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
+// import { withStyles } from "@material-ui/core";
+import {styled} from "@mui/system";
 
 const styles = theme => ({
     fileName: {
@@ -9,12 +10,18 @@ const styles = theme => ({
     }
 });
 
+const Container = styled("div")(({ theme }) => ({
+    '.fileName': {
+        marginLeft: '2%'
+    }
+}));
+
 class FileUpload extends Component {
     handleFileUpload = event => this.props.onFileUpload && this.props.onFileUpload(event.target.files);
 
     render () {
         return (
-            <div>
+            <Container>
                 <input
                     id={"contained-button-file" + this.props.name}
                     multiple
@@ -28,11 +35,11 @@ class FileUpload extends Component {
                     </Button>
                 </label>
                 <span
-                    className={this.props.classes.fileName}
+                    className="fileName"
                 >
                     {this.props.fileName}
                 </span>
-            </div>
+            </Container>
         );
     }
 }
@@ -41,4 +48,4 @@ FileUpload.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(FileUpload);
+export default FileUpload;

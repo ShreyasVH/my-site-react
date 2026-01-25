@@ -1,23 +1,10 @@
 import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import FilterListIcon from "@material-ui/icons/FilterList";
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import Slide from "@material-ui/core/Slide";
-import CloseIcon from '@material-ui/icons/Close';
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@material-ui/core/Radio';
-import TextField from '@material-ui/core/TextField';
+// import { withStyles } from '@material-ui/core';
+import { styled } from '@mui/system';
+
+import { Button, Dialog, AppBar, Toolbar, Typography, Slide, Accordion, AccordionSummary, AccordionDetails, FormControlLabel, Checkbox, Radio, TextField, IconButton, Fab } from '@mui/material';
+import { Close as CloseIcon, ExpandMore as ExpandMoreIcon, FilterList as FilterListIcon } from '@mui/icons-material';
 
 import { FILTER_TYPE } from '../../constants';
 import SearchDropDown from "../../components/searchDropdown";
@@ -71,6 +58,55 @@ const styles = (theme) => ({
     },
 });
 
+const Container = styled("div")(({ theme }) => ({
+    '.appBar': {
+        position: 'relative',
+    },
+    '.title': {
+        marginLeft: theme.spacing * 2,
+        flex: 1,
+    },
+    '.fab': {
+        position: 'fixed',
+        bottom: theme.spacing.unit * 2,
+        right: theme.spacing.unit * 2,
+        margin: theme.spacing.unit
+    },
+    '.root': {
+        width: '100%',
+    },
+    '.heading': {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
+    },
+    '.appliedFilter': {
+        display: 'inline-block',
+        borderRadius: '50%',
+        minWidth: theme.typography.pxToRem(10),
+        minHeight: theme.typography.pxToRem(10),
+        backgroundColor: '#27AE60',
+        marginLeft: theme.typography.pxToRem(10)
+    },
+    '.clearFilter': {
+        right: 0,
+        position: 'absolute',
+        fontWeight: 'bold'
+    },
+    '.rangeContainer': {
+        display: 'flex',
+        flexWrap: 'wrap',
+        width: '100%'
+    },
+    '.rangeInput': {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: '48%',
+        [theme.breakpoints.down('xs')]: {
+            width: '44%',
+        }
+    },
+}));
+
 function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
@@ -92,15 +128,14 @@ class FiltersCore extends Component {
 
     renderButton = () => {
         return (
-            <Button
-                variant="fab"
+            <Fab
                 color="primary"
-                className={this.props.classes.fab}
-                size="small"
+                className="fab"
                 onClick={this.openFilters}
+                sx={{position: 'fixed', bottom: '16px', right: '16px'}}
             >
                 <FilterListIcon />
-            </Button>
+            </Fab>
         );
     };
 
@@ -143,25 +178,25 @@ class FiltersCore extends Component {
 
     renderFilterSelectedIndicator = (key) => {
         if (this.isFilterSelected(key)) {
-            return <span className={this.props.classes.appliedFilter} />
+            return <span className="appliedFilter" />
         }
     };
 
     renderFilter = (key, filter) => {
         return (
-            <ExpansionPanel
+            <Accordion
                 key={key}
             >
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography className={this.props.classes.heading}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography className="heading">
                         {filter.displayName}
                         {this.renderFilterSelectedIndicator(key)}
                     </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                     {this.renderFilterContent(key, filter)}
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+                </AccordionDetails>
+            </Accordion>
         );
     };
 
@@ -215,7 +250,7 @@ class FiltersCore extends Component {
                     TouchRippleProps={{
                         'data-key': key
                     }}
-                    className={this.props.classes.clearFilter}
+                    className="clearFilter"
                 >
                     <span>
                         Clear
@@ -276,7 +311,7 @@ class FiltersCore extends Component {
 
     renderRangeFilter = (key, filter) => {
         return (
-            <div className={this.props.classes.rangeContainer}>
+            <div className="rangeContainer">
                 <TextField
                     name={key + '[]'}
                     data-filter={key}
@@ -289,7 +324,7 @@ class FiltersCore extends Component {
                     }}
                     value={((this.props.selected.hasOwnProperty(key) && this.props.selected[key].hasOwnProperty('from')) ? this.props.selected[key].from : '')}
                     variant="outlined"
-                    className={this.props.classes.rangeInput}
+                    className="rangeInput"
                     label="From"
                     margin="normal"
                 />
@@ -305,7 +340,7 @@ class FiltersCore extends Component {
                     }}
                     value={((this.props.selected.hasOwnProperty(key) && this.props.selected[key].hasOwnProperty('to')) ? this.props.selected[key].to : '')}
                     variant="outlined"
-                    className={this.props.classes.rangeInput}
+                    className="rangeInput"
                     label="To"
                     margin="normal"
                 />
@@ -337,7 +372,6 @@ class FiltersCore extends Component {
     };
 
     renderFiltersPopup = () => {
-        const { classes } = this.props;
         if (this.props.isOpen) {
             return (
                 <div>
@@ -347,12 +381,12 @@ class FiltersCore extends Component {
                         TransitionComponent={Transition}
                     >
                         <form name="filters" onSubmit={this.handleSubmit}>
-                            <AppBar className={this.props.classes.appBar}>
+                            <AppBar className="appBar">
                                 <Toolbar>
                                     <IconButton color="inherit" onClick={this.closeFilters} aria-label="Close">
                                         <CloseIcon />
                                     </IconButton>
-                                    <Typography variant="h6" color="inherit" className={this.props.classes.flex}>
+                                    <Typography variant="h6" color="inherit" className="flex">
                                         Filters
                                     </Typography>
                                     <Button color="inherit" name="submit" onClick={this.applyFilters}>
@@ -372,7 +406,7 @@ class FiltersCore extends Component {
                                     </div>
                                 </Toolbar>
                             </AppBar>
-                            <div className={this.props.classes.root}>
+                            <div className="root">
                                 {this.renderFilters()}
                             </div>
                         </form>
@@ -397,4 +431,5 @@ FiltersCore.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(FiltersCore);
+// export default withStyles(styles, { withTheme: true })(FiltersCore);
+export default FiltersCore;

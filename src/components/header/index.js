@@ -3,11 +3,21 @@
  *
  */
 import React, { Component } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+
+import {
+	Drawer,
+	IconButton,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemText,
+	Toolbar,
+	AppBar,
+	CssBaseline, Typography
+} from "@mui/material";
+import {Menu} from "@mui/icons-material";
+
+
 import Hamburger from '../hamburger';
 
 // import ModeSelector from '../../components/modeSelector';
@@ -25,15 +35,17 @@ export default class Header extends Component {
 				<AppBar
 					position="static"
 					className="colorPrimary"
+					sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
 				>
 					<Toolbar>
 						<IconButton
 							className="menuButton"
+							edge="start"
 							color="inherit"
 							aria-label="Menu"
 							onClick={this.openHamburger}
 						>
-							<MenuIcon />
+							<Menu />
 						</IconButton>
 						<Typography variant="title" color="inherit" className="flex">
 							Hande

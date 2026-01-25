@@ -5,16 +5,15 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 
 import MovieCard from '../movieList/card';
 
 import Utils from '../../../utils';
-import { Button } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
+
+import { Grid, Button } from '@mui/material';
+import { Edit as EditIcon } from '@mui/icons-material';
+import {styled} from "@mui/system";
 
 const styles = theme => ({
 	paper: {
@@ -33,7 +32,7 @@ const styles = theme => ({
 			width: '33%',
 		},
 		[theme.breakpoints.up('lg')]: {
-			width: '20%',
+			width: '33%',
 		},
 		[theme.breakpoints.up('xl')]: {
 			width: '16.5%',
@@ -91,6 +90,81 @@ const styles = theme => ({
 	}
 });
 
+const Container = styled("div")(({ theme }) => ({
+	'.paper': {
+		height: 80,
+		width: 60,
+		marginLeft: 'auto',
+		marginRight: 'auto'
+	},
+	'.artistImageDiv': {
+		textAlign: 'center',
+		display: 'inline-block',
+		verticalAlign: 'top',
+		// width: '50%',
+		marginBottom: '5%',
+		[theme.breakpoints.up('sm')]: {
+			// width: '33%',
+		},
+		[theme.breakpoints.up('lg')]: {
+			// width: '33%',
+		},
+		[theme.breakpoints.up('xl')]: {
+			width: '16.5%',
+		}
+	},
+	'.directorImageDiv': {
+		marginBottom: 0
+	},
+	'.artistImage': {
+		height: '80px',
+		maxWidth: '90%',
+		[theme.breakpoints.up('sm')]: {
+			height: 100
+		},
+		[theme.breakpoints.up('md')]: {
+			height: 160
+		},
+		[theme.breakpoints.up('lg')]: {
+			height: 120
+		},
+		[theme.breakpoints.up('xl')]: {
+			height: 200
+		},
+	},
+	'.artistLink': {
+		textAlign: 'center',
+		display: 'inline-block'
+	},
+	'.link': {
+		fontWeight: 'bold',
+		textDecoration: 'none',
+		color: '#35A4F5'
+	},
+	'.title': {
+		textAlign: 'center',
+		color: '#FF3C3C'
+	},
+	'.posterDiv': {
+		textAlign: 'center'
+	},
+	'.poster': {
+		maxWidth: 270,
+		maxHeight: 360,
+		marginBottom: '10%',
+		[theme.breakpoints.up('sm')]: {
+			maxWidth: 240,
+			maxHeight: 320,
+			marginBottom: '8%'
+		},
+		[theme.breakpoints.up('md')]: {
+			maxWidth: 300,
+			maxHeight: 400,
+			marginBottom: '5%'
+		}
+	}
+}));
+
 class MovieDetailCore extends Component {
 	handleUpdateClick = event => (this.props.onUpdateClick && this.props.onUpdateClick());
 
@@ -98,7 +172,7 @@ class MovieDetailCore extends Component {
 		if (!this.props.isEmpty()) {
 			return (
 				<h1
-					className={this.props.classes.title}
+					className="title"
 				>
 					{this.props.movie.name}
 				</h1>
@@ -108,9 +182,9 @@ class MovieDetailCore extends Component {
 
 	renderImage = () => {
 		return (
-			<div className={this.props.classes.posterDiv}>
+			<div className="posterDiv">
 				<img
-					className={this.props.classes.poster}
+					className="poster"
 					alt={this.props.movie.name}
 					src={this.props.movie.imageUrl}
 				/>
@@ -154,7 +228,7 @@ class MovieDetailCore extends Component {
 
 		let markup = (
 			// <Link
-			// 	to={'/movies/browseMovies?year[]=' + year + '&year[]=' + year + '&order=id DESC'}
+			// 	to={'/movies/browseMovies?year[]=' + year + '&year[]=' + year + '&order=id Desc'}
 			// >
 			// 	<span className={this.props.classes.link}>
 			// 		{year}
@@ -203,20 +277,20 @@ class MovieDetailCore extends Component {
 
 	renderDirectors = () => {
 		let artistMarkup = this.props.movie.directors.map((director) => (
-			<div className={`${this.props.classes.artistImageDiv} ${this.props.classes.directorImageDiv}`}>
+			<div className="artistImageDiv directorImageDiv">
 				<div>
 					<img
-						className={this.props.classes.artistImage}
+						className="artistImage"
 						src={director.imageUrl}
 						alt={director.name}
 					/>
 				</div>
 
-				<div className={this.props.classes.artistLink}>
+				<div className="artistLink">
 					<Link
-						to={'/movies/browseMovies?directorIds[]=' + director.id + '&order=releaseDate DESC'}
+						to={'/movies/browseMovies?directorIds[]=' + director.id + '&order=releaseDate Desc'}
 					>
-					<span className={this.props.classes.link}>
+					<span className="link">
 						{director.name}
 					</span>
 					</Link>
@@ -229,20 +303,20 @@ class MovieDetailCore extends Component {
 
 	renderActors = () => {
 		let artistMarkup = this.props.movie.actors.map((actor) => (
-			<div className={this.props.classes.artistImageDiv}>
+			<div className="artistImageDiv">
 				<div>
 					<img
-						className={this.props.classes.artistImage}
+						className="artistImage"
 						src={actor.imageUrl}
 						alt={actor.name}
 					/>
 				</div>
 
-				<div className={this.props.classes.artistLink}>
+				<div className="artistLink">
 					<Link
-						to={'/movies/browseMovies?actorIds[]=' + actor.id + '&order=releaseDate DESC'}
+						to={'/movies/browseMovies?actorIds[]=' + actor.id + '&order=releaseDate Desc'}
 					>
-					<span className={this.props.classes.link}>
+					<span className="link">
 						{actor.name}
 					</span>
 					</Link>
@@ -257,7 +331,7 @@ class MovieDetailCore extends Component {
 		if (!this.props.isEmpty()) {
 			return (
 				<div className="detailsSection">
-					<Grid container spacing={16}>
+					<Grid container spacing={3}>
 						{this.renderDirectors()}
 						{this.renderActors()}
 						{this.renderLanguageDetails()}
@@ -276,26 +350,28 @@ class MovieDetailCore extends Component {
 
 	render() {
 		return (
-			<div className="movieDetailsContainer">
-				{this.renderTitle()}
-				<Grid container spacing={16}>
-					<Grid item xs={12} sm={4}>
-						{this.renderImage()}
+			<Container>
+				<div className="movieDetailsContainer">
+					{this.renderTitle()}
+					<Grid container spacing={3}>
+						<Grid xs={12} sm={4} size={{xs: 12, sm: 4}}>
+							{this.renderImage()}
 
-						<div style={{'textAlign': 'center'}}>
-							<Button color={'primary'} variant={'contained'} onClick={this.handleUpdateClick}>
-								<EditIcon />
-								&nbsp;
-								Edit
-							</Button>
-						</div>
-					</Grid>
+							<div style={{'textAlign': 'center'}}>
+								<Button color={'primary'} variant={'contained'} onClick={this.handleUpdateClick}>
+									<EditIcon />
+									&nbsp;
+									Edit
+								</Button>
+							</div>
+						</Grid>
 
-					<Grid item xs={12} sm={8}>
-						{this.renderDetails()}
+						<Grid xs={12} sm={8} size={{xs: 12, sm: 8}}>
+							{this.renderDetails()}
+						</Grid>
 					</Grid>
-				</Grid>
-			</div>
+				</div>
+			</Container>
 		);
 	}
 }
@@ -304,4 +380,4 @@ MovieDetailCore.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(MovieDetailCore);
+export default MovieDetailCore;

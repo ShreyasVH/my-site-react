@@ -4,32 +4,55 @@
  */
 
 import React, { Component } from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { connect } from 'react-redux';
 
 import './styles.css';
 
-class Loader extends Component {
-	render() {
-		let markup;
-		if (this.props.showLoader) {
-			markup = (
-				<div className="loader">
-					<CircularProgress
-					/>
-				</div>
-			);
-		} else {
-			markup = (<div />);
-		}
-		return markup;
-	}
-}
+import { CircularProgress, Dialog, Button } from '@mui/material';
+import { useState } from "react";
 
-function mapStateToProps(statesInRedux) {
-	return {
-		showLoader: statesInRedux.context.showLoader
+export default function Loader (props) {
+	const [ visible, setVisible ] = useState(false);
+
+	window.addEventListener('show-loader', function(event) {
+		setVisible(true);
+	});
+
+	window.addEventListener('hide-loader', function(event) {
+		setVisible(false);
+	});
+
+	const showLoader = (event) => {
+		event.preventDefault();
+
+		const myEvent = new CustomEvent('show-loader', {});
+		window.dispatchEvent(myEvent);
 	};
+
+	const hideLoader = (event) => {
+		event.preventDefault();
+
+		const myEvent = new CustomEvent('hide-loader', {});
+		window.dispatchEvent(myEvent);
+	};
+
+	return (
+		<>
+			{
+				visible && <div onClick={hideLoader}>
+					<Dialog open={true} PaperProps={{sx: {backgroundColor: 'transparent', boxShadow: 'none'}}} >
+						<CircularProgress />
+					</Dialog>
+				</div>
+			}
+		</>
+	);
 }
 
-export default connect(mapStateToProps)(Loader);
+// function mapStateToProps(statesInRedux) {
+// 	return {
+// 		showLoader: statesInRedux.context.showLoader
+// 	};
+// }
+//
+// export default connect(mapStateToProps)(Loader);
