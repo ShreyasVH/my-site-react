@@ -4,6 +4,7 @@ import MoviesDashboard from './containers/movies/dashboard';
 import BrowseMovies from './containers/movies/browseMovies';
 import MovieDetail from './containers/movies/movieDetail';
 import MovieAdd from './containers/movies/add';
+import MovieUpdate from './containers/movies/update';
 import Header from './components/header';
 
 function AppLayout() {
@@ -41,10 +42,10 @@ export default createBrowserRouter([
                 path: '/movies/add',
                 element: <MovieAdd />
             },
-            // {
-            //     route: '/movies/update',
-            //     filePath: './containers/movies/update'
-            // },
+            {
+                path: '/movies/update',
+                element: <MovieUpdate />
+            },
             // {
             //     route: '/movies/artists/add',
             //     filePath: './containers/movies/artists/add'
