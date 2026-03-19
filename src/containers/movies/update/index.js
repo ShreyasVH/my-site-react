@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import UpdateCore from "./core";
 
@@ -8,352 +8,346 @@ import Context from "../../../utils/context";
 import ApiHelper from "../../../utils/apiHelper";
 import { useNavigate } from "react-router-dom";
 
-export default class Update extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-            imageUrl: '',
-            imageFile: '',
-            imageName: '',
-            qualities: [
-                {
-                    id: 'good',
-                    name: 'Good'
-                },
-                {
-                    id: 'normal',
-                    name: 'Normal'
-                }
-            ],
-            directorSuggestions: [],
-            actorSuggestions: [],
-            isLoaded: false,
-            artistDialogOpen: false,
-            newArtistText: ''
-        };
-        this.movieId = Utils.getUrlParam('id');
-        console.log(props);
-    }
+export default function Update(props) {
+    const navigate = useNavigate();
+    const movieId = Utils.getUrlParam('id');
 
-    async componentDidMount() {
-        Context.showLoader();
-        let state = {};
-        try {
-            const movieResponse = await MovieUtils.getMovieDetails(this.movieId);
-
-            let movie = movieResponse.data;
-            state = {
-                name: movie.name,
-                languageId: movie.language.id,
-                languageName: movie.language.name,
-                releaseDate: movie.releaseDate,
-                seenInTheatre: movie.seenInTheatre,
-                imageUrl: movie.imageUrl,
-                directors: movie.directors.map(director => ({
-                    id: director.id,
-                    name: director.name
-                })),
-                actors: movie.actors.map(actor => ({
-                    id: actor.id,
-                    name: actor.name
-                })),
-                obtained: movie.obtained
-            };
-
-            if (movie.obtained) {
-                state.size = movie.size.toString();
-                state.formatId = movie.format.id;
-                state.formatName = movie.format.name;
-                state.subtitles = movie.subtitles;
-                state.qualityId = movie.quality;
-                state.qualityName = this.state.qualities.filter(quality => quality.id === movie.quality)[0].name;
-                state.basename = movie.basename;
+    const [state, setState] = useState({
+        name: '',
+        imageUrl: '',
+        imageFile: '',
+        imageName: '',
+        qualities: [
+            {
+                id: 'good',
+                name: 'Good'
+            },
+            {
+                id: 'normal',
+                name: 'Normal'
             }
+        ],
+        directorSuggestions: [],
+        actorSuggestions: [],
+        isLoaded: false,
+        artistDialogOpen: false,
+        newArtistText: '',
+        artistType: '',
+        languageId: '',
+        languageName: '',
+        releaseDate: '',
+        seenInTheatre: false,
+        directors: [],
+        actors: [],
+        obtained: false,
+        size: '',
+        formatId: '',
+        formatName: '',
+        subtitles: false,
+        qualityId: '',
+        qualityName: '',
+        basename: '',
+        languages: [],
+        formats: [],
+        allArtists: []
+    });
 
-            if (movie.imageUrl) {
-                let imageParts = movie.imageUrl.split('/');
-                state.imageName = imageParts[imageParts.length - 1];
-            }
-
-            const allLanguagesResponse = await MovieUtils.getAllLanguages();
-            state.languages = allLanguagesResponse.data;
-
-            const allFormatsResponse = await MovieUtils.getAllFormats();
-            state.formats = allFormatsResponse.data;
-
-            state.allArtists = await MovieUtils.getAllArtists();
-        } catch (error) {
-            console.log(error);
-            Context.showNotify('Error while loading data.', 'error');
-        }
-
-        state.isLoaded = true;
-
-        this.setState(state);
-
-        Context.hideLoader();
-    }
-
-    handleSubmit = async event => {
-        event.preventDefault();
-        if (this.isFormValid()) {
+    useEffect(() => {
+        const loadData = async () => {
             Context.showLoader();
+            let updatedState = {};
 
-            let payload = {
-                name: this.state.name,
-                languageId: this.state.languageId,
-                formatId: this.state.formatId,
-                subtitles: this.state.subtitles,
-                seenInTheatre: this.state.seenInTheatre,
-                quality: this.state.qualityId,
-                releaseDate: Utils.formatDateToString(this.state.releaseDate),
-                basename: this.state.basename,
-                actors: this.state.actors.map(actor => actor.id),
-                directors: this.state.directors.map(director => director.id),
-                obtained: this.state.obtained
-            }
-            let size = null;
-            if (this.state.obtained) {
-                size = this.state.size.replace(/,/g, '');
-            }
-            payload.size = size;
+            try {
+                const movieResponse = await MovieUtils.getMovieDetails(movieId);
 
-            if (this.state.imageFile) {
-                const formattedName = this.state.name.toLowerCase().replace(/[/: -]/g, '_') + '_' + (new Date(this.state.releaseDate)).getFullYear() + '_' + this.state.languageName.toLowerCase();
-                const uploadResponse = await ApiHelper.uploadFile(this.state.imageFile, 'movies', formattedName);
-                let response = uploadResponse.data;
-                payload.imageUrl = response.secure_url;
-            }
+                const movie = movieResponse.data;
+                updatedState = {
+                    name: movie.name,
+                    languageId: movie.language.id,
+                    languageName: movie.language.name,
+                    releaseDate: movie.releaseDate,
+                    seenInTheatre: movie.seenInTheatre,
+                    imageUrl: movie.imageUrl,
+                    directors: movie.directors.map(director => ({
+                        id: director.id,
+                        name: director.name
+                    })),
+                    actors: movie.actors.map(actor => ({
+                        id: actor.id,
+                        name: actor.name
+                    })),
+                    obtained: movie.obtained
+                };
 
-            const updatePromise = MovieUtils.updateMovie(this.movieId, payload);
-            updatePromise.then(apiResponse => {
-                Context.hideLoader();
-                Context.showNotify('Updated Successfully', 'success');
-                // TODO: fix this
-                // this.props.history.push('/movies/movieDetail?id=' + this.movieId);
-            }).catch(apiResponse => {
-                Context.hideLoader();
-                if (apiResponse.response) {
-                    console.log(apiResponse.response.status);
-                    console.log(apiResponse.response.data);
+                if (movie.obtained) {
+                    updatedState.size = movie.size.toString();
+                    updatedState.formatId = movie.format.id;
+                    updatedState.formatName = movie.format.name;
+                    updatedState.subtitles = movie.subtitles;
+                    updatedState.qualityId = movie.quality;
+                    updatedState.qualityName = state.qualities.filter(
+                        quality => quality.id === movie.quality
+                    )[0]?.name || '';
+                    updatedState.basename = movie.basename;
                 }
-                Context.showNotify('Failed to update. Please try again', 'error');
-            });
-        }
+
+                if (movie.imageUrl) {
+                    const imageParts = movie.imageUrl.split('/');
+                    updatedState.imageName = imageParts[imageParts.length - 1];
+                }
+
+                const allLanguagesResponse = await MovieUtils.getAllLanguages();
+                updatedState.languages = allLanguagesResponse.data;
+
+                const allFormatsResponse = await MovieUtils.getAllFormats();
+                updatedState.formats = allFormatsResponse.data;
+
+                updatedState.allArtists = await MovieUtils.getAllArtists();
+            } catch (error) {
+                console.log(error);
+                Context.showNotify('Error while loading data.', 'error');
+            }
+
+            updatedState.isLoaded = true;
+
+            setState(prev => ({
+                ...prev,
+                ...updatedState
+            }));
+
+            Context.hideLoader();
+        };
+
+        loadData();
+    }, [movieId, state.qualities]);
+
+    const handleNameChange = (event) => {
+        setState(prev => ({
+            ...prev,
+            name: event.target.value
+        }));
     };
 
-    handleNameChange = event => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.name = event.target.value;
-        this.setState(updatedState);
+    const handleSizeChange = (event) => {
+        setState(prev => ({
+            ...prev,
+            size: event.target.value
+        }));
     };
 
-    handleSizeChange = event => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.size = event.target.value;
-        this.setState(updatedState);
-    };
-
-    handleLanguageSelect = (id, name) => {
-        this.setState({
+    const handleLanguageSelect = (id, name) => {
+        setState(prev => ({
+            ...prev,
             languageId: id,
             languageName: name
-        });
+        }));
     };
 
-    handleFormatSelect = (id, name) => {
-        this.setState({
+    const handleFormatSelect = (id, name) => {
+        setState(prev => ({
+            ...prev,
             formatId: id,
             formatName: name
-        });
+        }));
     };
 
-    handleReleaseDateChange = (event) => {
+    const handleReleaseDateChange = (event) => {
         const releaseDate = (new Date(event.target.value)).getTime();
 
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.releaseDate = releaseDate;
-        this.setState(updatedState);
-    }
-
-    handleSubtitleChange = (event, checked) => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.subtitles = checked;
-        this.setState(updatedState);
+        setState(prev => ({
+            ...prev,
+            releaseDate
+        }));
     };
 
-    handleViewedChange = (event, checked) => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.seenInTheatre = checked;
-        this.setState(updatedState);
+    const handleSubtitleChange = (event, checked) => {
+        setState(prev => ({
+            ...prev,
+            subtitles: checked
+        }));
     };
 
-    handleObtainedChange = (event, checked) => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.obtained = checked;
-        if (!checked) {
-            updatedState.size = null;
-            updatedState.qualityId = null;
-            updatedState.quality = '';
-            updatedState.basename = null;
-            updatedState.formatId = null;
-            updatedState.formatName = '';
-            updatedState.subtitles = null;
-        }
-        this.setState(updatedState);
+    const handleViewedChange = (event, checked) => {
+        setState(prev => ({
+            ...prev,
+            seenInTheatre: checked
+        }));
     };
 
-    handleQualitySelect = (id, name) => {
-        this.setState({
+    const handleObtainedChange = (event, checked) => {
+        setState(prev => {
+            const updatedState = {
+                ...prev,
+                obtained: checked
+            };
+
+            if (!checked) {
+                updatedState.size = null;
+                updatedState.qualityId = null;
+                updatedState.quality = '';
+                updatedState.basename = null;
+                updatedState.formatId = null;
+                updatedState.formatName = '';
+                updatedState.subtitles = null;
+            }
+
+            return updatedState;
+        });
+    };
+
+    const handleQualitySelect = (id, name) => {
+        setState(prev => ({
+            ...prev,
             qualityId: id,
             qualityName: name
-        });
+        }));
     };
 
-    handleBaseNameChange = event => {
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.basename = event.target.value;
-        this.setState(updatedState);
+    const handleBaseNameChange = (event) => {
+        setState(prev => ({
+            ...prev,
+            basename: event.target.value
+        }));
     };
 
-    handleDirectorSearch = event => {
-        let keyword = event.target.value;
+    const handleDirectorSearch = (event) => {
+        const keyword = event.target.value;
         let directorSuggestions = [];
+
         if (keyword.length > 2) {
-            const existingDirectors = this.state.directors.map(director => director.name);
-            directorSuggestions = this.state.allArtists.filter(artist => (!existingDirectors.includes(artist.name) && artist.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+            const existingDirectors = state.directors.map(director => director.name);
+            directorSuggestions = state.allArtists.filter(
+                artist =>
+                    !existingDirectors.includes(artist.name) &&
+                    artist.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1
+            );
         }
 
-        this.setState({
+        setState(prev => ({
+            ...prev,
             directorSuggestions
-        })
+        }));
     };
 
-    handleDirectorSelect = (id, name) => {
-        let updatedState = Utils.copyObject(this.state);
-
-        updatedState.directors.push({
-            id,
-            name
-        });
-
-        updatedState.directorSuggestions = [];
-
-        this.setState(updatedState);
+    const handleDirectorSelect = (id, name) => {
+        setState(prev => ({
+            ...prev,
+            directors: [
+                ...prev.directors,
+                { id, name }
+            ],
+            directorSuggestions: []
+        }));
     };
 
-    handleDirectorRemove = id => {
-        let updatedState = Utils.copyObject(this.state);
-
-        updatedState.directors.splice(updatedState.directors.map(director => director.id).indexOf(id), 1);
-
-        this.setState(updatedState);
+    const handleDirectorRemove = (id) => {
+        setState(prev => ({
+            ...prev,
+            directors: prev.directors.filter(director => director.id !== id)
+        }));
     };
 
-    handleActorSearch = event => {
-        let keyword = event.target.value;
+    const handleActorSearch = (event) => {
+        const keyword = event.target.value;
         let actorSuggestions = [];
+
         if (keyword.length > 2) {
-            const existingActors = this.state.actors.map(actor => actor.name);
-            actorSuggestions = this.state.allArtists.filter(artist => (!existingActors.includes(artist.name) && artist.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1));
+            const existingActors = state.actors.map(actor => actor.name);
+            actorSuggestions = state.allArtists.filter(
+                artist =>
+                    !existingActors.includes(artist.name) &&
+                    artist.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1
+            );
         }
 
-        this.setState({
+        setState(prev => ({
+            ...prev,
             actorSuggestions
-        })
+        }));
     };
 
-    handleActorSelect = (id, name) => {
-        let updatedState = Utils.copyObject(this.state);
-
-        updatedState.actors.push({
-            id,
-            name
-        });
-
-        updatedState.actorSuggestions = [];
-
-        this.setState(updatedState);
+    const handleActorSelect = (id, name) => {
+        setState(prev => ({
+            ...prev,
+            actors: [
+                ...prev.actors,
+                { id, name }
+            ],
+            actorSuggestions: []
+        }));
     };
 
-    handleActorRemove = id => {
-        let updatedState = Utils.copyObject(this.state);
-
-        updatedState.actors.splice(updatedState.actors.map(actor => actor.id).indexOf(id), 1);
-
-        this.setState(updatedState);
+    const handleActorRemove = (id) => {
+        setState(prev => ({
+            ...prev,
+            actors: prev.actors.filter(actor => actor.id !== id)
+        }));
     };
 
-    handleInitiateAddActor = value => {
-        this.setState({
+    const handleInitiateAddActor = (value) => {
+        setState(prev => ({
+            ...prev,
             artistDialogOpen: true,
             newArtistText: Utils.ucwords(value),
             artistType: 'actor'
-        });
+        }));
     };
 
-    handleInitiateAddDirector = value => {
-        this.setState({
+    const handleInitiateAddDirector = (value) => {
+        setState(prev => ({
+            ...prev,
             artistDialogOpen: true,
             newArtistText: Utils.ucwords(value),
             artistType: 'director'
+        }));
+    };
+
+    const handleArtistDialogClose = () => {
+        setState(prev => ({
+            ...prev,
+            artistDialogOpen: false
+        }));
+    };
+
+    const handleArtistAdd = (id, name) => {
+        setState(prev => {
+            const updatedArtists = [...prev.allArtists, { id, name }];
+
+            if (prev.artistType === 'actor') {
+                return {
+                    ...prev,
+                    actors: [...prev.actors, { id, name }],
+                    actorSuggestions: [],
+                    allArtists: updatedArtists,
+                    artistDialogOpen: false
+                };
+            }
+
+            return {
+                ...prev,
+                directors: [...prev.directors, { id, name }],
+                directorSuggestions: [],
+                allArtists: updatedArtists,
+                artistDialogOpen: false
+            };
         });
     };
 
-    handleArtistDialogClose = () => {
-        this.setState({
-            artistDialogOpen: false
-        });
-    }
-
-    handleArtistAdd = (id, name) => {
-        if (this.state.artistType === 'actor') {
-            this.handleActorSelect(id, name);
-        } else {
-            this.handleDirectorSelect(id, name);
-        }
-
-        let updatedState = Utils.copyObject(this.state);
-        updatedState.allArtists.push({
-            id,
-            name
-        });
-        this.setState(updatedState);
-
-        this.handleArtistDialogClose();
-    }
-
-    handleImageSelect = (file) => {
-        this.setState({
+    const handleImageSelect = (file) => {
+        setState(prev => ({
+            ...prev,
             imageFile: file,
             imageName: file.name
-        });
+        }));
     };
 
-    isFormValid = () => {
-        let isValid = this.validateName().isValid;
-
-        isValid = isValid && this.validateLanguage().isValid;
-        isValid = isValid && this.validateReleaseDate().isValid;
-        isValid = isValid && this.validateDirectors().isValid;
-        isValid = isValid && this.validateActors().isValid;
-
-        if (this.state.obtained) {
-            isValid = isValid && this.validateSize().isValid;
-            isValid = isValid && this.validateFormat().isValid;
-        }
-
-        return isValid;
-    };
-
-    validateName = () => {
-        let response = {
+    const validateName = () => {
+        const response = {
             isValid: true,
             message: ''
         };
 
-        if (!this.state.name) {
+        if (!state.name) {
             response.isValid = false;
             response.message = 'Name cannot be empty';
         }
@@ -361,16 +355,16 @@ export default class Update extends Component {
         return response;
     };
 
-    validateSize = () => {
-        let response = {
+    const validateSize = () => {
+        const response = {
             isValid: true,
             message: ''
         };
 
-        if (!this.state.size) {
+        if (!state.size) {
             response.isValid = false;
             response.message = 'Size cannot be empty';
-        } else if (isNaN(this.state.size.replace(/,/g, ''))) {
+        } else if (isNaN(state.size.replace(/,/g, ''))) {
             response.isValid = false;
             response.message = 'Invalid size';
         }
@@ -378,13 +372,13 @@ export default class Update extends Component {
         return response;
     };
 
-    validateLanguage = () => {
-        let response = {
+    const validateLanguage = () => {
+        const response = {
             isValid: true,
             message: ''
         };
 
-        if (!this.state.languageId) {
+        if (!state.languageId) {
             response.isValid = false;
             response.message = 'Language cannot be empty';
         }
@@ -392,13 +386,13 @@ export default class Update extends Component {
         return response;
     };
 
-    validateFormat = () => {
-        let response = {
+    const validateFormat = () => {
+        const response = {
             isValid: true,
             message: ''
         };
 
-        if (!this.state.formatId) {
+        if (!state.formatId) {
             response.isValid = false;
             response.message = 'Format cannot be empty';
         }
@@ -406,13 +400,13 @@ export default class Update extends Component {
         return response;
     };
 
-    validateReleaseDate = () => {
-        let response = {
+    const validateReleaseDate = () => {
+        const response = {
             isValid: true,
             message: ''
         };
 
-        if (!this.state.releaseDate) {
+        if (!state.releaseDate) {
             response.isValid = false;
             response.message = 'Release Date cannot be empty';
         }
@@ -420,13 +414,13 @@ export default class Update extends Component {
         return response;
     };
 
-    validateDirectors = () => {
-        let response = {
+    const validateDirectors = () => {
+        const response = {
             isValid: true,
             message: ''
         };
 
-        if (this.state.directors.length === 0) {
+        if (state.directors.length === 0) {
             response.isValid = false;
             response.message = 'Directors cannot be empty';
         }
@@ -434,13 +428,13 @@ export default class Update extends Component {
         return response;
     };
 
-    validateActors = () => {
-        let response = {
+    const validateActors = () => {
+        const response = {
             isValid: true,
             message: ''
         };
 
-        if (this.state.actors.length === 0) {
+        if (state.actors.length === 0) {
             response.isValid = false;
             response.message = 'Actors cannot be empty';
         }
@@ -448,51 +442,128 @@ export default class Update extends Component {
         return response;
     };
 
-    renderPage = () => {
-        if (this.state.isLoaded) {
+    const isFormValid = () => {
+        let isValid = validateName().isValid;
+
+        isValid = isValid && validateLanguage().isValid;
+        isValid = isValid && validateReleaseDate().isValid;
+        isValid = isValid && validateDirectors().isValid;
+        isValid = isValid && validateActors().isValid;
+
+        if (state.obtained) {
+            isValid = isValid && validateSize().isValid;
+            isValid = isValid && validateFormat().isValid;
+        }
+
+        return isValid;
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (isFormValid()) {
+            Context.showLoader();
+
+            try {
+                const payload = {
+                    name: state.name,
+                    languageId: state.languageId,
+                    formatId: state.formatId,
+                    subtitles: state.subtitles,
+                    seenInTheatre: state.seenInTheatre,
+                    quality: state.qualityId,
+                    releaseDate: Utils.formatDateToString(state.releaseDate),
+                    basename: state.basename,
+                    actors: state.actors.map(actor => actor.id),
+                    directors: state.directors.map(director => director.id),
+                    obtained: state.obtained
+                };
+
+                let size = null;
+                if (state.obtained) {
+                    size = state.size.replace(/,/g, '');
+                }
+                payload.size = size;
+
+                if (state.imageFile) {
+                    const formattedName =
+                        state.name.toLowerCase().replace(/[/: -]/g, '_') +
+                        '_' +
+                        (new Date(state.releaseDate)).getFullYear() +
+                        '_' +
+                        state.languageName.toLowerCase();
+
+                    const uploadResponse = await ApiHelper.uploadFile(
+                        state.imageFile,
+                        'movies',
+                        formattedName
+                    );
+
+                    const response = uploadResponse.data;
+                    payload.imageUrl = response.secure_url;
+                }
+
+                await MovieUtils.updateMovie(movieId, payload);
+
+                Context.hideLoader();
+                Context.showNotify('Updated Successfully', 'success');
+                navigate(`/movies/movieDetail?id=${movieId}`);
+            } catch (apiResponse) {
+                Context.hideLoader();
+                if (apiResponse.response) {
+                    console.log(apiResponse.response.status);
+                    console.log(apiResponse.response.data);
+                }
+                Context.showNotify('Failed to update. Please try again', 'error');
+            }
+        }
+    };
+
+    const renderPage = () => {
+        if (state.isLoaded) {
             return (
                 <UpdateCore
-                    {...this.state}
-                    onNameChange={this.handleNameChange}
-                    onSizeChange={this.handleSizeChange}
-                    onImageSelect={this.handleImageSelect}
-                    onLanguageSelect={this.handleLanguageSelect}
-                    onFormatSelect={this.handleFormatSelect}
-                    onReleaseDateChange={this.handleReleaseDateChange}
-                    onSubtitleChange={this.handleSubtitleChange}
-                    onViewedChange={this.handleViewedChange}
-                    onObtainedChange={this.handleObtainedChange}
-                    onQualitySelect={this.handleQualitySelect}
-                    onBaseNameChange={this.handleBaseNameChange}
-                    onDirectorSearch={this.handleDirectorSearch}
-                    onDirectorSelect={this.handleDirectorSelect}
-                    onDirectorRemove={this.handleDirectorRemove}
-                    onInitiateAddDirector={this.handleInitiateAddDirector}
-                    onActorSearch={this.handleActorSearch}
-                    onActorSelect={this.handleActorSelect}
-                    onActorRemove={this.handleActorRemove}
-                    onInitiateAddActor={this.handleInitiateAddActor}
-                    onSubmit={this.handleSubmit}
-                    isFormValid={this.isFormValid()}
-                    validateName={this.validateName()}
-                    validateSize={this.validateSize()}
-                    validateLanguage={this.validateLanguage()}
-                    validateFormat={this.validateFormat()}
-                    validateReleaseDate={this.validateReleaseDate()}
-                    validateDirectors={this.validateDirectors()}
-                    validateActors={this.validateActors()}
-                    onArtistDialogClose={this.handleArtistDialogClose}
-                    onArtistAdded={this.handleArtistAdd}
+                    {...state}
+                    onNameChange={handleNameChange}
+                    onSizeChange={handleSizeChange}
+                    onImageSelect={handleImageSelect}
+                    onLanguageSelect={handleLanguageSelect}
+                    onFormatSelect={handleFormatSelect}
+                    onReleaseDateChange={handleReleaseDateChange}
+                    onSubtitleChange={handleSubtitleChange}
+                    onViewedChange={handleViewedChange}
+                    onObtainedChange={handleObtainedChange}
+                    onQualitySelect={handleQualitySelect}
+                    onBaseNameChange={handleBaseNameChange}
+                    onDirectorSearch={handleDirectorSearch}
+                    onDirectorSelect={handleDirectorSelect}
+                    onDirectorRemove={handleDirectorRemove}
+                    onInitiateAddDirector={handleInitiateAddDirector}
+                    onActorSearch={handleActorSearch}
+                    onActorSelect={handleActorSelect}
+                    onActorRemove={handleActorRemove}
+                    onInitiateAddActor={handleInitiateAddActor}
+                    onSubmit={handleSubmit}
+                    isFormValid={isFormValid()}
+                    validateName={validateName()}
+                    validateSize={validateSize()}
+                    validateLanguage={validateLanguage()}
+                    validateFormat={validateFormat()}
+                    validateReleaseDate={validateReleaseDate()}
+                    validateDirectors={validateDirectors()}
+                    validateActors={validateActors()}
+                    onArtistDialogClose={handleArtistDialogClose}
+                    onArtistAdded={handleArtistAdd}
                 />
             );
         }
-    }
 
-    render () {
-        return (
-            <div>
-                {this.renderPage()}
-            </div>
-        );
-    }
+        return null;
+    };
+
+    return (
+        <div>
+            {renderPage()}
+        </div>
+    );
 }

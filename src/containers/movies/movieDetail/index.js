@@ -1,9 +1,8 @@
 /**
- * @author shreyas.hande on 9/9/18
- *
+ * @author shreyas.hande
  */
 
-import React, { Component } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
@@ -12,40 +11,48 @@ import MovieDetailCore from './core';
 import Movie from '../../../utils/movies';
 import Context from '../../../utils/context';
 import Utils from '../../../utils';
+import { useNavigate } from 'react-router-dom';
 
-class MovieDetail extends Component {
-	componentDidMount() {
+const MovieDetail = (props) => {
+
+	const navigate = useNavigate();
+
+	useEffect(() => {
 		Context.showLoader();
 		Movie.loadMovieDetails(Utils.getUrlParam('id'));
+
+		return () => {
+			Movie.clearMovieDetails();
+		};
+	}, []);
+
+	const handleUpdateClick = () => {
+		navigate(`/movies/update?id=${props.movie.id}`);
 	}
 
-	componentWillUnmount() {
-		Movie.clearMovieDetails();
-	}
+	const isEmpty = useCallback(() => {
+		return Object.keys(props.movie).length === 0;
+	}, [props.movie]);
 
-	handleUpdateClick = () => {
-		this.props.history.push('/movies/update?id=' + this.props.movie.id);
-	}
+	const getPageTitle = () => {
+		return isEmpty()
+			? 'Movie Mania'
+			: `${props.movie.name} - Movie Mania`;
+	};
 
-	isEmpty = () => (0 === Object.keys(this.props.movie).length);
-
-	getPageTitle = () => ((this.isEmpty()) ? 'Movie Mania' : (this.props.movie.name + ' - Movie Mania'));
-
-	render() {
-		return (
-			<div>
-				<Helmet
-					title={this.getPageTitle()}
-				/>
-				<MovieDetailCore
-					{...this.props}
-					isEmpty={this.isEmpty}
-					onUpdateClick={this.handleUpdateClick}
-				/>
-			</div>
-		);
-	}
-}
+	return (
+		<div>
+			<Helmet
+				title={getPageTitle()}
+			/>
+			<MovieDetailCore
+				{...props}
+				isEmpty={isEmpty}
+				onUpdateClick={handleUpdateClick}
+			/>
+		</div>
+	);
+};
 
 function mapStateToProps(statesInRedux) {
 	return {

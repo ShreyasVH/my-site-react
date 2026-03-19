@@ -198,18 +198,16 @@ class MovieDetailCore extends Component {
 			displayKey = key;
 		}
 		return (
-			<Grid item xs={12}>
+			<Grid size={{xs: 12}}>
 				<Grid container justify="center" spacing={16}>
 					<Grid
-						item
-						xs={3}
+						size={{xs: 3}}
 						key={formattedKey + '-key'}
 					>
 						{displayKey + ':'}
 					</Grid>
 					<Grid
-						item
-						xs={9}
+						size={{xs: 9}}
 						key={formattedKey + '-value'}
 					>
 						{content}
@@ -354,7 +352,7 @@ class MovieDetailCore extends Component {
 				<div className="movieDetailsContainer">
 					{this.renderTitle()}
 					<Grid container spacing={3}>
-						<Grid xs={12} sm={4} size={{xs: 12, sm: 4}}>
+						<Grid size={{xs: 12, sm: 4}}>
 							{this.renderImage()}
 
 							<div style={{'textAlign': 'center'}}>
@@ -366,7 +364,7 @@ class MovieDetailCore extends Component {
 							</div>
 						</Grid>
 
-						<Grid xs={12} sm={8} size={{xs: 12, sm: 8}}>
+						<Grid size={{xs: 12, sm: 8}}>
 							{this.renderDetails()}
 						</Grid>
 					</Grid>
