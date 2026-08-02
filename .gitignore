@@ -27,3 +27,4 @@ yarn-error.log*
 compile.log
 npmInstall.log
 server.log
+ncuLog.txt
