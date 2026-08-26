@@ -480,12 +480,7 @@ export default function Update(props) {
                     payload.subtitles = state.subtitles;
                     payload.quality = state.qualityId;
                     payload.basename = state.basename;
-
-                    let size = null;
-                    if (state.obtained) {
-                        size = state.size.replace(/,/g, '');
-                    }
-                    payload.size = size;
+                    payload.size = state.size.replace(/,/g, '');
                 }
 
                 if (state.imageFile) {
