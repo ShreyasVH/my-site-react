@@ -468,22 +468,20 @@ export default function Update(props) {
                 const payload = {
                     name: state.name,
                     languageId: state.languageId,
-                    formatId: state.formatId,
-                    subtitles: state.subtitles,
                     seenInTheatre: state.seenInTheatre,
-                    quality: state.qualityId,
                     releaseDate: Utils.formatDateToString(state.releaseDate),
-                    basename: state.basename,
                     actors: state.actors.map(actor => actor.id),
                     directors: state.directors.map(director => director.id),
                     obtained: state.obtained
                 };
 
-                let size = null;
                 if (state.obtained) {
-                    size = state.size.replace(/,/g, '');
+                    payload.formatId = state.formatId;
+                    payload.subtitles = state.subtitles;
+                    payload.quality = state.qualityId;
+                    payload.basename = state.basename;
+                    payload.size = state.size.replace(/,/g, '');
                 }
-                payload.size = size;
 
                 if (state.imageFile) {
                     const formattedName =
